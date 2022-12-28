@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script>
+    let s = "EBBANCF"
+    let t = "ABC"
+    const need = new Map()
+    for(const c of t) {
+      need.set(c, (need.get(c) ? (need.get(c)+1) : 1))
+    }
+    // console.log('need:', need)
+
+    const windowH = new Map()
+    console.log(windowH)
+    // valid表示有几个字符已经满足了need的需要
+    let left = 0, right = 0, valid = 0
+    // len先赋最大值，表示子串长度
+    let start = 0, len = Number.MAX_VALUE
+    let num = 0, isshink = false
+    while(right < s.length) {
+      // 拿到right对应的字符，并right自增扩大窗口
+      let c = s[right++]
+      console.log(num++, ': ' + c)
+      // 更新窗口，直到valid等于need的数量
+      if(need.get(c)) {
+          windowH.set(c, (windowH.get(c) ? (windowH.get(c)+1) : 1))
+          if(windowH.get(c) === need.get(c)) valid++
+      }
+      console.log('valid:', valid)
+      console.log('windowqqq', windowH)
+
+      // 当valid等于need的size就说明可以收缩了
+      while(valid === need.size) {
+        console.log(!isshink)
+        !isshink
+        if(right - left < len) {
+            start = left
+            len = right - left
+        }
+        console.log('left', left, 'right', right, 'len', len)
+
+        // d 表示要移出去的字符，并left自增减小窗口
+        let d = s[left++]
+
+        console.log('start', start, d)
+        if(need.get(d)) {
+          let isdelete = false
+          if(windowH.get(d) === need.get(d)) valid--
+          windowH.set(d, windowH.get(d)-1)
+        }
+
+        console.log('windoeH', windowH)
+        console.log('endValid', valid)
+      }
+    }
+    // return len === Number.MAX_VALUE ? "" : s.substr(start, len)
+    console.log('result:', len === Number.MAX_VALUE ? "" : s.substr(start, len))
+  </script>
+</head>
+<body>
+  
+</body>
+</html>
