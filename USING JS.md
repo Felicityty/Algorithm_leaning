@@ -238,7 +238,7 @@ ListNode detectCycle(ListNode head) {
 
 
 
-### 【双指针】
+## 1.2【双指针】
 
 2022.12.9
 
@@ -438,7 +438,7 @@ var slidingWindow = function(s) {
 
 
 
-2022-12-27
+2022.12.27
 
 [567.字符串的排列](https://leetcode.cn/problems/permutation-in-string/)
 
@@ -448,3 +448,165 @@ var slidingWindow = function(s) {
 
 
 
+
+
+2022.12.28
+
+## 1.3 二分查找
+
+**框架：**
+
+```js
+var binarySearch = function(nums, target) {
+    let left = 0, right = ...;
+    while(...) {
+        let mid = left + Math.floor((right - left) / 2);
+        if (nums[mid] === target) {
+            ...
+        } else if (nums[mid] < target) {
+            left = ...
+        } else if (nums[mid] > target) {
+            right = ...
+        }
+    }
+    return ...;
+}
+```
+
+
+
+### 1 寻找一个数
+
+```js
+var binarySearch = function(nums, target) {
+    let left = 0;
+    let right = nums.length - 1; // 注意
+    while(left <= right) {
+        let mid = left + (right - left) / 2;
+        if(nums[mid] == target)
+            return mid;
+        else if (nums[mid] < target)
+            left = mid + 1; // 注意
+        else if (nums[mid] > target)
+            right = mid - 1; // 注意
+    }
+    return -1;
+}
+```
+
+[704.二分查找](https://leetcode.cn/problems/binary-search/)
+
+1、通过right的赋值可以看出循环的搜索区间的开闭：
+
+👉 `right = nums.length` 则说明是左闭右开，while里面就应该是<，while(left < right) 终⽌的条件是 left === right，此时搜索区间 [left, left) 为空，所以可以正确终⽌
+
+这里应该是 left = mid + 1，right = mid。因为我们的「搜索区间」是 [left, right) 左闭右开，所以当 nums[mid] 被检测之
+后，下⼀步应该去 mid 的左侧或者右侧区间搜索，即 [left, mid) 或 [mid + 1, right)
+
+👉 `right = nums.length - 1` 则是左闭右闭，while里面就应该是<=，while(left <= right) 终⽌的条件是 left === right+1，此时搜索区间 [right+1, right) 为空，所以可以正确终⽌
+
+这里应该是 left = mid + 1，right = mid - 1
+
+2、怎样搜索左边界：
+
+```js
+if (nums[mid] === target)
+    right = mid;
+```
+
+找到 target 时不要⽴即返回，⽽是缩⼩「搜索区间」的上界 right，在区间 [left, mid) 中继续搜索，即不断向左收缩，达到锁定左侧边界的⽬的
+
+
+
+### 2 寻找左侧边界的二分搜索
+
+```js
+var left_bound = function(nums, target) {
+    let left = 0, right = nums.length - 1;
+    // 搜索区间为 [left, right]
+    while (left <= right) {
+        let mid = left + (right - left) / 2;
+        if (nums[mid] < target) {
+            // 搜索区间变为 [mid+1, right]
+            left = mid + 1;
+        } else if (nums[mid] > target) {
+            // 搜索区间变为 [left, mid-1]
+            right = mid - 1;
+        } else if (nums[mid] == target) {
+            // 收缩右侧边界
+            right = mid - 1;
+        }
+    }
+    // 判断 target 是否存在于 nums 中
+    // 此时 target ⽐所有数都⼤，返回 -1
+    if (left == nums.length) return -1;
+    // 判断⼀下 nums[left] 是不是 target
+    return nums[left] == target ? left : -1;
+}
+```
+
+
+
+### 3 寻找右侧边界的二分搜索
+
+```js
+var right_bound = function(nums, target) {
+    let left = 0, right = nums.length - 1;
+    while (left <= right) {
+        let mid = left + (right - left) / 2;
+        if (nums[mid] < target) {
+            left = mid + 1;
+        } else if (nums[mid] > target) {
+            right = mid - 1;
+        } else if (nums[mid] == target) {
+        // 这⾥改成收缩左侧边界即可
+            left = mid + 1;
+        }
+    }
+    // 最后改成返回 left - 1
+    if (left - 1 < 0) return -1;
+    return nums[left - 1] == target ? (left - 1) : -1;
+}
+```
+
+
+
+ps：这里注意哦，寻找左右边界的循环结束条件都是`left === right+1`。寻找左边界最后返回left，就要单独判断一下是否向上越界；寻找右边界最后返回right，就要判断是否向下越界
+
+
+
+1：
+
+[704.二分查找](https://leetcode.cn/problems/binary-search/)
+
+
+
+
+
+2：
+
+[35.搜索插入位置](https://leetcode.cn/problems/search-insert-position/)
+
+
+
+2+3：
+
+[34.在排序数组中查找元素的第一个和最后一个位置](https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/)
+
+[剑指offer 53-I.在排序数组中查找数字 I](https://leetcode.cn/problems/zai-pai-xu-shu-zu-zhong-cha-zhao-shu-zi-lcof/) （统计出现次数）
+
+
+
+二维矩阵：
+
+[240.搜索二维矩阵 II](https://leetcode.cn/problems/search-a-2d-matrix-ii/)
+
+[74.搜索二维矩阵](https://leetcode.cn/problems/search-a-2d-matrix/)
+
+74就是可以跟240一样，从右上角或者是从左下角一样开始搜索的，代码是完全一样的
+
+74如果要用二分的话：
+
+1️⃣ 可以转化为一个一维数组
+
+2️⃣ 或者用两次二分，第一次找到行，第二次找
