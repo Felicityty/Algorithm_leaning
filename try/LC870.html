@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script>
+    const nums1 = [12, 24, 8, 32], nums2 = [13, 25, 32, 11]
+    const n = nums1.length
+
+    let idx1 = new Array(n).fill(0)
+    let idx2 = new Array(n).fill(0)
+    for (let i = 0; i < n; i++) {
+      idx1[i] = i
+      idx2[i] = i
+    }
+    idx1.sort((i, j) => nums1[i] - nums1[j])
+    idx2.sort((i, j) => nums2[i] - nums2[j])
+
+    console.log(idx1);
+    console.log(idx2);
+
+    // 给nums1定义两个指针
+    let left = 0, right = n - 1
+    // 记录最后的结果
+    let res = new Array(n).fill(0)
+
+    for (let i = n - 1; i >= 0; i--) {
+      if (nums1[idx1[right]] > nums2[idx2[i]]) {
+        res[idx2[i]] = nums1[idx1[right]]
+        right--
+      } else {
+        res[idx2[i]] = nums1[idx1[left]]
+        left++
+      }
+      console.log('res', res);
+    }
+    console.log(res);
+
+
+    // const n = nums1.length
+    // const idx1 = new Array(n).fill(0)
+    // const idx2 = new Array(n).fill(0)
+    // for(let i=0; i<n; i++) {
+    //   idx1[i] = i
+    //   idx2[i] = i
+    // }
+    // idx1.sort((i, j) => nums1[i] - nums1[j])
+    // idx2.sort((i, j) => nums2[i] - nums2[j])
+
+    // console.log(idx1);
+    // console.log(idx2);
+    // console.log(nums1);
+    // console.log(nums2);
+  </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

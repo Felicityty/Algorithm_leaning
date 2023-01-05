@@ -448,6 +448,10 @@ var slidingWindow = function(s) {
 
 
 
+2023.1.2
+
+[392.判断子序列](https://leetcode.cn/problems/is-subsequence/) 很简单
+
 
 
 2022.12.28
@@ -575,21 +579,29 @@ ps：这里注意哦，寻找左右边界的循环结束条件都是`left === ri
 
 
 
-1：
+### 1：
 
 [704.二分查找](https://leetcode.cn/problems/binary-search/)
 
+[852.山脉数组的封顶索引](https://leetcode.cn/problems/peak-index-in-a-mountain-array/)
 
 
 
-
-2：
+### 2：
 
 [35.搜索插入位置](https://leetcode.cn/problems/search-insert-position/)
 
+[658.找到K个最接近的元素](https://leetcode.cn/problems/find-k-closest-elements/)
+
+👇 这两题很像，要有敏锐的眼光看出来应该用二分。细节上有一些题意上的小差别，主要还是在f函数的定义上
+
+[1011.在D天内送达包裹的能力](https://leetcode.cn/problems/capacity-to-ship-packages-within-d-days/)
+
+[875.爱吃香蕉的珂珂](https://leetcode.cn/problems/koko-eating-bananas/)
 
 
-2+3：
+
+### 2+3：
 
 [34.在排序数组中查找元素的第一个和最后一个位置](https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/)
 
@@ -597,7 +609,13 @@ ps：这里注意哦，寻找左右边界的循环结束条件都是`left === ri
 
 
 
-二维矩阵：
+### 3：
+
+[剑指 Offer 53 - II. 0～n-1中缺失的数字](https://leetcode.cn/problems/que-shi-de-shu-zi-lcof/)
+
+
+
+### 二维矩阵：
 
 [240.搜索二维矩阵 II](https://leetcode.cn/problems/search-a-2d-matrix-ii/)
 
@@ -610,3 +628,73 @@ ps：这里注意哦，寻找左右边界的循环结束条件都是`left === ri
 1️⃣ 可以转化为一个一维数组
 
 2️⃣ 或者用两次二分，第一次找到行，第二次找
+
+
+
+
+
+## 阶乘
+
+[技巧](https://labuladong.github.io/algo/di-san-zha-24031/shu-xue-yu-659f1/jiang-lian-ae367/)
+
+### 1、求阶乘后尾数0的数量
+
+0的产生是一定是因为2*5产生的，所以就是找因数。并且，找的到因数5，必然找的到因数2与之搭配。题目转化为找因数5的个数
+
+[172.阶乘后的零](https://leetcode.cn/problems/factorial-trailing-zeroes/)
+
+
+
+### 2、求有几个阶乘的尾数为0的数量是k
+
+[793.阶乘函数后K个零](https://leetcode.cn/problems/preimage-size-of-factorial-zeroes-function/)
+
+这道题就是利用一个求阶乘尾数为0的数量的函数，再利用二分查找寻找到尾数为0的数量是k的左右边界，从而得出这样的数有多少个
+
+`Number.MAX_VALUE` 表示 JS 中的 **最大值**
+
+
+
+## 田忌赛马：
+
+[870.优势洗牌](https://leetcode.cn/problems/advantage-shuffle/)
+
+🌟 这道题有一个很巧妙的**排序下标**：
+
+```js
+const nums1 = [12, 24, 8, 32]
+const n = nums1.length
+
+let idx1 = new Array(n).fill(0)
+for(let i=0; i<n; i++) {
+  idx1[i] = i
+}
+idx1.sort((i, j) => nums1[i] - nums1[j])
+
+console.log(idx1); // [2, 0, 1, 3]
+```
+
+
+
+
+
+
+
+# 遗留的：
+
+二分+动态规划
+
+[354.俄罗斯套娃信封问题](https://leetcode.cn/problems/russian-doll-envelopes/)
+
+二分+链表双指针
+
+[1201.丑数III](https://leetcode.cn/problems/ugly-number-iii/)
+
+
+
+
+
+
+
+
+
