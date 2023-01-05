@@ -238,6 +238,55 @@ ListNode detectCycle(ListNode head) {
 
 
 
+### 8 反转链表
+
+#### 1）反转整个
+
+[206.反转链表](https://leetcode.cn/problems/reverse-linked-list/)
+
+#### 2）反转部分
+
+[92.反转链表 II](https://leetcode.cn/problems/reverse-linked-list-ii/)
+
+反转部分 = 递归成反转前n个
+
+反转前n个的逻辑比较难想，举个例子👇
+
+![image-20230105225738910](USING JS.assets/image-20230105225738910.png)
+
+```js
+var reverseBetween = function(head, left, right) {
+    // 这里很好理解哦 就是一直递归 直到变成反转前n个链表元素的情况
+    if(left === 1) {
+        return reverseN(head, right)
+    }
+    head.next = reverseBetween(head.next, left-1, right-1)
+    return head
+};
+
+// successor 就是记录后驱结点的 之后就可以连起来了
+let successor = null
+var reverseN = function(head, n) {
+    // 这里就是head已经指向3了，让successor指向4
+    if(n === 1) {
+        // successor后面连着的4->5->6
+        // 这步不写的话，最后返回的值就没有4->5->6了
+        successor = head.next
+        return head
+        // 这里是3->4->5->6
+    }
+    // 递归成以head.next为起点，反转成前n-1个结点
+    let last = reverseN(head.next, n-1)
+    head.next.next = head
+    head.next = successor
+    return last
+}
+```
+
+
+
+
+
 ## 1.2【双指针】
 
 2022.12.9
