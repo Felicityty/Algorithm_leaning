@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script>
+    const s = "))(()()))()))))))()())()(())()))))()())(()())))()("
+    var minInsertions = function (s) {
+      // need 记录插入左或右括号的需求数  res 左括号的插入次数
+      let res = 0, need = 0, num = 1
+      for (let i = 0; i < s.length; i++) {
+        if (s[i] === '(') {
+          // 一个左括号对应了两个右括号 所以这里是加2
+          need += 2
+          // 这里判断一下 need的奇偶
+          // 奇数的话说明左括号之前有一个没有配对的右括号
+          // 则需要加入一个右括号 res++
+          // 并且右括号的需求减一 need--
+          if (need % 2 === 1) {
+            res++
+            need--
+          }
+        } else {
+          need--
+          // 右括号多了 就等于在右括号之前还需插入一个左括号 所以res++
+          // 同时 右括号这时也还需要一个与刚插入的左括号对应
+          if (need === -1) {
+            res++
+            need = 1
+          }
+        }
+        console.log(num++, s[i], 'need', need, 'res', res);
+      }
+      return res + need
+    };
+    console.log(minInsertions(s));
+  </script>
+</head>
+
+<body>
+
+</body>
+
+</html>
