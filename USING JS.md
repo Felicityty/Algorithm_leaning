@@ -777,8 +777,6 @@ console.log(idx1); // [2, 0, 1, 3]
 
 
 
-
-
 #### 3、平衡括号串 II
 
 [1541.平衡括号字符串的最少插入次数](https://leetcode.cn/problems/minimum-insertions-to-balance-a-parentheses-string/)
@@ -791,7 +789,74 @@ console.log(idx1); // [2, 0, 1, 3]
 
 
 
+### 单调栈
 
+#### 1、单调栈模版
+
+![image-20230107224146733](USING JS.assets/image-20230107224146733.png)
+
+```js
+var nextGreater = function (nums) {
+    let n = nums.length
+    let res = new Array() // 结果数组
+    let stack = new Array() // 栈数组
+    for(let i=n-1; i>=0; i--) {
+        // 保证了这个栈数组一定是一个降序的数组
+        // 经过这一步 保证了栈顶元素 要不比当前元素大 要不栈为空
+        while(stack.length!==0 && stack[stack.length-1]<=nums[i])
+            stack.pop()
+        res[i] = stack.length===0 ? -1 : stack[stack.length-1]
+        // 这里很聪明 一定要先赋值结果数组 再让当前元素入栈
+        // 这里保证了每个元素 必入栈
+        stack.push(nums[i])
+    }
+    return res
+}
+```
+
+
+
+#### 2、下一个更大元素
+
+这道题就是多了个nums1数组来迷惑你，其实跟模版是一样的
+
+我们的思路就是找出nums2的结果数组，然后把nums1的每个数找到nums2的对应下标，从而在得出的结果数组中找出对应的数，重新组成一个数组
+
+[496.下一个更大元素 I](https://leetcode.cn/problems/next-greater-element-i/)
+
+
+
+#### 3、下一个更大元素的下标
+
+这道题也是把模版稍微改动一下就行
+
+模版要的是下一个更大的元素
+
+这里要的是下一个更大的元素的下标，所以只要把模版里的stack用来存储下一个更大元素的下标就行了
+
+[739.每日温度](https://leetcode.cn/problems/daily-temperatures/)
+
+
+
+#### 4、循环数组中找下一个更大元素
+
+这道题还是可以运用模版，很容易就能想到，只要在原数组后再补一段同样数组就行，也就是数组长度翻倍
+
+[503.下一个更大元素 II](https://leetcode.cn/problems/next-greater-element-ii/)
+
+截取数组前n个元素（左闭右开）
+
+```
+arr.slice(0, n)
+```
+
+
+
+
+
+### 单调队列解决滑动窗口问题
+
+[239.滑动窗口最大值](https://leetcode.cn/problems/sliding-window-maximum/)
 
 
 

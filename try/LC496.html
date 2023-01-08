@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script>
+    var nextGreater = function (nums) {
+      let n = nums.length
+      let res = new Array() // 结果数组
+      let stack = new Array() // 栈数组
+      let num = 1
+      for (let i = n - 1; i >= 0; i--) {
+        console.log(num++, '----');
+        // 保证了这个栈数组一定是一个降序的数组
+        // 经过这一步 保证了栈顶元素 要不比当前元素大 要不栈为空
+        console.log(stack.length !== 0);
+        console.log(stack[stack.length - 1] <= nums[i]);
+        while (stack.length !== 0 && stack[stack.length - 1] <= nums[i]) {
+          stack.pop()
+        }
+        res[i] = stack.length === 0 ? -1 : stack[stack.length - 1]
+        // 这里很聪明 一定要先赋值结果数组 再让当前元素入栈
+        // 这里保证了每个元素 必入栈
+        stack.push(nums[i])
+        console.log('stack', stack);
+        console.log('res', res);
+      }
+      return res
+    }
+
+    console.log(nextGreater([2,1,2,4,3]));
+  </script>
+</head>
+
+<body>
+
+</body>
+
+</html>
