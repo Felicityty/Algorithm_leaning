@@ -852,6 +852,8 @@ arr.slice(0, n)
 
 
 
+[316.去除重复字母](https://leetcode.cn/problems/remove-duplicate-letters/)
+
 
 
 ### 单调队列解决滑动窗口问题
@@ -861,4 +863,141 @@ arr.slice(0, n)
 
 
 
+
+## 1.4 数据结构设计
+
+### LRU缓存
+
+[146.LRU缓存](https://leetcode.cn/problems/lru-cache/)
+
+拿到Map的第一个键值：
+
+```js
+const map1 = new Map();
+
+map1.set('0', 'foo');
+map1.set(1, 'bar');
+
+const iterator1 = map1.keys();
+
+console.log(iterator1.next().value);
+// expected output: "0" 迭代器的第一个元素的value 也就是map第一个键值
+
+console.log(iterator1.next().value);
+// expected output: 1
+```
+
+
+
+### LFU缓存
+
+[460.LFU缓存](https://leetcode.cn/problems/lfu-cache/)
+
+
+
+### O(1)时间插入、删除和获取随机元素
+
+因为数组不可能在O(1)时间判断该元素是否存在，所以不能O(1)时间内完成插入和删除操作，但可以完成随机获取元素操作
+
+哈希表可以在O(1)时间内完成插入和删除的操作，但是无法根据下标找到特定元素，所以不能在O(1)时间内完成获取随机元素操作
+
+👉 数组可以根据下标获取元素 而哈希表可以根据元素获取下标
+
+[380.O(1)时间插入、删除和获取随机元素](https://leetcode.cn/problems/insert-delete-getrandom-o1/)
+
+
+
+JS随机数：
+
+  `Math.random()`  生成一个0-1之间的随机数
+
+​	生成 0-x之间的随机数：
+
+  `Math.round(Math.random() * x)`
+
+  `Math.floor(Math.random() * (x + 1))` ✔
+
+​	生成 x-y 之间的随机数
+
+  `Math.round(Math.random() * (上限y-下限x) + 下限x)`
+
+
+
+### 避开黑名单的随机数
+
+[710.黑名单中的随机数](https://leetcode.cn/problems/random-pick-with-blacklist/)
+
+Solution函数：
+
+初始化一个Map用来存放映射关系，bound变量为白名单的元素个数，再新建一个Set来存储在在[n-m, n)这个范围之内的黑名单元素
+
+定义一个循环，给[0, n-m)这个范围内的黑名单元素添加映射关系
+
+pick函数：
+
+生成[0, bound)的随机数x，先去Map里找，找的到的话就返回映射后的值
+
+找不到 就返回x本身
+
+
+
+
+
+---
+
+
+
+# 遗留的---
+
+大顶堆小顶堆
+
+[295.数据流的中位数](https://leetcode.cn/problems/find-median-from-data-stream/solution/-by-1105389168-3r4x/)
+
+
+
+---
+
+
+
+### 计算器
+
+字符串去除空格： `str.trim()`
+
+
+
+`a = Number(a)`
+
+​	1、如果字符串不是合法数字，则转换为NaN
+
+​	2、如果字符串是空串或纯空格的字符串，则转换为0
+
+​	3、null 转换为 0     undefined 转换为 NaN
+
+
+
+检索字符串中特定位置的字符的Unicode 值：
+
+`string.charCodeAt([position]);`  position默认是0
+
+
+
+去掉小数部分:
+
+`~`符号用在JavaScript中有按位取反的作用，`~~`即是取反两次，而位运算的操作值要求是整数，其结果也是整数，所以经过位运算的都会自动变成整数，可以巧妙的去掉小数部分，类似于`parseInt()` 👇
+
+```
+let a = 1.23;
+let b = -1.23;
+
+console.log(~~a); // 1
+console.log(~~b); // -1
+```
+
+
+
+没有懂 | 的意思 按位或
+
+[227.基本计算器](https://leetcode.cn/problems/basic-calculator-ii/)
+
+[224.基本计算器](https://leetcode.cn/problems/basic-calculator/)
 

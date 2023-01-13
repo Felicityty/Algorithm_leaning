@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script>
+    const s = "14-3/2"
+    var calculate = function (s) {
+      // 先给字符串去除空格
+      s = s.trim()
+      const stack = new Array()
+      // 第一个肯定是数字 所以默认就是加号
+      let preSign = '+'
+      let num = 0
+      const n = s.length
+      for (let i = 0; i < n; i++) {
+        // 是数字的话 一直统计
+        if (!isNaN(Number(s[i])) && s[i] !== ' ') {
+          num = num * 10 + s[i].charCodeAt() - '0'.charCodeAt()
+        }
+        // 对之前的数字进行处理 最后一个元素了也要进行处理
+        if (isNaN(Number(s[i])) || i === n - 1) {
+          switch (preSign) {
+            case '+':
+              stack.push(num)
+              break
+            case '-':
+              stack.push(-num)
+              break
+            // 乘除马上跟栈顶元素进行计算 再入栈
+            case '*':
+              stack.push(stack.pop() * num)
+              break
+            default:
+              stack.push(stack.pop() / num | 0)
+              break
+          }
+          console.log(stack);
+          // 记录本次的符号
+          preSign = s[i]
+          num = 0
+        }
+      }
+      let ans = 0
+      while (stack.length) {
+        ans += stack.pop()
+      }
+      return ans
+    };
+    console.log(calculate(s));
+  </script>
+</head>
+
+<body>
+
+</body>
+
+</html>
