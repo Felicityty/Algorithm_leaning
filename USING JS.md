@@ -1,5 +1,7 @@
 # JS的刷题路
 
+# 学剑篇
+
 ## 1.1 数组&链表
 
 ### 【数组】
@@ -1000,4 +1002,343 @@ console.log(~~b); // -1
 [227.基本计算器](https://leetcode.cn/problems/basic-calculator-ii/)
 
 [224.基本计算器](https://leetcode.cn/problems/basic-calculator/)
+
+
+
+
+
+# 仗剑篇
+
+## 2.1 二叉树
+
+
+
+我叛变了
+
+我回到代码随想录
+
+
+
+遍历的所有题肯定先要初始化一个结果数组的
+
+### 1、递归遍历
+
+👀：所有遍历必然是返回一个结果数组的
+
+🌟：递归的三种是一样的，只要改变dfs函数里的顺序
+
+👉：一个结果数组 + 一个dfs函数（记得跳出条件return）
+
+#### 前序遍历：
+
+[144.二叉树的前序遍历](https://leetcode.cn/problems/binary-tree-preorder-traversal/)
+
+```javascript
+var preorderTraversal = function(root) {
+    let res = []
+    const dfs = function(root){
+     if(root === null) return
+     res.push(root.val)
+     dfs(root.left)
+     dfs(root.right)
+    }
+    dfs(root)
+    return res
+};
+```
+
+#### 中序遍历：
+
+[94.二叉树的中序遍历](https://leetcode.cn/problems/binary-tree-inorder-traversal/)
+
+```javascript
+var inorderTraversal = function(root) {
+    let res = []
+    const dfs = function(root){
+        if(root === null) return
+        dfs(root.left)
+        res.push(root.val)
+        dfs(root.right)
+    }
+    dfs(root)
+    return res
+};
+```
+
+#### 后序遍历：
+
+[145.二叉树的后序遍历](https://leetcode.cn/problems/binary-tree-postorder-traversal/)
+
+```javascript
+var postorderTraversal = function(root) {
+    let res = []
+    const dfs = function(root){
+        if(root === null) return
+        dfs(root.left)
+        dfs(root.right)
+        res.push(root.val)
+    }
+    dfs(root)
+    return res
+};
+```
+
+
+
+### 2、迭代遍历（非递归）
+
+👀：所有遍历必然是返回一个结果数组的
+
+🌟：前后序遍历差不多，中序有点出入的（但这样比较好理解，改成统一写法反而没那么好理解）
+
+👉：前序：利用栈，**一个结果数组 + 栈**（先判断root是否为空） + while(栈有长 -> **pop栈 -> 加到res** -> 右 -> 左)
+
+👉：后序：利用栈，**一个结果数组 + 栈**（先判断root是否为空） + while(栈有长 -> **pop栈 -> 加到res** -> 左 -> 右) + reverse
+
+👉：中序：利用指针cur访问，**一个结果数组 + 栈 + cur** + while(栈有长/有cur -> （有cur -> 进栈+找left）/（栈有长 -> **pop栈 -> 加到res** -> 找right）)
+
+![image-20230115205608923](USING JS.assets/image-20230115205608923.png)
+
+```js
+前序遍历:
+
+// 入栈 右 -> 左
+// 出栈 中 -> 左 -> 右
+// 利用栈控制
+var preorderTraversal = function(root) {
+    let res = []
+    if(root === null) return res
+    const stack = [root]
+    while(stack.length) {
+        let cur = stack.pop()
+        res.push(cur.val)
+        cur.right && stack.push(cur.right)
+        cur.left && stack.push(cur.left)
+    }
+    return res
+};
+
+
+中序遍历:
+// 入栈 左 -> 右
+// 出栈 左 -> 中 -> 右
+// 让指针cur去访问结点 用指针控制
+var inorderTraversal = function(root) {
+    let res = []
+    const stack = []
+    let cur = root
+    while(stack.length || cur) {
+        if(cur) { // 2
+            stack.push(cur)
+            cur = cur.left
+        } else { // 3
+            cur = stack.pop()
+            res.push(cur.val)
+            cur = cur.right
+        }
+    };
+    return res;
+};
+
+后序遍历:
+
+// 入栈 左 -> 右
+// 出栈 中 -> 右 -> 左 结果翻转
+// 利用栈
+var postorderTraversal = function(root) {
+    let res = []
+    if(root === null) return res
+    const stack = [root]
+    while(stack.length) {
+        let cur = stack.pop()
+        res.push(cur.val)
+        cur.left && stack.push(cur.left)
+        cur.right && stack.push(cur.right)
+    }
+    return res.reverse()
+};
+```
+
+
+
+### 3、层次遍历（bfs）
+
+👀：所有遍历必然是返回一个结果数组的
+
+🌟：借助队列来实现
+
+👉：利用队列，**一个结果数组 + 队列**（先判断root是否为空）+ while(队列有长 -> 记录length -> while(length -> **shift队列 -> 加到res** -> 左 -> 右) )
+
+![image-20230115211847260](USING JS.assets/image-20230115211847260.png)
+
+**队列先进先出，符合一层一层遍历的逻辑，而用栈先进后出适合模拟深度优先遍历也就是递归的逻辑**
+
+```js
+var levelOrder = function(root) {
+    let res = []
+    if(root === null) return res
+    let queue = [root]
+    while(queue.length) {
+        let len = queue.length
+        while(len>0) { // 这个循环是为了去找数的深度，如果只是遍历，就不用放在while循环里
+            let cur = queue.shift()
+            res.push(cur.val)
+            cur.left && queue.push(cur.left)
+            cur.right && queue.push(cur.right)
+            len-- // 这步别忘了
+        }
+    }
+    return res
+};
+```
+
+
+
+[102.二叉树的层序遍历](https://leetcode.cn/problems/binary-tree-level-order-traversal/)
+
+[107.二叉树的层序遍历 II](https://leetcode.cn/problems/binary-tree-level-order-traversal-ii/)
+
+直接把上一题的push改成unshift就行了，可以省掉reverse操作
+
+[199.二叉树的右视图](https://leetcode.cn/problems/binary-tree-right-side-view/)
+
+还是层级遍历，判断一下是否是这一层的最后就行了（len的值为0就是最后一个元素了）
+
+[637.二叉树的层平均值](https://leetcode.cn/problems/average-of-levels-in-binary-tree/)
+
+简单的
+
+[429.N叉树的层序遍历](https://leetcode.cn/problems/n-ary-tree-level-order-traversal/)
+
+把左右改成for of 去拿所有孩子  是cur.children！
+
+[515.在每个树行中找最大值](https://leetcode.cn/problems/find-largest-value-in-each-tree-row/)
+
+加个找最大值的就行了
+
+[116.填充每个节点的下一个右侧节点指针](https://leetcode.cn/problems/populating-next-right-pointers-in-each-node/)
+
+不用结果数组res，**增加指向关系.next**就行了，除了最后一个值（我借鉴了199里判断是否为最后一个的方法）
+
+[117.填充每个节点的下一个右侧节点指针 II](https://leetcode.cn/problems/populating-next-right-pointers-in-each-node-ii/)
+
+跟116完全一样，看了这道题就知道了，其实跟完不完全二叉树没关系，只要判断是不是最后一个值就行了
+
+❗ LeetCode 出问题了 👆
+
+🌟 [104.二叉树的最大深度](https://leetcode.cn/problems/maximum-depth-of-binary-tree/)
+
+这题可太牛了啊
+
+三种方法O~  其他到具体再看，层次遍历拿捏的
+
+[111.二叉树的最小深度](https://leetcode.cn/problems/minimum-depth-of-binary-tree/)
+
+的确只要在意层次就行了，跟上一题也差不多的，稍微改一改
+
+
+
+### 4、翻转二叉树
+
+[226.翻转二叉树](https://leetcode.cn/problems/invert-binary-tree/)
+
+**只要把每一个节点的左右孩子翻转一下，就可以达到整体翻转的效果**
+
+👉 注意这题，要求是要返回root，所以不要res，互换的也是结点，而不是入栈或者队列顺序
+
+递归 -> 直接在递归的时候左右结点互换
+
+层次和迭代 -> 多写一个结点互换的函数
+
+
+
+### 5、对称二叉树
+
+[101.对称二叉树](https://leetcode.cn/problems/symmetric-tree/)
+
+👉 不需要返回res的，就不要写了啊
+
+递归：在递归函数里，先把跳出递归的条件写了，如果都不满足，就继续进行递归
+
+迭代（队列&栈）：思想完全一样的，只是借助了一下栈或队列的性质，同样，也是把判断条件写了，否则就push栈或队列中去
+
+
+
+### 6、完全二叉树的节点个数
+
+[222.完全二叉树的节点个数](https://leetcode.cn/problems/count-complete-tree-nodes/)
+
+自己写出来了层次遍历和递归
+
+还有一种利用完全二叉树性质的递归先放一边边吧
+
+
+
+### 7、平衡二叉树
+
+[110.平衡二叉树](https://leetcode.cn/problems/balanced-binary-tree/)
+
+这题用递归的后序遍历很简单，有些题目的确就是递归简单点
+
+![image-20230118235554179](USING JS.assets/image-20230118235554179.png)
+
+
+
+### 8、二叉树的所有路径
+
+[257.二叉树的所有路径](https://leetcode.cn/problems/binary-tree-paths/)
+
+递归的话，这里很巧妙，把要一步步加上的东西，用curPath参数来传递，就用递归吧
+
+
+
+### 9、左叶子之和
+
+[404.左叶子之和](https://leetcode.cn/problems/sum-of-left-leaves/)
+
+抓住对左叶子节点的判断标准
+
+其他就是遍历的事情了
+
+层次遍历的两层while循环是为了让层次更好地体现出来，如果不用体现层次只要遍历的话，只要一层while就够了
+
+
+
+### 10、找树左下角的值
+
+[513.找树左下角的值](https://leetcode.cn/problems/find-bottom-left-tree-value/)
+
+深挖题意，就会觉得这题必然是层次遍历简单，要找的就是最后一层中的第一个结点
+
+递归要借助一下统计最大深度，巧妙的点在于要记录深度，递归用两个参数，由于 `curPath > maxPath` 一层中只需要记录最左边的那个节点，nice
+
+
+
+### 11、路径总和
+
+[112.路径总和](https://leetcode.cn/problems/path-sum/)
+
+递归的方法有点绕的
+
+感觉还是迭代的方法好，只要在原来的基础上加一个记录到当前位置的总和值的数组就行
+
+
+
+[113.路径总和 ii](https://leetcode.cn/problems/path-sum-ii/)
+
+**push方法的参数不能是数组，可以用扩展运算符的这种写法**
+
+`tempArr.push([...curArr])`
+
+只要在上一题的基础上加一个记录当前路径的队列数组，和一个记录最后结果的数组就行了
+
+
+
+
+
+
+
+
+
+
 
