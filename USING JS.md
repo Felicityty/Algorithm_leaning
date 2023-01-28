@@ -1334,6 +1334,296 @@ var levelOrder = function(root) {
 
 
 
+### 12、中序与后序遍历 / 前序与中序遍历 构造二叉树
+
+[106.从中序与后序遍历序列构造二叉树](https://leetcode.cn/problems/construct-binary-tree-from-inorder-and-postorder-traversal/)
+
+[105.从前序与中序遍历序列构造二叉树](https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/)
+
+每次找出根节点的值和位置，去递归分割已有的两个序列
+
+
+
+### 13、最大二叉树
+
+[654.最大二叉树](https://leetcode.cn/problems/maximum-binary-tree/)
+
+写一个递归，传入数组和截取数组的左边位置和右边位置，找出最大值和所在位置，递归地去建立树，和上面两题很像
+
+
+
+### 14、合并二叉树
+
+[617.合并二叉树](https://leetcode.cn/problems/merge-two-binary-trees/)
+
+就是一种前序递归的遍历
+
+
+
+### 15、二叉搜索树中的搜索
+
+[700.二叉搜索树中的搜索](https://leetcode.cn/problems/search-in-a-binary-search-tree/)
+
+前序递归遍历
+
+
+
+### 16、验证二叉搜索树
+
+[98.验证二叉搜索树](https://leetcode.cn/problems/validate-binary-search-tree/)
+
+辅助一个中序递归遍历二叉树的数组，若为二叉搜索树，肯定是单调递增的
+
+
+
+### 17、二叉搜索树的最小绝对差
+
+[530.二叉搜索树的最小绝对差](https://leetcode.cn/problems/minimum-absolute-difference-in-bst/)
+
+这题关键点在于想清楚，把树的val存到一个数组里，让其递增，只要求相邻两个数最小的差值就行
+
+🌟 **二叉搜索树的中序遍历是一个递增数组**
+
+
+
+### 18、二叉搜索树中的众数
+
+[501.二叉搜索树中的众数](https://leetcode.cn/problems/find-mode-in-binary-search-tree/)
+
+#### 遍历map的key和value：
+
+```js
+ for(let [key,value] of map) {}
+```
+
+#### map统计个数：
+
+```js
+map.set(root.val,map.has(root.val)?map.get(root.val)+1:1)
+```
+
+
+
+### 19、二叉树的最近公共祖先
+
+[236.二叉树的最近公共祖先](https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/)
+
+![236.二叉树的最近公共祖先1](USING JS.assets/20210204151125844.png)
+
+太绝了这题，就是按照上面这图
+
+1 因为要从下到上，所以要后序遍历
+
+2 如果左右都不为空，就返回该值
+
+3 如果左节点为空返回右节点，……
+
+
+
+
+
+### 20、二叉搜索树的最近公共祖先
+
+[235. 二叉搜索树的最近公共祖先](https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-search-tree/)
+
+![235.二叉搜索树的最近公共祖先](USING JS.assets/20220926164214.png)
+
+如果 中间节点是 q 和 p 的公共祖先，那么 中节点的数组 一定是在 [p, q]区间的。即 中节点 > p && 中节点 < q 或者 中节点 > q && 中节点 < p
+
+-> 找到第一个在这个区间内的节点
+
+
+
+### 21、二叉搜索树中的插入操作
+
+[701.二叉搜索树中的插入操作](https://leetcode.cn/problems/insert-into-a-binary-search-tree/)
+
+递归，不要改变原来树的形态，待插入的节点只可能找空节点的位置插
+
+所以先找到正确位置的空节点，按照传入的val值，建立节点，返回该节点
+
+
+
+### 22、删除二叉搜索树中的节点
+
+![img](USING JS.assets/bst_deletion_case_3.png)
+
+[450.删除二叉搜索树中的节点](https://leetcode.cn/problems/delete-node-in-a-bst/)
+
+这题难得多了，先递归找到要删除的节点位置
+
+然后再分情况
+
+1 root为null，返回null
+
+2 该节点是叶子节点，返回null删掉该节点
+
+3 该节点有一个叶子节点不存在，返回存在的那个叶子节点删掉该节点
+
+4 左右孩子都存在，找到该节点右子树的最小值（最左边的节点），去替换当前节点的值，再把右子树和右子树最小值进行递归，从而以删除叶子节点的方式删掉右子树的最小值
+
+
+
+### 23、修剪二叉搜索树
+
+[669.修剪二叉搜索树](https://leetcode.cn/problems/trim-a-binary-search-tree/)
+
+![image-20230125020356062](USING JS.assets/image-20230125020356062.png)
+
+这道题就是当root的值小于low，返回右子树；当root的值大于high，返回左子树
+
+在区间内的话就继续连上递归
+
+
+
+### 24、将有序数组转换为二叉搜索树
+
+[108.将有序数组转换为二叉搜索树](https://leetcode.cn/problems/convert-sorted-array-to-binary-search-tree/)
+
+这道题特殊的地方在于构造一棵平衡二叉树，所以关键点在于找中间节点，然后再正常build就行了
+
+
+
+### 25、把二叉搜索树转换为累加树
+
+[538.把二叉搜索树转换为累加树](https://leetcode.cn/problems/convert-bst-to-greater-tree/)
+
+这题奇奇怪怪的，就是用一个反中序遍历就行了
+
+记得可以用一个pre来记录之前节点的值
+
+
+
+
+
+## 回溯算法
+
+### 1、组合
+
+[77.组合](https://leetcode.cn/problems/combinations/)
+
+🌟 定义一个result数组，和一个记录每个可行解的path数组
+
+定义一个递归函数，一开始肯定是跳出递归的条件
+
+然后用一个for控制横向，递归来控制纵向，横向的一种情况纵向递归完，就pop之后换另外一种情况
+
+![77.组合1](USING JS.assets/20201123195242899.png)
+
+**剪枝条件：**
+
+![image-20230126234943672](USING JS.assets/image-20230126234943672.png)
+
+![77.组合4](USING JS.assets/20210130194335207.png)
+
+```js
+var combine = function(n, k) {
+    let result = []
+    let path = []
+    var backTracking = function(n, k, startIndex) {
+        // 跳出递归的条件 - path的长度和k相等 终止本层递归
+        if(path.length === k) {
+            result.push([...path])
+            return
+        }
+        // for控制横向
+        // for(let i=startIndex; i<=n; i++) {
+        // 剪枝条件
+        for(let i=startIndex; i<=n-(k-path.length)+1; i++) {
+            path.push(i)
+            // 递归控制纵向
+            backTracking(n, k, i+1)
+            // 横向的一种情况纵向递归完 就pop之后换另外一种情况
+            path.pop()
+        }
+    }
+    backTracking(n, k, 1)
+    return result
+};
+```
+
+
+
+### 2、组合III
+
+[216.组合总和 III](https://leetcode.cn/problems/combination-sum-iii/)
+
+递归函数比上一题多了一个记录总和的参数，判断跳出递归的时候加一个判断总和的条件接行了
+
+**剪枝条件：**
+
+1、当sum已经大于n时，就不需要继续递归下去了
+
+2、跟上一题一样
+
+
+
+### 3、电话号码的字母组合
+
+[17.电话号码的字母组合](https://leetcode.cn/problems/letter-combinations-of-a-phone-number/)
+
+没想到这题还要自己建立数字和字母的映射表，不过这样也好
+
+跟之前的题其实也差不多，递归函数三个参数，一个是输入的digits，和上几题的n差不多的，k也就是path数组的个数，最后一个是下标
+
+#### **数组连成字符串**
+
+```js
+path.join("")
+```
+
+
+
+### 🌟 startIndex - 组合问题
+
+一个集合来求组合的话，就需要startIndex（T1和T2要）
+
+多个集合取组合，各个集合之间相互不影响，那么就不用（T3不用）
+
+
+
+### 4、组合总和
+
+[39.组合总和](https://leetcode.cn/problems/combination-sum/)
+
+![39.组合总和](USING JS.assets/20201223170730367.png)
+
+不用i+1了，表示可以重复读取当前的数
+
+这里的递归函数还是需要startIndex的，和一个记录总和的sum参数
+
+这里的总和大于target之后，一定要记得及时break掉
+
+pop之后让sum也恢复正常，之前的就一直通过`sum+i`往下就行了，而这里的需要回退的
+
+
+
+### 5、组合总和 II
+
+[40.组合总和 II](https://leetcode.cn/problems/combination-sum-ii/)
+
+这题的难点在于要去掉一层中重复的，所以就需要加一个if判断一下当前取值是否和前一个一样，一样就continue掉
+
+![40.组合总和II](USING JS.assets/20201123202736384.png)
+
+
+
+
+
+
+
+
+
+## 贪心
+
+1、
+
+
+
+
+
+
+
 
 
 
