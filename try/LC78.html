@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script>
+    var subsets = function (nums) {
+      let result = [], path = []
+      var backtracking = function (startIndex) {
+        if (startIndex > nums.length) {
+          console.log(111)
+          return
+        }
+        // 来者不拒地记录
+        result.push([...path])
+        for (let i = startIndex; i < nums.length; i++) {
+          console.log('startIndex', startIndex)
+          console.log(nums[i])
+          path.push(nums[i])
+          backtracking(i + 1)
+          path.pop()
+        }
+      }
+      backtracking(0)
+      return result
+    };
+    console.log(subsets([1,2,3]))
+  </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

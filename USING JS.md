@@ -1498,7 +1498,66 @@ map.set(root.val,map.has(root.val)?map.get(root.val)+1:1)
 
 ## 回溯算法
 
-### 1、组合
+![回溯算法大纲](USING JS.assets/20210219192050666.png)
+
+```js
+void backtracking(参数) {
+    if (终止条件) {
+        存放结果;
+        return;
+    }
+
+    for (选择：本层集合中元素（树中节点孩子的数量就是集合的大小）) {
+        处理节点;
+        backtracking(路径，选择列表); // 递归
+        回溯，撤销处理结果
+    }
+}
+```
+
+
+
+### 🌟 startIndex - 组合问题
+
+一个集合来求组合的话，就需要startIndex（T1和T2要）
+
+多个集合取组合，各个集合之间相互不影响，那么就不用（T3不用）
+
+
+
+**👉 组合问题:**
+
+**取过的元素不会重复取，写回溯算法的时候，for就要从startIndex开始，而不是从0开始**
+
+**👉 排列问题:**
+
+集合有序，不需要startIndex
+
+
+
+### ✨组合总结
+
+两个数组，一个result，一个path（过程）
+
+递归函数中：
+
+​	跳出递归：满足题目给出的条件（path到最下面一层了），push给result，return
+
+​	for循环：push -> 递归函数 -> pop
+
+👉 求总和，**for循环里总是要加一个大于给出和的return条件**，push后`+=`，pop后`-=`
+
+👉 无限制重复取，递归的i不加1
+
+👉 集合中有重复元素，但组合中不能有重复组合 -> 排序，for的每层循环判断一下是否和上一次的元素相同
+
+
+
+
+
+
+
+### 1、纯组合
 
 [77.组合](https://leetcode.cn/problems/combinations/)
 
@@ -1544,17 +1603,40 @@ var combine = function(n, k) {
 
 
 
-### 2、组合III
+### 2、组合总和III
 
 [216.组合总和 III](https://leetcode.cn/problems/combination-sum-iii/)
 
-递归函数比上一题多了一个记录总和的参数，判断跳出递归的时候加一个判断总和的条件接行了
+递归函数比上一题多了一个记录总和的参数，判断跳出递归的时候加一个判断总和的条件就行了
 
 **剪枝条件：**
 
 1、当sum已经大于n时，就不需要继续递归下去了
 
 2、跟上一题一样
+
+```js
+var combinationSum3 = function(k, n) {
+    let result = []
+    let path = []
+    var backtracking = function(k, n, startIndex, sum) {
+        if(path.length===k && sum===n) {
+            result.push([...path])
+            return
+        }
+        for(let i=startIndex; i<=9-(k-path.length)+1; i++) {
+            if(sum+i > n) return
+            path.push(i)
+            sum += i
+            backtracking(k, n, i+1, sum)
+            path.pop()
+            sum -= i
+        }
+    }
+    backtracking(k, n, 1, 0)
+    return result
+};
+```
 
 
 
@@ -1572,13 +1654,30 @@ var combine = function(n, k) {
 path.join("")
 ```
 
-
-
-### 🌟 startIndex - 组合问题
-
-一个集合来求组合的话，就需要startIndex（T1和T2要）
-
-多个集合取组合，各个集合之间相互不影响，那么就不用（T3不用）
+```js
+var letterCombinations = function(digits) {
+    const map = ["","","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"]
+    let result = [], path = []
+    // 这里的字符串长度是看digits的长度的
+    let k = digits.length
+    if(!k) return[]
+    // 这里的index是下标
+    var backtracking = function(digits, k, index) {
+        if(path.length === k) {
+            // 把数组里的连成字符串
+            result.push(path.join(""))
+            return
+        }
+        for(let v of map[digits[index]]) {
+            path.push(v)
+            backtracking(digits, k, index+1)
+            path.pop()
+        }
+    }
+    backtracking(digits, k, 0)
+    return result
+};
+```
 
 
 
@@ -1592,9 +1691,34 @@ path.join("")
 
 这里的递归函数还是需要startIndex的，和一个记录总和的sum参数
 
-这里的总和大于target之后，一定要记得及时break掉
+这里的总和大于target之后，一定要记得及时break/return掉
 
 pop之后让sum也恢复正常，之前的就一直通过`sum+i`往下就行了，而这里的需要回退的
+
+```js
+var combinationSum = function(candidates, target) {
+    let res = [], path = []
+    candidates.sort((a,b)=>a-b) // 升序排序
+
+    function backtracking(startIndex, sum) {
+        if (sum === target) {
+            res.push([...path])
+            return
+        }
+        for(let i = startIndex; i < candidates.length; i++ ) {
+            const temp = candidates[i]
+            if(temp + sum > target) return
+            path.push(temp)
+            sum += temp
+            backtracking(i, sum)
+            path.pop()
+            sum -= temp
+        }
+    }
+    backtracking(0, 0)
+    return res
+};
+```
 
 
 
@@ -1602,9 +1726,431 @@ pop之后让sum也恢复正常，之前的就一直通过`sum+i`往下就行了�
 
 [40.组合总和 II](https://leetcode.cn/problems/combination-sum-ii/)
 
-这题的难点在于要去掉一层中重复的，所以就需要加一个if判断一下当前取值是否和前一个一样，一样就continue掉
+这题的难点在于**集合（数组candidates）有重复元素，但还不能有重复的组合**（和上一题对比）
+
+要去掉一层中重复的，所以就需要加一个if判断一下当前取值是否和前一个一样，一样就continue掉
 
 ![40.组合总和II](USING JS.assets/20201123202736384.png)
+
+```js
+var combinationSum2 = function(candidates, target) {
+    let result = [], path = []
+    candidates.sort((a,b) => a-b)
+    var backtracking = function(startIndex, sum) {
+        if(sum === target) {
+            result.push([...path])
+            return
+        }
+        for(let i=startIndex; i<candidates.length; i++) {
+            let temp = candidates[i]
+            if(i>startIndex && candidates[i]===candidates[i-1])
+                continue
+            if(temp + sum > target) return
+            path.push(temp)
+            sum += temp
+            backtracking(i+1, sum)
+            path.pop()
+            sum -= temp
+        }
+    }
+    backtracking(0, 0)
+    return result
+};
+```
+
+
+
+---
+
+### ✨ 分割总结
+
+要用到startIndex
+
+递归结束条件是 `startIndex === s.length`
+
+
+
+### 6、分割回文子串
+
+[131.分割回文子串](https://leetcode.cn/problems/palindrome-partitioning/)
+
+![131.分割回文串](USING JS.assets/131.分割回文串.jpg)
+
+#### 判断是否是回文字符串
+
+```js
+var isPalindorme = function(str, left, right) {
+    for(let i=left, j=right; i<j; i++,j--) {
+        if(str[i] !== str[j]) return false
+    }
+    return true
+}
+```
+
+for循环中先加一个判断是否是回文字符串，如果不是，就continue，这里不是return，还是有希望可以是的
+
+用startIndex来记录截取的位置
+
+```js
+var partition = function(s) {
+    let result = [], path = []
+    var backtracking = function(startIndex) {
+        if(startIndex === s.length) {
+            result.push([...path])
+            return
+        }
+        for(let i=startIndex; i<s.length; i++) {
+            // 不是回文字符串也还是有机会是的啊 所以这里用continue
+            if(!isPalindorme(s, startIndex, i)) continue
+            path.push(s.slice(startIndex, i+1))
+            backtracking(i+1)
+            path.pop()
+        }
+    }
+    backtracking(0)
+    return result
+};
+var isPalindorme = function(str, left, right) {
+    for(let i=left, j=right; i<j; i++,j--) {
+        if(str[i] !== str[j]) return false
+    }
+    return true
+}
+```
+
+
+
+### 7、复原IP地址
+
+[93.复原IP地址](https://leetcode.cn/problems/restore-ip-addresses/)
+
+![93.复原IP地址](USING JS.assets/20201123203735933.png)
+
+参数需要startIndex记录下一次分割的起始位置
+
+（pointNum记录添加点的个数，这个参数可以直接用数组的长度来等效替代）
+
+记住，path是每一种可行解，分割完以后的结果
+
+注意跳出循环的条件（满足+不满足的超过分割数量就跳出循环）
+
+跟上一题还是很像的
+
+```js
+var restoreIpAddresses = function(s) {
+    let result = [], path = []
+    var backtracking = function(startIndex) {
+        if(path.length > 4) return
+        if(path.length === 4 && startIndex === s.length) {
+            result.push(path.join("."))
+            return
+        }
+        for(let i=startIndex; i<s.length; i++) {
+            if(!validator(s.slice(startIndex, i+1))) return
+            // 这里push的的确应该是一小串字符串啊，不是某个字符
+            path.push(s.slice(startIndex, i+1))
+            backtracking(i+1)
+            path.pop()
+        }
+    }
+    backtracking(0)
+    return result
+};
+var validator = function(s) {
+    if(s*1 > 255) return false
+    if(s.length>1 && s[0]==='0') return false
+    return true
+}
+```
+
+
+
+---
+
+
+
+### 8、子集问题
+
+[78.子集](https://leetcode.cn/problems/subsets/)
+
+![78.子集](USING JS.assets/202011232041348.png)
+
+🌟 **组合问题和分割问题都是收集树的叶子节点，而子集问题是找树的所有节点！**
+
+其实就是push到result数组里的条件少了，全都push进去
+
+```js
+var subsets = function(nums) {
+    let result = [], path = []
+    var backtracking = function(startIndex) {
+        // 来者不拒地记录
+        result.push([...path])
+        for(let i=startIndex; i<nums.length; i++) {
+            path.push(nums[i])
+            backtracking(i+1)
+            path.pop()
+        }
+    }
+    backtracking(0)
+    return result
+};
+```
+
+
+
+### 9、子集II
+
+[90.子集 II](https://leetcode.cn/problems/subsets-ii/)
+
+![90.子集II](USING JS.assets/20201124195411977.png)
+
+上一题给的测试用例不存在数组中有重复元素的，而这一题存在，还不能有重复的子集
+
+跟之前的题一样，**不能包含重复的解集**，所以在每层for循环中去判断是否与之前那一层的一样，一样的话就跳过，continue！后面的值还是要的啊
+
+还要记得先给数组排个序
+
+其他感觉没什么了
+
+```js
+var subsetsWithDup = function(nums) {
+    let result = [], path = []
+    nums.sort((a,b) => a-b)
+    var backtracking = function(startIndex) {
+        result.push([...path])
+        for(let i=startIndex; i<nums.length; i++) {
+            // 这里是continue啊，每一层里后面的数字还是要的啊
+            if(i>startIndex && nums[i-1]===nums[i]) continue
+            path.push(nums[i])
+            backtracking(i+1)
+            path.pop()
+        }
+    }
+    backtracking(0)
+    return result
+};
+```
+
+
+
+### 10、递增子序列
+
+[491.递增子序列](https://leetcode.cn/problems/non-decreasing-subsequences/)
+
+![491. 递增子序列1](USING JS.assets/20201124200229824.png)
+
+先注意两个条件： 1 至少有两个元素  2 递增
+
+难点：数组有重复的元素，不能之前排个序与前一个对比的方法去重。所以就在for的每一层循环中加入一个uset的map，来判断一层中是否有重复元素
+
+ps：`map.set` `map.has`
+
+其他也都差不多的
+
+```js
+var findSubsequences = function(nums) {
+    let result = [], path = []
+    var backtracking = function(startIndex) {
+        // 至少有两个元素
+        if(path.length > 1) {
+            result.push([...path])
+        }
+        // 利用map记录已经有的元素，每层更新
+        let uset = new Map()
+        for(let i=startIndex; i<nums.length; i++) {
+            // 递增 并且 这一层中没出现过
+            if(path.length>0 && nums[i]<path[path.length-1] || uset.has(nums[i]))
+                continue
+            uset.set(nums[i])
+            path.push(nums[i])
+            backtracking(i+1)
+            path.pop()
+        }
+    }
+    backtracking(0)
+    return result
+};
+```
+
+
+
+---
+
+### ✨ 排列总结
+
+加一个used的数组
+
+push之后used中元素赋true，pop后赋false
+
+跳出递归条件 `path.length === k`
+
+
+
+
+
+### 11、全排列
+
+不包含重复元素
+
+[46.全排列](https://leetcode.cn/problems/permutations/)
+
+![46.全排列](USING JS.assets/20201209174225145.png)
+
+首先不用startIndex了
+
+给递归函数加一个used数组的参数，push后改变used中当前元素，pop之后再改回来 -> 用true和false改就行了
+
+```js
+var permute = function(nums) {
+    let result = [], path = []
+    // 递归函数的参数其实只要used就行了
+    var backtracking = function(n, k, used) {
+        if(path.length === k) {
+            result.push([...path])
+        }
+        for(let i=0; i<k; i++) {
+            if(used[nums[i]]) continue
+            path.push(nums[i])
+            used[nums[i]] = true
+            backtracking(n, k, used)
+            path.pop()
+            used[nums[i]] = false
+        }
+    }
+    backtracking(nums, nums.length, [])
+    return result
+};
+```
+
+
+
+### 12、全排列 II
+
+数组包含重复元素
+
+[47.全排列 II](https://leetcode.cn/problems/permutations-ii/)
+
+![47.全排列II1](USING JS.assets/20201124201331223.png)
+
+这里又涉及到去重了，跟之前一样，按层去重的话，要注意：如果当前元素等于之前那个元素了，要判断之前那个元素有没有用过，一定是要没用过的（因为之前的层如果用过也是可以的，只要去重当前层的）
+
+还有一个continue条件就是当前元素用过了，就去找下一个
+
+其他也没什么了
+
+```js
+var permuteUnique = function(nums) {
+    let result = [], path = []
+    nums.sort((a,b) => a-b)
+    var backtracking = function(n, k, used) {
+        if(path.length === k) {
+            result.push([...path])
+        }
+        for(let i=0; i<k; i++) {
+            // 和没有重复元素的数组一样，首先当前元素在used里应该是false的
+            // 这一层的used赋值还未开始，如果是之前的层用过也是可以的，只要去重当前层的，所以要!used[i-1]
+            // 还需要排序后，跟前一个元素不一样
+            if(i>0 && nums[i]===nums[i-1] && !used[i-1] || used[i]) continue
+            path.push(nums[i])
+            used[i] = true
+            backtracking(n, k, used)
+            path.pop()
+            used[i] = false
+        }
+    }
+    backtracking(nums, nums.length, [])
+    return result
+};
+```
+
+
+
+👉 如果要对树层中前一位去重，就用`used[i - 1] == false`，如果要对树枝前一位去重用`used[i - 1] == true`。
+
+**对于排列问题，树层上去重和树枝上去重，都是可以的，但是树层上去重效率更高！**
+
+树层上去重(used[i - 1] == false)，的树形结构如下：
+
+![47.全排列II2](USING JS.assets/20201124201406192.png)
+
+树枝上去重（used[i - 1] == true）的树型结构如下：
+
+![47.全排列II3](USING JS.assets/20201124201431571.png)
+
+
+
+下面的都当扩宽眼界了
+
+---
+
+
+
+# 遗留的---
+
+13、重新安排行程
+
+[332.重新安排行程](https://leetcode.cn/problems/reconstruct-itinerary/)
+
+困难啊
+
+
+
+---
+
+
+
+### 14、N皇后
+
+[51.N皇后](https://leetcode.cn/problems/n-queens/)
+
+这题也是困难啊
+
+总结一下：
+
+先定义一个函数，判断每次放置皇后的位置的合法性
+
+递归函数：按行进行递归，结束条件是行的值已经等于n了，把结果push给result数组，记得都return一下
+
+然后就是for循环按层遍历，位置合法就放置，递归到下一行，再回溯撤销放置
+
+这里要注意格式化数组的函数，可以用 `array.join("")` 来连接数组成字符串
+
+
+
+**👇 建立初值全为.的二维数组**
+
+`let chessBoard = new Array(n).fill([]).map(() => new Array(n).fill('.'))`
+
+
+
+### 15、解数独
+
+[37.解数独](https://leetcode.cn/problems/sudoku-solver/)
+
+**模板字符串在算法题中都可以妙用诶**
+
+```js
+for(let val=1; val<=9; val++) {
+    // 模版字符串
+    if(isValid(i, j, `{$val}`, board)) {
+        board[i][j] = `{val}`
+    }
+}
+```
+
+就这种感觉奥
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
