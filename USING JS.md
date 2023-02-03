@@ -2142,39 +2142,215 @@ for(let val=1; val<=9; val++) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+---
 
 
 
 ## 贪心
 
-1、
+![贪心算法大纲](USING JS.assets/20210917104315.png)
+
+步骤：
+
+- 将问题分解为若干个子问题
+- 找出适合的贪心策略
+- 求解每一个子问题的最优解
+- 将局部最优解堆叠成全局最优解
 
 
 
+### 1、分发饼干
+
+[455.分发饼干](https://leetcode.cn/problems/assign-cookies/)
+
+**这里的局部最优就是大饼干喂给胃口大的，充分利用饼干尺寸喂饱一个，全局最优就是喂饱尽可能多的小孩**。
+
+👉 注意：这里千万千万不能先遍历饼干，再遍历胃口，这样的话需要多次遍历饼干，没必要的
+
+![img](USING JS.assets/20230112102848.png)
+
+很简单呀，就先给两个数组升序排序，从后往前遍历就行，先遍历胃口
+
+```js
+var findContentChildren = function(g, s) {
+    // 先排序
+    g.sort((a,b) => a-b)
+    s.sort((a,b) => a-b)
+    let index = s.length-1
+    let num = 0
+    // 遍历胃口，把大饼干先满足大胃口
+    for(let i=g.length; i>=0; i--) {
+        if(s[index]>=g[i] && index>=0) {
+            index--
+            num++
+        }
+    }
+    return num
+};
+```
 
 
 
+### 2、摆动序列
+
+[376.摆动序列](https://leetcode.cn/problems/wiggle-subsequence/)
+
+**删除单调坡度上的节点（不包括单调坡度两端的节点）**
+
+难点在于以下两种情况：
+
+![img](USING JS.assets/20230108174452.png)
+
+```js
+var wiggleMaxLength = function(nums) {
+    if(nums.length <= 1) return nums.length
+    let preDiff = 0
+    let curDiff = 0
+    // 默认最右有一个峰值
+    let res = 1
+    for(let i=0; i<nums.length; i++) {
+        curDiff = nums[i] - nums[i-1]
+        if(preDiff<=0 && curDiff>0 || preDiff>=0 && curDiff<0) {
+            res++
+            preDiff = curDiff
+        }
+    }
+    return res
+};
+```
 
 
 
+### 3、最大子数组和
+
+[53.最大子数组和](https://leetcode.cn/problems/maximum-subarray/)
+
+连续子数组
+
+当前“连续和”为负数的时候立刻放弃，从下一个元素重新计算“连续和”，因为负数加上下一个元素 “连续和”只会越来越小。
+
+**`Number.MAX_VALUE`** 属性表示在 JavaScript 里所能表示的最大数值。
+
+全局属性 **`Infinity`** 是一个数值，表示无穷大。
+
+当然，infinity是大于Number.MAX_VALUE的
+
+```js
+var maxSubArray = function(nums) {
+    let num = 0
+    // res 的初始值一定要设为最小的负数，不然全部为负数的会出问题
+    let res = -Number.MAX_VALUE
+    for(let i=0; i<nums.length; i++) {
+        num += nums[i]
+        if(num > res) res = num
+        if(num < 0) num = 0
+    }
+    return res
+};
+```
+
+👉 注意：这里的初始result值一定要是最小的负数，上面两种都是可以的
 
 
 
+### 4、买卖股票的最佳时机II
+
+[122.买卖股票的最佳时机II](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-ii/)
+
+太简单了啊，取相邻两数的差值，把正的差值全部加起来就行了
+
+```js
+var maxProfit = function(prices) {
+    let res = 0
+    for(let i=1; i<prices.length; i++) {
+        res += Math.max(prices[i]-prices[i-1], 0)
+    }
+    return res
+};
+```
+
+
+
+### 5、跳跃游戏
+
+[55.跳跃游戏](https://leetcode.cn/problems/jump-game/)
+
+这题还是很简单的，只要一直去更新最大覆盖范围，记得遍历的数组元素也要一直在更新的最大覆盖范围里就行，其他没什么了
+
+```js
+var canJump = function(nums) {
+    let maxCover = 0
+    let len = nums.length
+    for(let i=0; i<=maxCover; i++) {
+        maxCover = Math.max(maxCover, i+nums[i])
+        if(maxCover >= len-1) return true
+    }
+    return false
+};
+```
+
+
+
+### 6、跳跃游戏 II
+
+[45.跳跃游戏 II](https://leetcode.cn/problems/jump-game-ii/)
+
+![45.跳跃游戏II](USING JS.assets/20201201232309103.png)
+
+这里的要借助`当前可覆盖最大范围`和`下一步可覆盖最大范围`这两个参数
+
+这里只要 i 的下标触碰到当前可覆盖最大范围了，就需要去启用下一步了
+
+👉 注意：这里的遍历只需要遍历到倒数第二个数就行了，因为最初始的时候多加了1
+
+```js
+var jump = function(nums) {
+    let curCover = 0
+    let nextCover = 0
+    let step = 0
+    let len = nums.length
+    for(let i=0; i<len-1; i++) {
+        // 下一步的范围是当前范围值中能取到的最大值
+        nextCover = Math.max(i+nums[i], nextCover)
+        // 如果i已经走到curCover这一步了，就需要启用下一步了
+        if(i === curCover) {
+            curCover = nextCover
+            step++
+        }
+    }
+    return step
+};
+```
+
+
+
+### 7、K次取反后最大化的数组和
+
+[1005.K次取反后最大化的数组和](https://leetcode.cn/problems/maximize-sum-of-array-after-k-negations/)
+
+按绝对值降序排序，先把所有绝对值大的负数取反，累加
+
+如果负数已经全部变正了，k的个数是奇数，再把已得出的数组和减去两倍数组中绝对值最小的数
+
+```js
+var largestSumAfterKNegations = function(nums, k) {
+    let res = 0
+    // 按绝对值降序排序
+    nums.sort((a,b) => Math.abs(b) - Math.abs(a))
+    // 遍历一遍 把所有负的先都转换为正的
+    for(let i=0; i<nums.length; i++) {
+        if(nums[i]<0 && k){
+            nums[i] *= -1
+            k--
+        }
+        res += nums[i]
+    }
+    if(k%2 !== 0) {
+        res -= 2*nums[nums.length-1]
+    }
+    return res
+};
+```
 
 
 
