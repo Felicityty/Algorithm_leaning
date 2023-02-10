@@ -2562,6 +2562,246 @@ var findMinArrowShots = function(points) {
 
 ### 13、无重叠区间
 
+[435.无重叠区间](https://leetcode.cn/problems/non-overlapping-intervals/)
+
+按照右边界排序，从左向右记录非交叉区间的个数。最后用区间总数减去非交叉区间的个数就是需要移除的区间个数了
+
+![435.无重叠区间](USING JS.assets/20201221201553618.png)
+
+```js
+var eraseOverlapIntervals = function(intervals) {
+    // 右边界排序
+    // 注意箭头函数的写法
+    intervals.sort((a, b) => a[1] - b[1])
+
+    // 记录没有重叠的区间的数量
+    let count = 1
+    let end = intervals[0][1]
+
+    for(let i=1; i<intervals.length; i++) {
+        if(intervals[i][0] >= end) {
+            count++
+            end = intervals[i][1]
+        }
+    }
+
+    return intervals.length - count
+};
+```
+
+
+
+### 14、划分字母区间
+
+[763.划分字母区间](https://leetcode.cn/problems/partition-labels/)
+
+可以分为如下两步：
+
+- 统计每一个字符最后出现的位置
+- 从头遍历字符，并更新字符的最远出现下标，如果找到字符最远出现位置下标和当前下标相等了，则找到了分割点
+
+![763.划分字母区间](USING JS.assets/20201222191924417.png)
+
+👉 散列表（Hash table，也叫***哈希表***），是根据关键码值(Key value)而直接进行访问的数据结构
+
+借助object建立一个哈希表，来每个元素的最远出现下标
+
+想清楚right的更新就行了
+
+```js
+var partitionLabels = function(s) {
+    // 建立一个哈希表（根据键值来进行直接访问）
+    // 记录每个字符的最远出现下标
+    let hash = {}
+    let left = 0
+    let right = 0
+    let res = []
+    for(let i=0; i<s.length; i++) {
+        hash[s[i]] = i
+    }
+    // 遍历字符串，当当前下标等于最远出现下标，就要记录一次
+    for(let i=0; i<s.length; i++) {
+        // 这里要想清楚right的更新诶 不要想当然
+        right = Math.max(right, hash[s[i]])
+        if(right === i) {
+            res.push(right-left+1)
+            left = i+1
+        }
+    }
+    return res
+};
+```
+
+👉 用map也是可以的
+
+`map.set(key, value)`  向map中添加键值对
+
+`map.get(key)`  根据key获取值
+
+
+
+### 15、合并区间
+
+[56.合并区间](https://leetcode.cn/problems/merge-intervals/)
+
+自己写出来的呀，多考虑一下情况，用左右边界，easy啦~
+
+![56.合并区间](USING JS.assets/20201223200632791.png)
+
+```js
+var merge = function(intervals) {
+    // 先按左边界排序
+    intervals.sort((a, b) => a[0] - b[0])
+
+    let res = []
+    let left = intervals[0][0]
+    let right = intervals[0][1]
+    for(let i=1; i<intervals.length; i++) {
+        if(intervals[i][0] <= right) {
+            // 这里要排除一些包含的情况
+            right = Math.max(right, intervals[i][1])
+        } else {
+            res.push([left, right])
+            left = intervals[i][0]
+            right = intervals[i][1]
+        }
+    }
+    // 最后还要push一下
+    res.push([left, right])
+    return res
+};
+```
+
+
+
+### 🌟 箭头函数踩坑
+
+吃了好几次亏了，写错咋就那么顺手捏
+
+写法一：
+
+```js
+intervals.sort((a, b) => a[0] - b[0])
+```
+
+写法二：（不要忘记return！）
+
+```js
+intervals.sort((a, b) => {
+	return a[0] - b[0]
+})
+```
+
+
+
+### 16、单调递增的数字
+
+[738.单调递增的数字](https://leetcode.cn/problems/monotone-increasing-digits/)
+
+**遇到strNum[i - 1] > strNum[i]的情况，让strNum[i - 1]--，然后strNum[i]给为9，可以保证这两位变成最大单调递增整数**
+
+所以从前后向遍历会改变已经遍历过的结果
+
+嘿嘿，我已经感觉到要从后往前遍历了
+
+👉 本题难点：感觉是**数据类型转换**诶
+
+数字 -> 字符串：
+
+`n = n.toString()`
+
+字符串 -> 数字数组：
+
+`n = n.split('').map(item => +item)`
+
+数字数组 -> 字符串：
+
+`n = n.join('')`
+
+字符串 -> 数字：
+
+`+n`
+
+```js
+var monotoneIncreasingDigits = function(n) {
+    // 把n转为一个全是数字的数组
+    n = n.toString()
+    n = n.split('').map(item => +item)
+    let flag = Infinity
+    for(let i=n.length-1; i>0; i--) {
+        if(n[i-1] > n[i]) {
+            flag = i
+            n[i-1]--
+            n[i] = 9
+        }
+    }
+    // 像100这种 预期结果应该是99 而不是90 所以还要多遍历一下
+    for(let i=flag; i<n.length; i++) {
+        n[i] = 9
+    }
+    // 把数字数组的元素连接成一个字符串
+    n = n.join('')
+    // 字符串转换成数字
+    return +n
+};
+```
+
+
+
+### 17、买卖股票的最佳时机含手续费
+
+[714. 买卖股票的最佳时机含手续费](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/)
+
+因为有手续费了，所以什么时候买卖就重要了
+
+买入日期就是更低价格的更新
+
+卖出日期需要找找
+
+👉 难点在于：万一不是获利区间的最后一天，不是真正的买卖的话，需要把当前的价格减去fee来更新一下最低价格
+
+多想想就懂了啊，相当于把那天的手续费减掉了
+
+```js
+var maxProfit = function(prices, fee) {
+    let res = 0
+    let minPrice = prices[0]
+    for(let i=0; i<prices.length; i++) {
+        // 更新最低价格
+        if(prices[i] < minPrice)
+            minPrice = prices[i]
+        
+        if(prices[i] > minPrice + fee) {
+            res += prices[i] - minPrice - fee
+            // 这一步尤为重要啊 更新最低价格
+            // 万一这一步不是获利区间的最后一天，更新为最低价格，不是真正的买卖，不影响之后的计算
+            minPrice = prices[i] - fee
+        }
+    }
+    return res
+};
+```
+
+
+
+### 18、监控二叉树【困难】
+
+[968.监控二叉树](https://leetcode.cn/problems/binary-tree-cameras/)
+
+**让叶子节点的父节点安摄像头，所用摄像头最少，整体最优：全部摄像头数量所用最少！**
+
+因为头结点放不放摄像头也就省下一个摄像头， 叶子节点放不放摄像头省下了的摄像头数量是指数阶别的
+
+每个节点可能有几种状态：
+
+- 0：该节点无覆盖
+- 1：本节点有摄像头
+- 2：本节点有覆盖
+
+空节点的状态只能是有覆盖，这样就可以在叶子节点的父节点放摄像头了
+
+
+
 
 
 
