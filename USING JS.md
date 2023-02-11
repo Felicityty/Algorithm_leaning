@@ -2806,7 +2806,328 @@ var maxProfit = function(prices, fee) {
 
 
 
+## 动态规划
 
+又见啦，动规！这次善待我 OK？
+
+👉 动规是由前一个状态推导出来的，而贪心是局部直接选最优的
+
+👀 步骤：
+
+> 1. 确定dp数组（dp table）以及下标的含义
+> 2. 确定递推公式
+> 3. dp数组如何初始化
+> 4. 确定遍历顺序
+> 5. 举例推导dp数组
+
+![img](USING JS.assets/动态规划-总结大纲1.jpg)
+
+
+
+### 1、斐波那契数列
+
+[509.斐波那契数列](https://leetcode.cn/problems/fibonacci-number/)
+
+0、1、1、2、3、5、8、13、21……
+
+经典啊
+
+```js
+// 动规
+var fib = function(n) {
+    // 我们只要维护两个序列就行了
+    if(n <= 1) return n
+    let dp = new Array(2)
+    dp[0] = 0
+    dp[1] = 1
+    for(let i=2; i<=n; i++) {
+        let sum = dp[0] + dp[1]
+        dp[0] = dp[1]
+        dp[1] = sum
+    }
+    return dp[1]
+};
+
+// 心血来潮 送你个递归叭
+// var fib = function(n) {
+//     if(n <= 1) return n
+//     return fib(n-1) + fib(n-2)
+// };
+```
+
+
+
+### 2、爬楼梯
+
+dp[i] 可以有两个方向推出来
+
+- 首先是dp[i - 1]，上i-1层楼梯，有dp[i - 1]种方法，那么再一步跳一个台阶不就是dp[i]了么。
+
+- 还有就是dp[i - 2]，上i-2层楼梯，有dp[i - 2]种方法，那么再一步跳两个台阶不就是dp[i]了么。
+
+那么dp[i]就是 dp[i - 1]与dp[i - 2]之和！
+
+dp数组直接从1和2开始初始化就行了
+
+给我爬！
+
+![70.爬楼梯](USING JS.assets/20210105202546299.png)
+
+👀 发现玄机了叭，就是斐波那契啊
+
+```js
+var climbStairs = function(n) {
+    if(n <= 1) return n
+    let dp = new Array(3)
+    dp[1] = 1
+    dp[2] = 2
+    for(let i=3; i<=n; i++) {
+        let sum = dp[1] + dp[2]
+        dp[1] = dp[2]
+        dp[2] = sum
+    }
+    return dp[2]
+};
+```
+
+
+
+### 3、使用最小花费爬楼梯
+
+[746.使用最小花费爬楼梯](https://leetcode.cn/problems/min-cost-climbing-stairs/)
+
+dp[i]的定义：到达第i台阶所花费的最少体力为dp[i]
+
+可以有两个途径得到dp[i]，一个是dp[i-1] 一个是dp[i-2]
+
+dp[i - 1] 跳到 dp[i] 需要花费 dp[i - 1] + cost[i - 1]
+
+dp[i - 2] 跳到 dp[i] 需要花费 dp[i - 2] + cost[i - 2]
+
+选最小的，所以 `dp[i] = min(dp[i - 1] + cost[i - 1], dp[i - 2] + cost[i - 2]);`
+
+![img](USING JS.assets/20221026175104.png)
+
+```js
+var minCostClimbingStairs = function(cost) {
+    let dp = new Array(cost.length+1)
+    // 根据题目意思 前两步都不花费体力的
+    dp[0] = 0
+    dp[1] = 0
+    for(let i=2; i<=cost.length; i++) {
+        dp[i] = Math.min(dp[i-1]+cost[i-1], dp[i-2]+cost[i-2])
+    }
+    return dp[cost.length]
+};
+```
+
+
+
+### 4、不同路径
+
+[不同路径](https://leetcode.cn/problems/unique-paths/)
+
+![62.不同路径1](USING JS.assets/20201209113631392.png)
+
+这题哦 就有点感觉了，高中排列组合好像也能做诶 还行还行~
+
+```js
+var uniquePaths = function(m, n) {
+    // 初始化一个二维数组
+    let dp = new Array(m).fill().map(item => new Array(n))
+
+    for(let i=0; i<m; i++) dp[i][0] = 1
+
+    for(let i=0; i<n; i++) dp[0][i] = 1
+
+    for(let i=1; i<m; i++) {
+        for(let j=1; j<n; j++) {
+            dp[i][j] = dp[i-1][j] + dp[i][j-1]
+        }
+    }
+
+    return dp[m-1][n-1]
+};
+```
+
+
+
+👉 初始化一个二维数组：
+
+`let dp = new Array(m).fill().map(item => new Array(n))`
+
+👉 二维数组下标：
+
+![image-20230211142215449](USING JS.assets/image-20230211142215449.png)
+
+
+
+### 5、不同路径 II
+
+[63. 不同路径 II](https://leetcode.cn/problems/unique-paths-ii/)
+
+两种方法，一种借助dp数组，一种直接在原数组上操作
+
+1️⃣ dp数组
+
+考虑得相对简单，只要在数组初始化的时候，加个遇到障碍后的判断，之后的全是0
+
+![63.不同路径II](USING JS.assets/20210104114513928.png)
+
+```js
+var uniquePathsWithObstacles = function(obstacleGrid) {
+    let m = obstacleGrid.length
+    let n = obstacleGrid[0].length
+    // 初始化二维数组
+    let dp = new Array(m).fill().map(item => new Array(n).fill(0))
+    
+    // 遇到障碍后，之后的全是0
+    for(let i=0; i<m&&!obstacleGrid[i][0]; i++) dp[i][0] = 1
+    for(let i=0; i<n&&!obstacleGrid[0][i]; i++) dp[0][i] = 1
+
+    // 只要不是障碍就差不多
+    for(let i=1; i<m; i++) {
+        for(let j=1; j<n; j++) {
+            dp[i][j] = obstacleGrid[i][j]===1 ? 0 : dp[i-1][j]+dp[i][j-1] 
+        }
+    }
+
+    return dp[m-1][n-1]
+};
+```
+
+2️⃣ 直接操作原数组
+
+这里初始化数组会比较有意思，用了两个新奇的运算符
+
+不要被 0 1 搞混就是了
+
+```js
+var uniquePathsWithObstacles = function(obstacleGrid) {
+    const m = obstacleGrid.length
+    const n = obstacleGrid[0].length
+
+    for (let i = 0; i < m; i++) {
+        for (let j = 0; j < n; j++) {
+            // 不是障碍物
+            if (obstacleGrid[i][j] === 0) {
+                if (i === 0) {
+                    // 取左边的值
+                    // 这里的 ?? 是在给 obstacleGrid[0][0] 初始化啊
+                    obstacleGrid[i][j] = obstacleGrid[0][j - 1] ?? 1
+                } else if (j === 0) {
+                    // 取上边的值
+                    // 这里也是这个意思
+                    obstacleGrid[i][j] = obstacleGrid[i - 1]?.[0] ?? 1
+                } else {
+                    // 取左边和上边的和
+                    obstacleGrid[i][j] = obstacleGrid[i - 1][j] + obstacleGrid[i][j - 1]
+                }
+            } else {
+                // 如果是障碍物，则路径为0
+                obstacleGrid[i][j] = 0
+            }
+        }
+    }
+    return obstacleGrid[m - 1][n - 1]
+};
+```
+
+👉 **空值合并运算符**（**`??`**）是一个逻辑运算符，当左侧的操作数为 [`null`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/null) 或者 [`undefined`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/undefined) 时，返回其右侧操作数，否则返回左侧操作数
+
+左边是 假值（例如，`''` 或 `0`）时，也会返回左边的
+
+https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing
+
+![image-20230211150001755](USING JS.assets/image-20230211150001755.png)
+
+👉 **可选链运算符**（**`?.`**）允许读取位于连接对象链深处的属性的值，而不必明确验证链中的每个引用是否有效。`?.` 运算符的功能类似于 `.` 链式运算符，不同之处在于，在引用为空 ([nullish](https://developer.mozilla.org/zh-CN/docs/Glossary/Nullish) ) ([`null`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/null) 或者 [`undefined`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/undefined)) 的情况下不会引起错误，该表达式短路返回值是 `undefined`。与函数调用一起使用时，如果给定的函数不存在，则返回 `undefined`
+
+https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Optional_chaining
+
+![image-20230211152135923](USING JS.assets/image-20230211152135923.png)
+
+
+
+### 6、整数拆分
+
+[343.整数拆分](https://leetcode.cn/problems/integer-break/)
+
+定义 dp[i]：分拆数字i，可以得到的最大乘积为dp[i]
+
+有两种渠道得到dp[i]
+
+一个是j * (i - j) 直接相乘。
+
+一个是j * dp[i - j]，相当于是拆分(i - j)，对这个拆分不理解的话，可以回想dp数组的定义
+
+👉 递推公式：dp[i] = max(dp[i], max((i - j) * j, dp[i - j] * j));
+
+```js
+var integerBreak = function(n) {
+    // 小细节注意吧
+    let dp = new Array(n+1).fill(0)
+    // 0 和 1 根本没有意义
+    dp[2] = 1
+    for(let i=3; i<=n; i++) {
+        for(let j=1; j<=i/2; j++) {
+            // 这里的dp[i]怎么能傻乎乎忘记哇
+            // 之前的结果都得好好记录在这里啊
+            dp[i] = Math.max(dp[i], j*dp[i-j], j*(i-j))
+        }
+    }
+    return dp[n]
+};
+```
+
+哦豁，突然发现js的取最大值的参数可以是多个诶，C++就不行😎
+
+
+
+### 7、不同的二叉搜索树
+
+[96.不同的二叉搜索树](https://leetcode.cn/problems/unique-binary-search-trees/)
+
+dp[i] ： 1到i为节点组成的二叉搜索树的个数为dp[i]
+
+eg：
+
+dp[3]，就是 元素1为头结点搜索树的数量 + 元素2为头结点搜索树的数量 + 元素3为头结点搜索树的数量
+
+元素1为头结点搜索树的数量 = 右子树有2个元素的搜索树数量 * 左子树有0个元素的搜索树数量
+
+元素2为头结点搜索树的数量 = 右子树有1个元素的搜索树数量 * 左子树有1个元素的搜索树数量
+
+元素3为头结点搜索树的数量 = 右子树有0个元素的搜索树数量 * 左子树有2个元素的搜索树数量
+
+有2个元素的搜索树数量就是dp[2]。
+
+有1个元素的搜索树数量就是dp[1]。
+
+有0个元素的搜索树数量就是dp[0]。
+
+所以dp[3] = dp[2] * dp[0] + dp[1] * dp[1] + dp[0] * dp[2]
+
+![96.不同的二叉搜索树2](USING JS.assets/20210107093226241.png)
+
+```js
+var numTrees = function(n) {
+    // 像这种下标就是n的，一定要+1！
+    let dp = new Array(n+1).fill(0)
+    dp[0] = 1
+    dp[1] = 1
+
+    for(let i=2; i<=n; i++) {
+        for(let j=0; j<i; j++) {
+            dp[i] += dp[j] * dp[i-j-1]
+        }
+    }
+    
+    return dp[n]
+};
+```
+
+找出这个关系挺难的诶 不大好想😒
 
 
 
