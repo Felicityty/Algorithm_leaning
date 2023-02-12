@@ -32,7 +32,7 @@
 
 👇 **建立初值全为0的二维数组**
 
-`this.sums = new Array(m+1).fill(0).map(()=> new Array(n+1).fill(0));`
+`this.sums = new Array(m+1).fill().map(()=> new Array(n+1).fill(0));`
 
 
 
@@ -3128,6 +3128,249 @@ var numTrees = function(n) {
 ```
 
 找出这个关系挺难的诶 不大好想😒
+
+
+
+---
+
+**背包啦~**
+
+![416.分割等和子集1](USING JS.assets/20210117171307407.png)
+
+
+
+### eg：01背包
+
+|       | 重量 | 价值 |
+| ----- | ---- | ---- |
+| 物品0 | 1    | 15   |
+| 物品1 | 3    | 20   |
+| 物品2 | 4    | 30   |
+
+#### 1）二维数组
+
+`dp[i][j]`的含义：从下标为[0-i]的物品里任意取，放进容量为j的背包，价值总和最大是多少
+
+`dp[i][j] = max(dp[i - 1][j], dp[i - 1][j - weight[i]] + value[i]);`
+
+![动态规划-背包问题4](USING JS.assets/20210118163425129.jpg)
+
+```js
+function testWeightBagProblem (weight, value, size) {
+    // 定义 dp 数组
+    const len = weight.length,
+          dp = Array(len).fill().map(() => Array(size + 1).fill(0));
+
+    // 初始化
+    for(let j = weight[0]; j <= size; j++) {
+        dp[0][j] = value[0];
+    }
+
+    // weight 数组的长度len 就是物品个数
+    for(let i = 1; i < len; i++) { // 遍历物品
+        for(let j = 0; j <= size; j++) { // 遍历背包容量
+            if(j < weight[i]) dp[i][j] = dp[i - 1][j];
+            else dp[i][j] = Math.max(dp[i - 1][j], dp[i - 1][j - weight[i]] + value[i]);
+        }
+    }
+
+    console.table(dp)
+
+    return dp[len - 1][size];
+}
+
+function test () {
+    console.log(testWeightBagProblem([1, 3, 4, 5], [15, 20, 30, 55], 6));
+}
+
+test();
+```
+
+#### 2）滚动数组
+
+降维嘛
+
+`dp[j] = max(dp[j], dp[j - weight[i]] + value[i]);`
+
+👉 **遍历背包的顺序是倒序，是为了保证物品i只被放入一次！**
+
+所以从后往前循环，每次取得状态不会和之前取得状态重合，这样每种物品就只取一次了，体会一下就懂了呀~
+
+就是说，如果物品数量是无限的，就可以正序遍历了嘛😎
+
+👉 二维为什么是正序嘞？ 对于二维dp，`dp[i][j]`都是通过上一层即`dp[i - 1][j]`计算而来，本层的`dp[i][j]`并不会被覆盖！
+
+👉 **必须先遍历物品嵌套遍历背包容量哈**
+
+```js
+function testWeightBagProblem(wight, value, size) {
+  const len = wight.length, 
+    dp = Array(size + 1).fill(0);
+  // 不大喜欢这里从1开始， 看下面那题的例子吧
+  for(let i = 1; i <= len; i++) {
+    // 不用到0的，之前的不会改变的
+    for(let j = size; j >= wight[i - 1]; j--) {
+      dp[j] = Math.max(dp[j], value[i - 1] + dp[j - wight[i - 1]]);
+    }
+  }
+  return dp[size];
+}
+
+
+function test () {
+  console.log(testWeightBagProblem([1, 3, 4, 5], [15, 20, 30, 55], 6));
+}
+
+test();
+```
+
+
+
+### 8、分割等和子集
+
+[416.分割等和子集](https://leetcode.cn/problems/partition-equal-subset-sum/)
+
+![416.分割等和子集2](USING JS.assets/20210110104240545.png)
+
+```js
+var canPartition = function(nums) {
+    // js里求数组和都用的reduc诶，拿捏
+    let sum = nums.reduce((a, b) => a+b)
+    if(sum & 1) return false
+    let dp = new Array(sum/2+1).fill(0)
+    // 先遍历物品 这里的i是下标啦
+    for(let i=0; i<nums.length; i++) {
+        // 倒序遍历背包
+        for(let j=sum/2; j>=nums[i]; j--) {
+            dp[j] = Math.max(dp[j], dp[j-nums[i]]+nums[i])
+        }
+    }
+    return dp[sum/2] === sum/2
+};
+```
+
+
+
+#### 👉 排除奇数和0：
+
+只有0和奇数按位与1是1，偶数按位与1是0，妙啊
+
+```js
+if (sum & 1) return false
+```
+
+
+
+### 9、最后一块石头的重量II
+
+[1049.最后一块石头的重量II](https://leetcode.cn/problems/last-stone-weight-ii/)
+
+这一题其实跟上一题差不多诶，也是分为两堆，只是可以分为两堆重量不同但最接近的
+
+![1049.最后一块石头的重量II](USING JS.assets/20210121115805904.jpg)
+
+```js
+var lastStoneWeightII = function(stones) {
+    let sum = stones.reduce((a,b) => a+b)
+    let maxSize = Math.floor(sum/2)
+    let dp = new Array(maxSize+1).fill(0)
+    for(let i=0; i<stones.length; i++) {
+        for(let j=maxSize; j>=stones[i]; j--) {
+            dp[j] = Math.max(dp[j], dp[j-stones[i]]+stones[i])
+        }
+    }
+    return sum - dp[maxSize]*2
+};
+```
+
+呀呼，就是差不多嘛，就是这里不是整除了哦
+
+
+
+### 10、目标和
+
+[494.目标和](https://leetcode.cn/problems/target-sum/)
+
+假设加法的总和为x，那么减法对应的总和就是sum - x
+
+所以我们要求的是 x - (sum - x) = target
+
+x = (target + sum) / 2
+
+👉 所以说 target+sum 一定是个偶数呀~
+
+`dp[j] += dp[j - nums[i]]`
+
+
+
+输入：nums: [1, 1, 1, 1, 1], S: 3
+
+bagSize = (S + sum) / 2 = (3 + 5) / 2 = 4
+
+![494.目标和](USING JS.assets/20210125120743274.jpg)
+
+```js
+var findTargetSumWays = function(nums, target) {
+    let sum = nums.reduce((a,b) => a+b)
+    let half = sum + target // 这个half一定是个偶数
+    // target还可以是小于0的 或者 sum和target之和是奇数 都是无解的
+    if(Math.abs(target) > sum || half & 1) return 0
+    let dp = new Array(half+1).fill(0)
+    // 这里一定要给一个初始值的
+    dp[0] = 1
+    for(let i=0; i<nums.length; i++) {
+        for(let j=half/2; j>=nums[i]; j--) {
+            dp[j] += dp[j-nums[i]]
+        }
+    }
+    return dp[half/2]
+};
+```
+
+这题有点难想啊，一个是转换为之前那两题的思想，去转换为一个背包问题，并且背包的最大容量是什么，都需要想一想啊
+
+其次就是dp数组要有一个初值，是需要注意的诶
+
+这题的确看了好多次题解才写出来的😒
+
+
+
+### 11、一和零
+
+[474.一和零](https://leetcode.cn/problems/ones-and-zeroes/)
+
+![474.一和零](USING JS.assets/20210120111201512.jpg)
+
+👉 这题要把背包从两个维度想，都得从后往前遍历👍，难度的话会比之前那题好点儿~
+
+```js
+var findMaxForm = function(strs, m, n) {
+    let dp = new Array(m+1).fill().map(item => new Array(n+1).fill(0))
+    // 顺序遍历物品
+    for(let str of strs) {
+        let zeroNum = 0
+        let oneNum = 0
+
+        for(let c of str) {
+            if(c === '0') zeroNum++
+            else oneNum++
+        }
+
+        // 这里的i和j都是背包容量呀 只是有两个维度
+        // 所以都是从后往前
+        for(let i=m; i>=zeroNum; i--) {
+            for(let j=n; j>=oneNum; j--) {
+                dp[i][j] = Math.max(dp[i][j], dp[i-zeroNum][j-oneNum]+1)
+            }
+        }
+    }
+    return dp[m][n]
+};
+```
+
+
+
+完全背包啦~
 
 
 
