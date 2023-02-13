@@ -3370,7 +3370,232 @@ var findMaxForm = function(strs, m, n) {
 
 
 
-完全背包啦~
+### eg：完全背包
+
+👉 **每种物品有无限件，求凑成背包最大价值是多少**
+
+背包最大重量为4。
+
+物品为：
+
+|       | 重量 | 价值 |
+| ----- | ---- | ---- |
+| 物品0 | 1    | 15   |
+| 物品1 | 3    | 20   |
+| 物品2 | 4    | 30   |
+
+![动态规划-完全背包](USING JS.assets/20210126104510106.jpg)
+
+**在完全背包中，对于一维dp数组来说，其实两个for循环嵌套顺序是无所谓的！**
+
+因为dp[j] 是根据 下标j之前所对应的dp[j]计算出来的。 只要保证下标j之前的dp[j]都是经过计算的就可以了。
+
+👇 先遍历物品，再遍历背包容量（就都这样吧，只是这里不用倒序了哦）
+
+```js
+// 先遍历物品，再遍历背包容量
+function test_completePack1() {
+    let weight = [1, 3, 5]
+    let value = [15, 20, 30]
+    let bagWeight = 4 
+    let dp = new Array(bagWeight + 1).fill(0)
+    for(let i = 0; i <= weight.length; i++) {
+        for(let j = weight[i]; j <= bagWeight; j++) {
+            dp[j] = Math.max(dp[j], dp[j - weight[i]] + value[i])
+        }
+    }
+    console.log(dp)
+}
+```
+
+
+
+### 🌟 排列 组合
+
+**求组合数 👉  先遍历物品，再遍历背包**
+
+**求排列数 👉  先遍历背包，再遍历物品**
+
+❗❗❗ 不管先遍历什么 都需要当前背包容量大于等于当前物品的
+
+先遍历背包的话 就要加个if判断
+
+先遍历物品的话 背包开始的初值是当前物品的重量
+
+
+
+### 12、零钱兑换 II
+
+[518.零钱兑换 II](https://leetcode.cn/problems/coin-change-ii/)
+
+![518.零钱兑换II](USING JS.assets/20210120181331461.jpg)
+
+👉 首先题目中说硬币个数有无限个，确定本题是一个完全背包问题
+
+这题求的是组合数，还真只能先遍历物品，再遍历背包诶
+
+换一下顺序，求出来的就是排列数了，想一想确实啊 👇
+
+https://programmercarl.com/0518.%E9%9B%B6%E9%92%B1%E5%85%91%E6%8D%A2II.html#%E6%80%9D%E8%B7%AF
+
+```js
+var change = function(amount, coins) {
+    let dp = new Array(amount+1).fill(0)
+    dp[0] = 1
+    for(let i=0; i<coins.length; i++) {
+        for(let j=coins[i]; j<=amount; j++) {
+            dp[j] += dp[j-coins[i]]
+        }
+    }
+    return dp[amount]
+};
+```
+
+还挺简单的~耶
+
+
+
+### 13、组合总和 IV
+
+[377. 组合总和 Ⅳ](https://leetcode.cn/problems/combination-sum-iv/)
+
+这道题跟上一题一样，就是变成排列了
+
+👉 所以嘛，就是先遍历背包，再遍历物品就行了，不同顺序也会算是一种情况
+
+```js
+var combinationSum4 = function(nums, target) {
+    let dp = new Array(target+1).fill(0)
+    dp[0] = 1
+    for(let i=0; i<=target; i++) {
+        for(let j=0; j<nums.length; j++) {
+            // 这里的i和j要注意诶 想清楚！
+            if(i>=nums[j]) dp[i] += dp[i-nums[j]]
+        }
+    }
+    return dp[target]
+};
+```
+
+
+
+### 14、爬楼梯
+
+[70.爬楼梯](https://leetcode.cn/problems/climbing-stairs/)
+
+哇塞！这题我感觉用完全背包更容易想诶，easy
+
+👉 一道求排列的完全背包，所以先遍历背包，再遍历物品
+
+```js
+var climbStairs = function(n) {
+    let dp = new Array(n+1).fill(0)
+    let choices = [1, 2]
+    dp[0] = 1
+    for(let i=0; i<=n; i++) {
+        for(let j=0; j<choices.length; j++) {
+            if(i>=choices[j]) dp[i] += dp[i-choices[j]]
+        }
+    }
+    return dp[n]
+}
+```
+
+
+
+### 15、零钱兑换 - 求最少硬币数
+
+[322.零钱兑换](https://leetcode.cn/problems/coin-change/)
+
+👉 这道题跟之前 [518.零钱兑换 II](https://leetcode.cn/problems/coin-change-ii/) 大大不一样了啊，不求组合数了，求的是最少硬币个数
+
+所以啊，第一反应，肯定要用min，并且也不是 `dp[j] += ……` 这样所有情况累加了
+
+这题遍历顺序不重要，重要的是dp递推公式和dp的初始值
+
+我当然首当其冲选先遍历物品，再遍历背包的
+
+递推公式：`p[j] = Math.min(dp[j], dp[j-coins[i]]+1)`
+
+这也决定了初值应该全为Infinity，dp[0] = 0 就行了
+
+```js
+var coinChange = function(coins, amount) {
+    if(amount === 0) return 0
+
+    let dp = new Array(amount+1).fill(Infinity)
+    dp[0] = 0
+    for(let i=0; i<coins.length; i++) {
+        // 这里的j直接从coins[i]开始就行了啊
+        for(let j=coins[i]; j<=amount; j++) {
+            dp[j] = Math.min(dp[j], dp[j-coins[i]]+1)
+        }
+    }
+    // 题意是这样的
+    return dp[amount] === Infinity ? -1 : dp[amount]
+};
+```
+
+
+
+### 16、完全平方数
+
+[279.完全平方数](https://leetcode.cn/problems/perfect-squares/)
+
+这题啊，不是跟上一题简直一模一样嘛
+
+不过 `i * i` 会不会改成 `i ** 2` 好一点
+
+```js
+var numSquares = function(n) {
+    let dp = new Array(n+1).fill(Infinity)
+    dp[0] = 0
+    for(let i=0; i*i<=n; i++) {
+        for(let j=i*i; j<=n; j++) {
+            dp[j] = Math.min(dp[j], dp[j-i*i]+1)
+        }
+    }
+    return dp[n]
+};
+```
+
+吼吼吼，我真厉害~
+
+
+
+### 17、单词拆分
+
+[139.单词拆分](https://leetcode.cn/problems/word-break/)
+
+![139.单词拆分](USING JS.assets/20210202162652727.jpg)
+
+这题是会有顺序的嘛 第一感觉挺准的诶 就应该先遍历背包 再遍历物品
+
+```js
+var wordBreak = function(s, wordDict) {
+    let dp = new Array(s.length+1).fill(false)
+    dp[0] = true
+    for(let i=0; i<=s.length; i++) {
+        for(let j=0; j<wordDict.length; j++) {
+            if(i >= wordDict[j].length) {
+                if(dp[i-wordDict[j].length] && s.slice(i-wordDict[j].length, i) === wordDict[j])
+                    dp[i] = true
+            }
+        }
+    }
+    return dp[s.length]
+};
+```
+
+这题其实不难想诶，但还是看了题解再写的，可能难点在截取字符串再去比较那里吧😥，一开始还真的没有这种思路啊，学到了😏
+
+
+
+多重背包 跳！
+
+明天打家劫舍~
+
+
 
 
 
