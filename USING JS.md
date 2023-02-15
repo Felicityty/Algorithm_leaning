@@ -3837,19 +3837,143 @@ var findLengthOfLCIS = function(nums) {
 
 
 
-今天差不多差不多
+### 23、最长重复子数组
+
+[718. 最长重复子数组](https://leetcode.cn/problems/maximum-length-of-repeated-subarray/)
+
+![718.最长重复子数组](USING JS.assets/2021011215282060.jpg)
+
+这里的子数组是连续的，脑子里有这张图就行了
+
+```js
+var findLength = function(nums1, nums2) {
+    let len1 = nums1.length
+    let len2 = nums2.length
+    let dp = new Array(len1+1).fill().map(item => new Array(len2+1).fill(0))
+    let res = 0
+    for(let i=1; i<=len1; i++) {
+        for(let j=1; j<=len2; j++) {
+            if(nums1[i-1] === nums2[j-1]) {
+                dp[i][j] = dp[i-1][j-1] + 1
+            }
+            if(dp[i][j] > res) res = dp[i][j]
+        }
+    }
+    return res
+};
+```
 
 
 
+### 24、最长公共子序列
+
+[1143. 最长公共子序列](https://leetcode.cn/problems/longest-common-subsequence/)
+
+![1143.最长公共子序列1](USING JS.assets/20210210150215918.jpg)
+
+这道题可以不连续，所以当前的值还可以从上和下继承下来，图很重要啊
+
+```js
+var longestCommonSubsequence = function(text1, text2) {
+    let len1 = text1.length
+    let len2 = text2.length
+    let dp = new Array(len1+1).fill().map(item => new Array(len2+1).fill(0))
+    for(let i=1; i<=len1; i++) {
+        for(let j=1; j<=len2; j++) {
+            if(text1[i-1] === text2[j-1]) {
+                dp[i][j] = dp[i-1][j-1] + 1
+            } else {
+                dp[i][j] = Math.max(dp[i-1][j], dp[i][j-1])
+            }
+        }
+    }
+    return dp[len1][len2]
+};
+```
 
 
 
+### 25、不相交的线
+
+[ 1035. 不相交的线](https://leetcode.cn/problems/uncrossed-lines/)
+
+花里胡哨的 还强调顺序不相交
+
+其实就是求最长公共子序列嘛
+
+```js
+var maxUncrossedLines = function(nums1, nums2) {
+    let len1 = nums1.length
+    let len2 = nums2.length
+    let dp = new Array(len1+1).fill().map(item => new Array(len2+1).fill(0))
+    for(let i=1; i<=len1; i++) {
+        for(let j=1; j<=len2; j++) {
+            if(nums1[i-1] === nums2[j-1]) {
+                dp[i][j] = dp[i-1][j-1] + 1
+            } else {
+                dp[i][j] = Math.max(dp[i-1][j], dp[i][j-1])
+            }
+        }
+    }
+    return dp[len1][len2]
+};
+```
 
 
 
+### 26、最大子序和
+
+[53. 最大子序和](https://leetcode.cn/problems/maximum-subarray/)
+
+怎么回事 我要叛变了 这题好像动规写起来也很顺手啊🤨
+
+那我选动规了嘿嘿
+
+```js
+var maxSubArray = function(nums) {
+    let dp = new Array(nums.length+1)
+    dp[0] = nums[0]
+    let res = nums[0]
+    for(let i=1; i<nums.length; i++) {
+        dp[i] = Math.max(nums[i], dp[i-1]+nums[i])
+        if(dp[i] > res) res = dp[i]
+    }
+    return res
+}
+```
 
 
 
+### 27、判断子序列
+
+[392. 判断子序列](https://leetcode.cn/problems/is-subsequence/)
+
+这题不纠结了，选贪心🥳
+
+```js
+var isSubsequence = function(s, t) {
+    let i=0, j=0
+    while(i<s.length && j<t.length) {
+        if(s[i] === t[j]) {
+            i++
+        }
+        j++
+    }
+    return i === s.length
+};
+```
+
+
+
+### 28、不同的子序列
+
+[115. 不同的子序列](https://leetcode.cn/problems/distinct-subsequences/)
+
+emm 累了
+
+感觉23 24还要再看看啊
+
+到这题就混乱了诶 🤯
 
 
 
