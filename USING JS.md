@@ -4163,9 +4163,103 @@ var longestPalindromeSubseq = function(s) {
 
 
 
-明天开始刺激了啊😅
+---
 
 
+
+# Mixedddd 😆
+
+2023-2-17
+
+[1. 两数之和](https://leetcode.cn/problems/two-sum/submissions/)
+
+哦莫 第一题我居然没做过
+
+这题说实话，暴力很香
+
+虽然我转念一想 想到了哈希表
+
+但还是踩坑了，当然不能先把数组遍历一遍放进去，再排序遍历输出下标，重复set会覆盖的呀 单纯
+
+👉 遍历一遍就行了，匹配不上就放到map里，匹配上了直接返回
+
+```js
+// 1
+var twoSum = function(nums, target) {
+    let map = {}
+    for(let i=0; i<nums.length; i++) {
+        let curNum = nums[i]
+        let targetNum = target - curNum
+        let targetIndex = map[targetNum]
+        if(targetIndex !== undefined) {
+            return [targetIndex, i]
+        } else {
+            map[curNum] = i
+        }
+    }
+};
+
+// 2
+var twoSum = function(nums, target) {
+    let map = new Map()
+    for(let i=0; i<nums.length; i++) {
+        let curNum = nums[i]
+        let targetNum = target - curNum
+        let targetIndex = map.get(targetNum)
+        if(targetIndex !== undefined) {
+            return [targetIndex, i]
+        } else {
+            map.set(curNum, i)
+        }
+    }
+};
+
+```
+
+map.get() 找不到 返回undefined
+
+
+
+[15.三数之和](https://leetcode.cn/problems/3sum/)
+
+居然能调那么久，救命啊🤯
+
+👉 思路就是排个序，遍历数组（确定三元组中的一个），其他两个再靠双指针去找，注意一下去重的情况
+
+```js
+var threeSum = function(nums) {
+    let res = []
+    let len = nums.length
+    nums.sort((a,b) => a-b)
+    for(let i=0; i<len; i++) {
+        let left = i+1
+        let right = len -1
+        if(i>0 && nums[i]===nums[i-1]) continue
+        if(nums[i] > 0) break
+        while(left < right) {
+            let sum = nums[i] + nums[left] + nums[right]
+            if(sum === 0) {
+                res.push([nums[i], nums[left], nums[right]])
+                while(left<right && nums[left]===nums[left+1]) left++
+                while(left<right && nums[right]===nums[right-1]) right--
+                left++
+                right--
+            } else if(sum < 0) {
+                left++
+            } else {
+                right--
+            }
+        }
+    }
+    return res
+};
+```
+
+
+
+晕了 还有四数之和
+
+明天吧 思路就用三数之和的吧~
 
 
 
