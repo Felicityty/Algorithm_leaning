@@ -1204,6 +1204,25 @@ var levelOrder = function(root) {
 
 还是层级遍历，判断一下是否是这一层的最后就行了（len的值为0就是最后一个元素了）
 
+```js
+var rightSideView = function(root) {
+    let res = []
+    if(root === null) return res
+    let queue = [root]
+    while(queue.length) {
+        let len = queue.length
+        while(len) {
+            let cur = queue.shift()
+            len--
+            if(!len) res.push(cur.val)
+            cur.left && queue.push(cur.left)
+            cur.right && queue.push(cur.right)
+        }
+    }
+    return res
+};
+```
+
 [637.二叉树的层平均值](https://leetcode.cn/problems/average-of-levels-in-binary-tree/)
 
 简单的
@@ -2859,6 +2878,8 @@ var fib = function(n) {
 
 ### 2、爬楼梯
 
+[70. 爬楼梯](https://leetcode.cn/problems/climbing-stairs/)
+
 dp[i] 可以有两个方向推出来
 
 - 首先是dp[i - 1]，上i-1层楼梯，有dp[i - 1]种方法，那么再一步跳一个台阶不就是dp[i]了么。
@@ -2925,7 +2946,7 @@ var minCostClimbingStairs = function(cost) {
 
 ### 4、不同路径
 
-[不同路径](https://leetcode.cn/problems/unique-paths/)
+[62. 不同路径](https://leetcode.cn/problems/unique-paths/)
 
 ![62.不同路径1](USING JS.assets/20201209113631392.png)
 
@@ -2996,7 +3017,7 @@ var uniquePathsWithObstacles = function(obstacleGrid) {
 };
 ```
 
-2️⃣ 直接操作原数组
+2️⃣ 直接操作原数组 ❌
 
 这里初始化数组会比较有意思，用了两个新奇的运算符
 
@@ -3059,7 +3080,7 @@ https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Opti
 
 一个是j * (i - j) 直接相乘。
 
-一个是j * dp[i - j]，相当于是拆分(i - j)，对这个拆分不理解的话，可以回想dp数组的定义
+一个是j * dp[i - j]，dp[i - j]相当于是拆分(i - j)后得到的最大乘积，对这个拆分不理解的话，可以回想dp数组的定义
 
 👉 递推公式：dp[i] = max(dp[i], max((i - j) * j, dp[i - j] * j));
 
@@ -4169,7 +4190,7 @@ var longestPalindromeSubseq = function(s) {
 
 # Mixedddd 😆
 
-2023-2-17
+### 2023-2-17
 
 [1. 两数之和](https://leetcode.cn/problems/two-sum/submissions/)
 
@@ -4257,9 +4278,101 @@ var threeSum = function(nums) {
 
 
 
-晕了 还有四数之和
+### 2023-2-18
 
-明天吧 思路就用三数之和的吧~
+[18. 四数之和](https://leetcode.cn/problems/4sum/)
+
+救命 终于！ 我好感动 wwww
+
+思路跟上一题完全一样滴
+
+```js
+var fourSum = function(nums, target) {
+    let res = []
+    let len = nums.length
+    nums.sort((a,b) => a-b)
+    if(nums.length < 4) return []
+    for(let i=0; i<len-3; i++) {
+        if(i>0 && nums[i]===nums[i-1]) continue
+        for(let j=i+1; j<len-2; j++) {
+            if(j>i+1 && nums[j]===nums[j-1]) continue
+            let left = j+1
+            let right = len-1
+            while(left < right) {
+                let sum = nums[i] + nums[j] + nums[left] + nums[right]
+                if(sum === target) {
+                    res.push([nums[i], nums[j], nums[left], nums[right]])
+                    while(left<right && nums[left]===nums[left+1]) left++
+                    while(left<right && nums[right]===nums[right-1]) right--
+                    left++
+                    right--
+                } else if(sum < target) {
+                    left++
+                } else {
+                    right--
+                }
+            }
+        }
+    }
+    return res
+};
+```
+
+
+
+[199. 二叉树的右视图](https://leetcode.cn/problems/binary-tree-right-side-view/submissions/)
+
+当然 这题要用我第二喜欢的层序遍历
+
+队列队列队列！
+
+```js
+var rightSideView = function(root) {
+    let res = []
+    if(root === null) return res
+    let queue = [root]
+    while(queue.length) {
+        let len = queue.length
+        while(len--) {
+            let cur = queue.shift()
+            if(!len) res.push(cur.val)
+            cur.left && queue.push(cur.left)
+            cur.right && queue.push(cur.right)
+        }
+    }
+    return res
+};
+```
+
+
+
+[322.零钱兑换](https://leetcode.cn/problems/coin-change/)
+
+还可以哦
+
+就是那个无解的情况卡了一下下
+
+完全背包呀~
+
+```js
+var coinChange = function(coins, amount) {
+    if(amount === 0) return 0
+    let dp = new Array(amount+1).fill(Infinity)
+    dp[0] = 0
+    for(let i=0; i<coins.length; i++) {
+        for(let j=coins[i]; j<=amount; j++) {
+            dp[j] = Math.min(dp[j], dp[j-coins[i]]+1)
+        }
+    }
+    return dp[amount] === Infinity ? -1 : dp[amount]
+};
+```
+
+
+
+明天继续吧
+
+要上学去了啊 😥
 
 
 
