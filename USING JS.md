@@ -174,7 +174,7 @@
 ```js
 boolean hasCycle(ListNode head) {
 // 快慢指针初始化指向 head
-    ListNode slow = head, fast = head;
+    let slow = head, fast = head;
     // 快指针⾛到末尾时停⽌
     while (fast != null && fast.next != null) {
         // 慢指针⾛⼀步，快指针⾛两步
@@ -4370,9 +4370,139 @@ var coinChange = function(coins, amount) {
 
 
 
-明天继续吧
+### 2023-2-19
 
-要上学去了啊 😥
+[141. 环形链表](https://leetcode.cn/problems/linked-list-cycle/)
+
+链表找环就用快慢指针啊，欧克~
+
+```js
+var hasCycle = function(head) {
+    if(head === null) return false
+    // 快慢指针判断是否成环
+    let slow = head, fast = head.next
+    while(fast !== null && fast.next !==null) {
+        slow = slow.next
+        fast = fast.next.next
+        if(slow === fast) return true
+    }
+    return false
+};
+```
+
+
+
+[165. 比较版本号](https://leetcode.cn/problems/compare-version-numbers/)
+
+这题看到那么多 . ，就能想到要split分割呀
+
+然后parseInt一下，绝绝
+
+```js
+var compareVersion = function(version1, version2) {
+    let nums1 = version1.split(".")
+    let nums2 = version2.split(".")
+    for(let i=0; i<nums1.length || i<nums2.length; i++) {
+        let x = 0, y = 0
+        if(i<nums1.length) {
+            x = parseInt(nums1[i])
+        }
+        if(i<nums2.length) {
+            y = parseInt(nums2[i])
+        }
+        if(x < y) {
+            return -1
+        } else if(x > y) {
+            return 1
+        }
+    }
+    return 0
+};
+```
+
+
+
+[232. 用栈实现队列](https://leetcode.cn/problems/implement-queue-using-stacks/)
+
+这题太绝了啊
+
+用数组当栈，只能使用push和pop方法
+
+其实就是用push和pop去实现push和unshift叭
+
+所以需要一个倒序
+
+inStack 用来push
+
+在pop和peak的时候，都要先把inStack里的移到outStack里
+
+```js
+var MyQueue = function() {
+    this.inStack = []
+    this.outStack = []
+};
+
+/** 
+ * @param {number} x
+ * @return {void}
+ */
+MyQueue.prototype.push = function(x) {
+    this.inStack.push(x)
+};
+
+/**
+ * @return {number}
+ */
+MyQueue.prototype.pop = function() {
+    if(!this.outStack.length) {
+        this.in2out()
+    }
+    return this.outStack.pop()
+};
+
+/**
+ * @return {number}
+ */
+MyQueue.prototype.peek = function() {
+    if(!this.outStack.length) {
+        this.in2out()
+    }
+    return this.outStack[this.outStack.length-1]
+};
+
+/**
+ * @return {boolean}
+ */
+MyQueue.prototype.empty = function() {
+    return this.inStack.length === 0 && this.outStack.length === 0
+};
+
+// 换个顺序
+MyQueue.prototype.in2out = function() {
+    while(this.inStack.length) {
+        this.outStack.push(this.inStack.pop())
+    }
+}
+
+/**
+ * Your MyQueue object will be instantiated and called as such:
+ * var obj = new MyQueue()
+ * obj.push(x)
+ * var param_2 = obj.pop()
+ * var param_3 = obj.peek()
+ * var param_4 = obj.empty()
+ */
+```
+
+
+
+
+
+
+
+
+
+
 
 
 
