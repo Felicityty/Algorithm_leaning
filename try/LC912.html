@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        const nums = [5,2,3,1]
+        // 归并
+        // var sortArray = function (nums) {
+        //     let len = nums.length
+        //     if (len < 2) return nums
+        //     let mid = Math.floor(nums.length / 2)
+        //     let left = nums.slice(0, mid)
+        //     let right = nums.slice(mid)
+        //     return merge(sortArray(left), sortArray(right))
+        // }
+
+        // var merge = function (left, right) {
+        //     let res = []
+        //     while (left.length && right.length) {
+        //         if (left[0] <= right[0]) {
+        //             res.push(left.shift())
+        //         } else {
+        //             res.push(right.shift())
+        //         }
+        //     }
+        //     // while(left.length) {
+        //     //     res.push(left.shift())
+        //     // }
+        //     // while(right.length) {
+        //     //     res.push(right.shift())
+        //     // }
+
+        //     res.push(...left, ...right)
+        //     return res
+        // }
+        // console.log(sortArray(nums))
+
+
+        // 冒泡
+        // 从后往前，两两比较，一次往前冒
+        // var sortArray = function (nums) {
+        //     let len = nums.length
+        //     for(let i=0; i<len-1; i++) {
+        //         let flag = true
+        //         for(let j=len-1; j>i; j--) {
+        //             if(nums[j] < nums[j-1]) {
+        //                 [nums[j-1], nums[j]] = [nums[j], nums[j-1]]
+        //                 flag = false
+        //             }
+        //         }
+        //         if(flag) {
+        //             break
+        //         }
+        //     }
+        //     return nums
+        // }
+        // console.log(sortArray(nums))
+
+        // 选择排序
+        // 逐个比较，找到最小，一次完成对调
+        // var sortArray = function (nums) {
+        //     let len = nums.length
+        //     for(let i=0; i<len-1; i++) {
+        //         let minIndex = i
+        //         for(let j=i+1; j<len; j++) {
+        //             if(nums[j] < nums[minIndex]) {
+        //                 minIndex = j
+        //             }
+        //         }
+        //         [nums[i], nums[minIndex]] = [nums[minIndex], nums[i]]
+        //     }
+        //     return nums
+        // }
+        // console.log(sortArray(nums))
+
+        // 插入排序
+        // 左侧有序，右侧一个一个往左边去找位置插入
+        var sortArray = function (nums) {
+            let len = nums.length
+            for(let i=1; i<len; i++) {
+                let target = i
+                for(let j=i-1; j>=0; j--) {
+                    if(nums[target] < nums[j]) {
+                        [nums[target], nums[j]] = [nums[j], nums[target]]
+                        // 这步一定要的呀
+                        target = j
+                    } else {
+                        break
+                    }
+                }
+            }
+            return nums
+        }
+        console.log(sortArray(nums))
+
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

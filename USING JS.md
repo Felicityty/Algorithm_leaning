@@ -4594,7 +4594,7 @@ var isValid = function(s) {
 
 [912.排序数组](https://leetcode.cn/problems/sort-an-array/)
 
-- 归并排序
+- **归并排序**
 
 反正就是很奇怪 用两个while就超时
 
@@ -4635,6 +4635,117 @@ var merge = function(left, right) {
 
 
 
-排序趁机理下呗
+### 2023-2-21
 
-心路复杂
+### 🌟 js 交换数组中的两个元素可以这样写：
+
+1、救了个大命，es6解构赋值啊
+
+```js
+if(nums[j] < nums[j-1]) {
+    [nums[j-1], nums[j]] = [nums[j], nums[j-1]]
+}
+```
+
+2、splice
+
+`array.splice(index1, 1 , array[index2])` 会将index1位置上的元素替换为index2位置的元素，同时返回[array[index1]]
+
+3、temp
+
+
+
+[排序概况](https://www.conardli.top/docs/algorithm/%E6%8E%92%E5%BA%8F/%E6%8E%92%E5%BA%8F.html)
+
+
+
+[912.排序数组](https://leetcode.cn/problems/sort-an-array/)
+
+- **冒泡排序**
+
+从后往前，两两比较，一次往前冒（想发科的信技课www）
+
+加个flag优化一下，但还是超时诶🤨
+
+```js
+var sortArray = function (nums) {
+    let len = nums.length
+    for(let i=0; i<len-1; i++) {
+        let flag = true
+        for(let j=len-1; j>i; j--) {
+            if(nums[j] < nums[j-1]) {
+                [nums[j-1], nums[j]] = [nums[j], nums[j-1]]
+                flag = false
+            }
+        }
+        if(flag) {
+            break
+        }
+    }
+    return nums
+}
+```
+
+
+
+- **选择排序**
+
+逐个比较，找到最小，一次完成对调
+
+```js
+var sortArray = function (nums) {
+    let len = nums.length
+    for(let i=0; i<len-1; i++) {
+        let minIndex = i
+        for(let j=i+1; j<len; j++) {
+            if(nums[j] < nums[minIndex]) {
+                minIndex = j
+            }
+        }
+        [nums[i], nums[minIndex]] = [nums[minIndex], nums[i]]
+    }
+    return nums
+}
+```
+
+
+
+- **插入排序**
+
+左侧有序，右侧一个一个往左边去找位置插入
+
+换完位置，target也要换啊！
+
+```js
+var sortArray = function (nums) {
+    let len = nums.length
+    for(let i=1; i<len; i++) {
+        let target = i
+        for(let j=i-1; j>=0; j--) {
+            if(nums[target] < nums[j]) {
+                [nums[target], nums[j]] = [nums[j], nums[target]]
+                // 这步一定要的呀
+                target = j
+            } else {
+                break
+            }
+        }
+    }
+    return nums
+}
+```
+
+
+
+ohno这段时间哇
+
+可以调整过来！🥺
+
+明天再来一遍好嘛
+
+还有堆 和 快排
+
+
+
+
+
