@@ -765,6 +765,30 @@ console.log(idx1); // [2, 0, 1, 3]
 
 因为js没有内置Stack，这里用数组模拟了一下栈的思想
 
+```js
+var isValid = function(s) {
+    // Map 真的是用来判断是否配对的一个好工具哇
+    const pairs = new Map([
+        [')', '('],
+        [']', '['],
+        ['}', '{']
+    ])
+    const left = new Array()
+    for(let c of s) {
+        // 如果存在右括号的键值c，根据这个键值去判断数组最后的元素是否为该键值对应的value值
+        // 这里的数组相当于栈了
+        if(pairs.has(c)) {
+            if(!left.length || left[left.length-1] !== pairs.get(c))
+                return false
+            left.pop()
+        } else {
+            left.push(c)
+        }
+    }
+    return left.length === 0
+};
+```
+
 
 
 #### 2、平衡括号串 I
@@ -4496,13 +4520,121 @@ MyQueue.prototype.in2out = function() {
 
 
 
+### 2023-2-20
+
+[2. 两数相加](https://leetcode.cn/problems/add-two-numbers/)
+
+复习一波
+
+const dummy 哑结点
+
+let p 游标
+
+js 和 c++不一样啊，除法要取整！勿忘
+
+```js
+var addTwoNumbers = function(l1, l2) {
+    const dummy = new ListNode(-1)
+    let p = dummy
+    let v1 = l1, v2 = l2
+    // 记录进位
+    let pre = 0
+    while(v1 !== null || v2 !== null || pre > 0) {
+        let val = 0
+        if(v1 !== null) {
+            pre += v1.val
+            v1 = v1.next
+        } 
+        if(v2 !== null) {
+            pre += v2.val
+            v2 = v2.next
+        }
+        val = pre % 10
+        pre = Math.floor(pre / 10)
+        p.next = new ListNode(val)
+        p = p.next
+    }
+    return dummy.next
+};
+```
 
 
 
+[20. 有效的括号](https://leetcode.cn/problems/valid-parentheses/)
+
+嘿嘿 又复习了一下map的妙用
+
+```js
+var isValid = function(s) {
+    // 利用map来找对应的括号
+    let pairs = new Map([
+        [')', '('],
+        ['}', '{'],
+        [']', '['],
+    ])
+    // 利用数组来模拟栈
+    let stack = []
+    for(let c of s) {
+        if(pairs.has(c)) {
+            // 右括号
+            if(pairs.get(c) !== stack[stack.length-1]) {
+                return false
+            }
+            stack.pop()
+        } else {
+            // 左括号都进栈
+            stack.push(c)
+        }
+    }
+    return stack.length === 0
+};
+```
 
 
 
+[912.排序数组](https://leetcode.cn/problems/sort-an-array/)
+
+- 归并排序
+
+反正就是很奇怪 用两个while就超时
+
+用展开运算符就行诶
+
+... 确实nb
+
+```js
+var sortArray = function(nums) {
+    let len = nums.length
+    if(len < 2) return nums
+    let mid = Math.floor(nums.length / 2)
+    let left = nums.slice(0, mid)
+    let right = nums.slice(mid)
+    return merge(sortArray(left), sortArray(right))
+}
+
+var merge = function(left, right) {
+    let res = []
+    while(left.length && right.length) {
+        if(left[0] <= right[0]) {
+            res.push(left.shift())
+        } else {
+            res.push(right.shift())
+        }
+    }
+    // while(left.length) {
+    //     res.push(left.shift())
+    // }
+    // while(right.length) {
+    //     res.push(right.shift())
+    // }
+
+    res.push(...left, ...right)
+    return res
+}
+```
 
 
 
+排序趁机理下呗
 
+心路复杂
