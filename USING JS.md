@@ -4737,15 +4737,36 @@ var sortArray = function (nums) {
 
 
 
-ohno这段时间哇
+- **快速排序**
 
-可以调整过来！🥺
+设定一个target，小的往左，大的往右
 
-明天再来一遍好嘛
-
-还有堆 和 快排
-
-
+```js
+var sortArray = function (nums) {
+    if(nums.length < 2) return nums
+    return quickSort(nums, 0, nums.length-1)
+}
+var quickSort = function(nums, start, end) {
+    if(start >= end) return
+    let target = nums[start]
+    let l = start
+    let r = end
+    while(l < r) {
+        while(l<r && nums[r] >= target) {
+            r--
+        }
+        nums[l] = nums[r]
+        while(l<r && nums[l] < target) {
+            l++
+        }
+        nums[r] = nums[l]
+    }
+    nums[l] = target
+    quickSort(nums, start, l-1)
+    quickSort(nums, l+1, end)
+    return nums
+}
+```
 
 
 
