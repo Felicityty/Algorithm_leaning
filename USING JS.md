@@ -4737,6 +4737,8 @@ var sortArray = function (nums) {
 
 
 
+### 2023-2-22
+
 - **快速排序**
 
 设定一个target，小的往左，大的往右
@@ -4769,4 +4771,14 @@ var quickSort = function(nums, start, end) {
 ```
 
 
+
+### 2023-2-23
+
+en 既然开启豪赌模式 不后悔
+
+我决定血战一周期末考和八股
+
+嘿嘿LeetCode给你丢宏任务里去了
+
+一周后见哟~ 😘
 
