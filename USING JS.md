@@ -4772,13 +4772,57 @@ var quickSort = function(nums, start, end) {
 
 
 
-### 2023-2-23
+### 2023-3-3
 
-en 既然开启豪赌模式 不后悔
+- **堆排序**
 
-我决定血战一周期末考和八股
+创建一个大顶堆
 
-嘿嘿LeetCode给你丢宏任务里去了
+交换第一个和最后一个元素，剩余元素调整为大顶堆
 
-一周后见哟~ 😘
+```js
+var sortArray = function (nums) {
+    // 构建大顶堆
+    createHeap(nums)
+    // 交换第一个和最后一个元素
+    for(let i=nums.length-1; i>0; i--) {
+        [nums[i], nums[0]] = [nums[0], nums[i]]
+        adjust(nums, 0, i)
+    }
+    return nums
+}
+
+var createHeap = function(nums) {
+    let len = nums.length
+    // 从第一个非叶子节点开始 调整成大顶堆
+    let start = parseInt(len/2 -1)
+    for(let i=start; i>=0; i--) {
+        adjust(nums, i, len)
+    }
+}
+
+var adjust = function(nums, start, len) {
+    for(let i=2*start+1; i<len; i=2*i+1) {
+        if(i+1<len && nums[i+1]>nums[i]) {
+            i++
+        }
+        if(nums[i] > nums[start]) {
+            [nums[i], nums[start]] = [nums[start], nums[i]]
+            start = i
+        } else {
+            break
+        }
+    }
+}
+```
+
+
+
+我呦呦呦回来了！👀
+
+
+
+
+
+
 
