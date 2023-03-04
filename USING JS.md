@@ -4818,7 +4818,80 @@ var adjust = function(nums, start, len) {
 
 
 
-我呦呦呦回来了！👀
+### 2023-3-4
+
+[349. 两个数组的交集](https://leetcode.cn/problems/intersection-of-two-arrays/)
+
+```js
+var intersection = function(nums1, nums2) {
+    nums1.sort((a,b) => a-b)
+    nums2.sort((a,b) => a-b)
+    let nums = new Array()
+    for(let i=0; i<nums1.length; i++) {
+        if(i && nums1[i]===nums1[i-1]) continue
+        for(let j=0; j<nums2.length; j++) {
+            if(nums1[i] === nums2[j]) {
+                nums.push(nums1[i])
+                break
+            }
+        }
+    }
+    return nums
+};
+```
+
+说实话，稍微改改，用双指针更好点儿
+
+```js
+var intersection = function(nums1, nums2) {
+    nums1.sort((a,b) => a-b)
+    nums2.sort((a,b) => a-b)
+    let nums = new Array()
+    let cur1 = 0, cur2 = 0
+    while(cur1<nums1.length && cur2<nums2.length) {
+        while(cur1 && nums1[cur1] === nums1[cur1-1]) cur1++
+        while(cur2 && nums2[cur2] === nums2[cur2-1]) cur2++
+        if(cur1<nums1.length && cur2<nums2.length) {
+            if(nums1[cur1] === nums2[cur2]) {
+                nums.push(nums1[cur1])
+                cur1++
+                cur2++
+            } else if(nums1[cur1] < nums2[cur2]) {
+                cur1++
+            } else cur2++
+        }
+    }
+    return nums
+};
+```
+
+不放心 还是写写
+
+
+
+[35. 搜索插入位置](https://leetcode.cn/problems/search-insert-position/)
+
+找左边界
+
+```js
+var left_bound = function(nums, target) {
+    let left = 0, right = nums.length-1
+    while(left <= right) {
+        let mid = left + Math.floor((right - left) / 2)
+        if(nums[mid] >= target) right = mid - 1
+        else left = mid + 1
+    }
+    return left
+}
+```
+
+哎呦呦 二分呀🤩 好久不见！
+
+
+
+允许自己枯萎两天💔
+
+十个月啦 最终章 明天加油哟
 
 
 
