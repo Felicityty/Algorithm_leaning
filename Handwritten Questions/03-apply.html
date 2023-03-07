@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        let Person = {
+            name: 'Tom',
+            say() {
+                console.log(this)
+                console.log(`我叫${this.name}`)
+            }
+        }
+
+        // 先看代码执行效果
+        // Person.say() //我叫Tom 
+
+        Person1 = {
+            name: 'Tom1'
+        }
+
+        // 我们尝试用原生方法call来实现this指向Person1
+        // Person.say.call(Person1) //我叫Tom1
+
+        Function.prototype.myApply = function(context = window, args) {
+            if(this === Function.prototype) {
+                return undefined
+            }
+            const fn = Symbol()
+            context[fn] = this
+            let result
+            if(Array.isArray(args)) {
+                result = context[fn](...args)
+            } else {
+                result = context[fn]()
+            }
+            delete context[fn]
+        }
+
+        // 测试
+        Person.say.myApply(Person1)//我叫Tom1
+
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

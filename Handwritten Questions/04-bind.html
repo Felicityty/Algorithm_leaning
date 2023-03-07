@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        let Person = {
+            name: 'Tom',
+            say() {
+                console.log(this)
+                console.log(`我叫${this.name}`)
+            }
+        }
+
+        // 先看代码执行效果
+        // Person.say() //我叫Tom 
+
+        Person1 = {
+            name: 'Tom1'
+        }
+
+        // 我们尝试用原生方法call来实现this指向Person1
+        // Person.say.call(Person1) //我叫Tom1
+
+        // bind 也太不一样了😭
+        Function.prototype.myBind = function(context, ...args1) {
+            if(this === Function.prototype) {
+                return undefined
+            }
+            const that = this
+            return function Fn(...args2) {
+                if(this instanceof Fn) {
+                    return new that(...args1, ...args2)
+                }
+                return that.apply(context, args1.concat(args2))
+            }
+        }
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
