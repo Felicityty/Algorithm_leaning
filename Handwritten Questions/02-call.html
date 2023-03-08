@@ -24,6 +24,11 @@
         // 我们尝试用原生方法call来实现this指向Person1
         // Person.say.call(Person1) //我叫Tom1
 
+        function mySymbol(obj) {
+            let unique = (Math.random() + new Date().getTime()).toString(32).slice(0, 8)
+            
+        }
+
         Function.prototype.MyCall = function(context = window, ...args) {
             // 阻止这个方法被直接调用
             if(this === Function.prototype) {

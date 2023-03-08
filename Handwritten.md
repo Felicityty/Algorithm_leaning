@@ -16,5 +16,7 @@ https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Functions/argu
 
 https://juejin.cn/post/6844903773979033614
 
-### 02 - call
+### 02 - call、apply、bind
+
+
 

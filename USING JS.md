@@ -4889,9 +4889,60 @@ var left_bound = function(nums, target) {
 
 
 
-允许自己枯萎两天💔
+### 2023-3-8
 
-十个月啦 最终章 明天加油哟
+[2351. 第一个出现两次的字母](https://leetcode.cn/problems/first-letter-to-appear-twice/)
+
+```js
+var repeatedCharacter = function(s) {
+    let map = new Map()
+    let res = ''
+    for(let c of s) {
+        if(map.has(c)) {
+            res = c
+            break
+        }
+        map.set(c, 1)
+    }
+    return res
+};
+```
+
+这里用Set和Map都行
+
+
+
+[515. 在每个树行中找最大值](https://leetcode.cn/problems/find-largest-value-in-each-tree-row/)
+
+```js
+var largestValues = function(root) {
+    let res = []
+    if(root === null) return res
+    let queue = [root]
+    while(queue.length) {
+        let max = queue[0].val
+        let len = queue.length
+        while(len--) {
+            let cur = queue.shift()
+            if(cur.val > max) max = cur.val
+            cur.left && queue.push(cur.left)
+            cur.right && queue.push(cur.right)
+        }
+        res.push(max)
+    }
+    return res
+}
+```
+
+又是树的层次遍历嘛
+
+
+
+这几天经历太多😥
+
+成熟女人不好当
+
+我可以，园园！
 
 
 

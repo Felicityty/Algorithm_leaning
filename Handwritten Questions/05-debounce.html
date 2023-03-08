@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <input type="text">
+
+<script>
+    // 防抖：用户触发事件过于频繁，只要最后一次事件的操作
+    let inp = document.querySelector("input")
+    // 输入的时候触发
+    inp.oninput = debounce(function(){
+        console.log(this.value)
+    }, 500)
+
+    function debounce(fn, delay) {
+        let timer = null
+        return function() {
+            if(timer !== null) {
+                clearTimeout(timer)
+            }
+            timer = setTimeout(() => {
+                // fn 指向的是 window 这里的this指向的是input
+                fn.call(this)
+            }, delay)
+        }
+    }
+
+    // 明天给你优化一下叭
+
+</script>
+
+</body>
+
+</html>
