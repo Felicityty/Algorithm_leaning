@@ -4938,15 +4938,83 @@ var largestValues = function(root) {
 
 
 
-这几天经历太多😥
+### 2023-3-9
 
-成熟女人不好当
+[3. 无重复字符的最长子串](https://leetcode.cn/problems/longest-substring-without-repeating-characters/)
 
-我可以，园园！
+```js
+var lengthOfLongestSubstring = function(s) {
+    let window = new Map()
+    let left = 0, right = 0, res = 0
+    while(right < s.length) {
+        let c = s[right++]
+        window.set(c, window.has(c) ? window.get(c)+1 : 1)
+        while(window.get(c) > 1) {
+            let d = s[left++]
+            window.set(d, window.get(d)-1)
+        }
+        res = Math.max(res, right-left)
+    }
+    return res
+}
+```
+
+滑动窗口嘛~
 
 
 
+[88. 合并两个有序数组](https://leetcode.cn/problems/merge-sorted-array/)
+
+- 双指针
+
+```js
+var merge = function(nums1, m, nums2, n) {
+    let p1 = 0, p2 = 0
+    const nums = new Array(m+n).fill(0)
+    let cur
+    while(p1<m || p2<n) {
+        if(p1 === m) {
+            cur = nums2[p2++]
+        } else if(p2 === n) {
+            cur = nums1[p1++]
+        } else if(nums1[p1] < nums2[p2]) {
+            cur = nums1[p1++]
+        } else {
+            cur = nums2[p2++]
+        }
+        nums[p1+p2-1] = cur
+    }
+    for(let i=0; i<m+n; i++) {
+        nums1[i] = nums[i]
+    }
+};
+```
+
+- 逆序双指针
+
+```js
+var merge = function(nums1, m, nums2, n) {
+    let p1 = m-1, p2 = n-1
+    let tail = m+n-1
+    let cur
+    while(p1>=0 || p2>=0) {
+        if(p1 === -1) {
+            cur = nums2[p2--]
+        } else if(p2 === -1) {
+            cur = nums1[p1--]
+        } else if(nums1[p1] > nums2[p2]) {
+            cur = nums1[p1--]
+        } else {
+            cur = nums2[p2--]
+        }
+        nums1[tail--] = cur
+    }
+};
+```
+
+确实，这种好点儿，但第一种我写起来顺点儿
 
 
 
+加油bb😴
 
