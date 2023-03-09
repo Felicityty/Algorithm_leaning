@@ -22,17 +22,16 @@
     function debounce(fn, delay) {
         let timer = null
         return function() {
+            let args = arguments
             if(timer !== null) {
                 clearTimeout(timer)
             }
             timer = setTimeout(() => {
                 // fn 指向的是 window 这里的this指向的是input
-                fn.call(this)
+                fn.apply(this, args)
             }, delay)
         }
     }
-
-    // 明天给你优化一下叭
 
 </script>
 
