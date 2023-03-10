@@ -5016,5 +5016,76 @@ var merge = function(nums1, m, nums2, n) {
 
 
 
-加油bb😴
+### 2023-3-10
 
+cnt 是 count 的缩写，表示计数器
+
+[112. 路径总和](https://leetcode.cn/problems/path-sum/)
+
+```js
+var hasPathSum = function(root, targetSum) {
+    var traverse = function(node, cnt) {
+        if(cnt === 0 && node.left === null && node.right === null) {
+            return true
+        } else if(node.left === null && node.right === null) {
+            return false
+        } else if(node.left && traverse(node.left, cnt - node.left.val)) {
+            return true
+        } else if(node.right && traverse(node.right, cnt - node.right.val)) {
+            return true
+        }
+        return false
+    }
+    if(root === null) return false
+    return traverse(root, targetSum-root.val)
+}
+```
+
+四种情况，一种存在，一种拜拜，两种继续递归
+
+每次传递一下还剩的目标和
+
+
+
+[53. 最大子数组和](https://leetcode.cn/problems/maximum-subarray/)
+
+```js
+var maxSubArray = function(nums) {
+    let sum = 0
+    let res = -Number.MAX_VALUE
+    for(let num of nums) {
+        sum += num
+        if(sum > res) res = sum
+        if(sum < 0) sum = 0
+    }
+    return res
+}
+```
+
+res 的初始值一定要是最小的负数
+
+
+
+[1. 两数之和](https://leetcode.cn/problems/two-sum/)
+
+```js
+var twoSum = function(nums, target) {
+    let map = new Map()
+    for(let i=0; i<nums.length; i++) {
+        let curNum = nums[i]
+        let targetNum = target - curNum
+        let targetIndex = map.get(targetNum)
+        if(targetIndex !== undefined) {
+            return [targetIndex, i]
+        } else {
+            map.set(curNum, i)
+        }
+    }
+}
+```
+
+巧用map~
+
+
+
+可以！💪
