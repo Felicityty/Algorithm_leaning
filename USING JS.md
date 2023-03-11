@@ -5088,4 +5088,62 @@ var twoSum = function(nums, target) {
 
 
 
-可以！💪
+### 2023-3-11
+
+[129. 求根节点到叶节点数字之和](https://leetcode.cn/problems/sum-root-to-leaf-numbers/)
+
+```js
+var sumNumbers = function(root) {
+    var traverse = function(node, preSum) {
+        if(node === null) return node
+        let sum = preSum*10 + node.val
+        if(node.left === null && node.right === null) {
+            return sum
+        } else {
+            return traverse(node.left, sum) + traverse(node.right, sum)
+        }
+    }
+    return traverse(root, 0)
+};
+```
+
+就是树的遍历呀 可以
+
+
+
+[415. 字符串相加](https://leetcode.cn/problems/add-strings/)
+
+```js
+var addStrings = function(num1, num2) {
+    let res = []
+    let i = num1.length-1, j = num2.length-1, add = 0
+    while(i>=0 || j>=0 || add>0) {
+        let x = 0, y = 0
+        if(i>=0) x = num1[i] - '0'
+        if(j>=0) y = num2[j] - '0'
+        let sum = x + y + add
+        res.unshift(sum % 10)
+        add = Math.floor(sum / 10)
+        i--
+        j--
+    }
+    return res.join('')
+};
+```
+
+就是模拟进位嘛
+
+
+
+### `str[index]` 和 `str.charAt(index)`  的区别
+
+1、当index的取值不在str的长度范围内，str[index]放回undefined，charAt(index)放回空字符串
+
+2、str[index]不兼容ie6-ie8，charAt(index)可以兼容
+
+
+
+
+
+
+
