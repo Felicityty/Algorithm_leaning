@@ -1598,8 +1598,6 @@ void backtracking(参数) {
 
 
 
-
-
 ### 1、纯组合
 
 [77.组合](https://leetcode.cn/problems/combinations/)
@@ -5143,7 +5141,61 @@ var addStrings = function(num1, num2) {
 
 
 
+### 2023-3-12🌳
+
+[46. 全排列](https://leetcode.cn/problems/permutations/)
+
+```js
+var permute = function(nums) {
+    let res = [], path = []
+    let len = nums.length
+    var backtracking = function(used) {
+        if(path.length === len) {
+            res.push([...path])
+            return
+        }
+        for(let i=0; i<len; i++) {
+            if(used[nums[i]]) continue
+            path.push(nums[i])
+            used[nums[i]] = true
+            backtracking(used)
+            path.pop()
+            used[nums[i]] = false
+        }
+    }
+    backtracking([])
+    return res
+}
+```
+
+回溯
+
+回顾一下排列和组合叭，一个用used数组，一个用startIndex
 
 
 
+[206. 反转链表](https://leetcode.cn/problems/reverse-linked-list/)
+
+![image-20230312152839621](USING JS.assets/image-20230312152839621.png)
+
+```js
+var reverseList = function(head) {
+    if(head === null || head.next === null) {
+        return head
+    }
+    
+    let tail = reverseList(head.next)
+    head.next.next = head
+    head.next = null
+    return tail
+}
+```
+
+这道题是真的绝，但忘也是真的忘
+
+下次绝对欧克
+
+
+
+明天，加油啦，小冯er~😃
 
