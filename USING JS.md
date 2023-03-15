@@ -5197,5 +5197,41 @@ var reverseList = function(head) {
 
 
 
-明天，加油啦，小冯er~😃
+### 2023-3-15
+
+[93. 复原IP地址](https://leetcode.cn/problems/restore-ip-addresses/)
+
+```js
+var restoreIpAddresses = function(s) {
+    // 回溯
+    let res = [], path = []
+    var backtracking = function(startIndex) {
+        if(path.length > 4) return
+        if(path.length === 4 && startIndex === s.length) {
+            res.push(path.join('.'))
+            return
+        }
+        for(let i=startIndex; i<s.length; i++) {
+            if(!validator(s.slice(startIndex, i+1))) return
+            path.push(s.slice(startIndex, i+1))
+            backtracking(i+1)
+            path.pop()
+        }
+    }
+    backtracking(0)
+    return res
+};
+
+var validator = function(s) {
+    if(s*1 > 255) return false
+    if(s.length > 1 && s[0] === '0') return false
+    return true
+}
+```
+
+还是要想很久的，回溯啊回溯
+
+
+
+加油啊！小冯er～ 瘫
 
