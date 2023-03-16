@@ -5233,5 +5233,29 @@ var validator = function(s) {
 
 
 
-加油啊！小冯er～ 瘫
+### 2023-3-16
 
+[797. 所有可能的路径](https://leetcode.cn/problems/all-paths-from-source-to-target/)
+
+```js
+var allPathsSourceTarget = function(graph) {
+    let res = [], path = []
+    var traverse = function(startIndex, path) {
+        path.push(startIndex)
+        if(startIndex === graph.length-1) {
+            // 找的是到最后那个节点的路径
+            res.push([...path])
+            path.pop()
+            return
+        }
+        for(let i=0; i<graph[startIndex].length; i++) {
+            traverse(graph[startIndex][i], path)
+        }
+        path.pop()
+    }
+    traverse(0, path)
+    return res
+};
+```
+
+明显，用回溯，但真的要想好久好久
