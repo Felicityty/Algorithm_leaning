@@ -5259,3 +5259,66 @@ var allPathsSourceTarget = function(graph) {
 ```
 
 明显，用回溯，但真的要想好久好久
+
+
+
+### 2023-3-18
+
+[14. 最长公共前缀](https://leetcode.cn/problems/longest-common-prefix/)
+
+```js
+var longestCommonPrefix = function(strs) {
+    let res = strs[0]
+    for(let i=1; i<strs.length; i++) {
+        let j=0
+        for(; j<strs[i].length; j++) {
+            if(res[j] !== strs[i][j]) break
+        }
+        res = res.substr(0, j)
+    }
+    return res
+};
+```
+
+我就是个粗心鬼吧😜
+
+
+
+[43. 字符串拼接](https://leetcode.cn/problems/multiply-strings/)
+
+```js
+var multiply = function(num1, num2) {
+    let m = num1.length
+    let n = num2.length
+    let res = new Array(m+n).fill(0)
+    for(let i=m-1; i>=0; i--) {
+        for(let j=n-1; j>=0; j--) {
+            let mul = (num1[i]-'0') * (num2[j]-'0')
+            let p1 = i + j
+            let p2 = i + j + 1
+            let sum = mul + res[p2]
+            res[p2] = sum % 10
+            res[p1] += Math.floor(sum / 10)
+        }
+    }
+    let i = 0
+    while(i<res.length && res[i]==0) {
+        i++
+    }
+    let str = ''
+    for(; i<res.length; i++) {
+        // 这里一定要加上这样的一步的 不然就只是单纯的字符串拼接了
+        str += String.fromCharCode('0'.charCodeAt() + res[i])
+    }
+    return str.length===0 ? '0' : str
+};
+```
+
+`str += String.fromCharCode('0'.charCodeAt() + res[i])` ：字符串转码值，再转回来
+
+否则就是单纯的字符串拼接了
+
+
+
+
+
