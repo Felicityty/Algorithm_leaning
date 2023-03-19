@@ -5320,5 +5320,23 @@ var multiply = function(num1, num2) {
 
 
 
+### 2023-3-19
+
+[70. 爬楼梯](https://leetcode.cn/problems/climbing-stairs/)
+
+```js
+var climbStairs = function(n) {
+    let dp = new Array(n+1).fill(0)
+    let choices = [1, 2]
+    dp[0] = 1
+    for(let i=0; i<=n; i++) {
+        for(let j=0; j<choices.length; j++) {
+            if(i>=choices[j]) dp[i] += dp[i-choices[j]]
+        }
+    }
+    return dp[n]
+}
+```
+
 
 
