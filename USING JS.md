@@ -5340,3 +5340,49 @@ var climbStairs = function(n) {
 
 
 
+### 2023-3-20
+
+[503. 下一个更大的元素 II](https://leetcode.cn/problems/next-greater-element-ii/)
+
+```js
+var nextGreaterElements = function(nums) {
+    let n = nums.length
+    let res = new Array(n)
+    let stack = new Array()
+    // 循环就是来两遍嘛
+    for(let i = 2*n-1; i>=0; i--) {
+        // 很决绝 把小的都踢了
+        while(stack.length !== 0 && stack[stack.length-1] <= nums[i%n])
+            stack.pop()
+        res[i%n] = stack.length===0 ? -1 : stack[stack.length-1]
+        stack.push(nums[i%n])
+    }
+    return res
+}
+```
+
+从后往前 & 栈
+
+
+
+[7. 整数反转](https://leetcode.cn/problems/reverse-integer/)
+
+```js
+var reverse = function(x) {
+    let res = 0
+    while(x) {
+        res = res*10 + x%10
+        if(res > Math.pow(2, 31) - 1 || res < Math.pow(-2, 31)) return 0
+        x = ~~(x/10)
+    }
+    return res
+};
+```
+
+这里用了个按位非 果真比C++简洁太多啊
+
+按位非 对于大于零的相当于floor，小于零的相当于ceiling
+
+
+
+明天赐我一个小伙伴叭 老天（咆哮😱
