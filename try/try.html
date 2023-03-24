@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script>
+    function getMaxValue(str, k) {
+      let minMax = Number.MAX_VALUE, sum = 0
+      let res = [], path = []
+      var backtracking = function (startIndex) {
+        if (path.length === k - 1) {
+          path.push(str.slice(startIndex))
+          console.log('path', path)
+          for(let i=0; i<path.length; i++) {
+            let len = path[i].length
+            console.log('len', len)
+            let str2 = [...new Set(path[i])]
+            console.log('set', str2)
+            let type = str2.length
+            let num = len * type
+            console.log('type', type)
+            if(num > sum) sum = num
+          }
+          res.push(sum)
+          console.log('res', res)
+        }
+        for (i = startIndex; i < str.length; i++) {
+          // console.log('i', i)
+          path.push(str.slice(startIndex, i + 1))
+          backtracking(i + 1)
+          path.pop()
+        }
+      }
+      backtracking(0)
+      for(let i=0; i<res.length; i++) {
+        if(res[i] <minMax) minMax = res[i]
+      }
+      return minMax
+    }
+    console.log('value', getMaxValue("ababbbb", 2))
+  </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

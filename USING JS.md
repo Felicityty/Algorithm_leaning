@@ -5385,4 +5385,45 @@ var reverse = function(x) {
 
 
 
-再冲两天~ crazy👾
+### 2023-3-24
+
+[718. 最长重复子数组](https://leetcode.cn/problems/maximum-length-of-repeated-subarray/)
+
+```js
+var findLength = function(nums1, nums2) {
+    let len1 = nums1.length
+    let len2 = nums2.length
+    let dp = new Array(len1+1).fill().map(item => new Array(len2+1).fill(0))
+    let res = 0
+    for(let i=1; i<=len1; i++) {
+        for(let j=1; j<=len2; j++) {
+            if(nums1[i-1] === nums2[j-1]) {
+                dp[i][j] = dp[i-1][j-1] + 1
+            }
+            if(dp[i][j] > res) res = dp[i][j]
+        }
+    }
+    return res
+}
+```
+
+心中有图💐
+
+
+
+[300. 最长递增子序列](https://leetcode.cn/problems/longest-increasing-subsequence/)
+
+```js
+var lengthOfLIS = function(nums) {
+    let dp = new Array(nums.length).fill(1)
+    if(nums.length===1) return 1
+    for(let i=1; i<nums.length; i++) {
+        for(let j=0; j<i; j++) {
+            if(nums[i] > nums[j]) dp[i] = Math.max(dp[i], dp[j]+1)
+        }
+    }
+    return Math.max(...dp)
+}
+```
+
+心中继续有图💐
