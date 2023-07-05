@@ -5176,7 +5176,7 @@ var permute = function(nums) {
 
 [206. 反转链表](https://leetcode.cn/problems/reverse-linked-list/)
 
-![image-20230312152839621](USING JS.assets/image-20230312152839621.png)
+![ ](USING JS.assets/image-20230312152839621.png)
 
 ```js
 var reverseList = function(head) {

@@ -213,3 +213,67 @@ var reverseList = function(head) {
 
 又是你！可以
 
+
+
+# 2023.7.5
+
+[剑指 Offer 06. 从尾到头打印链表](https://leetcode.cn/problems/cong-wei-dao-tou-da-yin-lian-biao-lcof/) 【简单】
+
+输入一个链表的头节点，从尾到头反过来返回每个节点的值（用数组返回）。
+
+```javascript
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val) {
+ *     this.val = val;
+ *     this.next = null;
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @return {number[]}
+ */
+var reversePrint = function(head) {
+    let res = []
+    while(head!==null) {
+        res.unshift(head.val)
+        head = head.next
+    }
+    return res
+};
+```
+
+唯一区别，这里需要返回的是一个数组
+
+
+
+❗️[剑指 Offer 35. 复杂链表的复制](https://leetcode.cn/problems/fu-za-lian-biao-de-fu-zhi-lcof/) 【中等】 😱🤯我不会❗️救
+
+请实现 copyRandomList 函数，复制一个复杂链表。在复杂链表中，每个节点除了有一个 next 指针指向下一个节点，还有一个 random 指针指向链表中的任意节点或者 null。
+
+```javascript
+ * // Definition for a Node.
+ * function Node(val, next, random) {
+ *    this.val = val;
+ *    this.next = next;
+ *    this.random = random;
+ * };
+ */
+
+/**
+ * @param {Node} head
+ * @return {Node}
+ */
+var copyRandomList = function(head, cachedNode=new Map()) {
+    if (head === null) {
+        return null;
+    }
+    if (!cachedNode.has(head)) {
+        cachedNode.set(head, {val: head.val}), Object.assign(cachedNode.get(head), {next: copyRandomList(head.next, cachedNode), random: copyRandomList(head.random, cachedNode)})
+    }
+    return cachedNode.get(head)
+};
+```
+
+
+
