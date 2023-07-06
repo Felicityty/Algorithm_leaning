@@ -277,3 +277,89 @@ var copyRandomList = function(head, cachedNode=new Map()) {
 
 
 
+# 2023.7.6
+
+[剑指 Offer 03. 数组中重复的数字](https://leetcode.cn/problems/shu-zu-zhong-zhong-fu-de-shu-zi-lcof/) 【简单】
+
+找出数组中重复的数字。
+
+
+在一个长度为 n 的数组 nums 里的所有数字都在 0～n-1 的范围内。数组中某些数字是重复的，但不知道有几个数字重复了，也不知道每个数字重复了几次。请找出数组中任意一个重复的数字。
+
+```javascript
+var findRepeatNumber = function(nums) {
+    let map = new Map()
+    for (let i of nums) {
+        if(map.has(i)) return i
+        map.set(i,1)
+    }
+    return
+};
+```
+
+
+
+[剑指 Offer 53 - I. 在排序数组中查找数字 I](https://leetcode.cn/problems/zai-pai-xu-shu-zu-zhong-cha-zhao-shu-zi-lcof/) 【简单】
+
+统计一个数字在排序数组中出现的次数。
+
+```javascript
+/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number}
+ */
+var search = function(nums, target) {
+    function searchleftBinary(nums, target) {
+        let left = 0, right = nums.length-1
+        while(left<=right) {
+            let mid = left+Math.floor((right-left)/2)
+            if(nums[mid] === target) {
+                right = mid -1
+            } else if(nums[mid] < target) {
+                left = mid + 1
+            } else {
+                right = mid - 1
+            }
+        }
+        return left
+    }
+    let left = searchleftBinary(nums, target)
+    if(nums[left] === target) {
+        for(let i = left; i<=nums.length; i++) {
+            if(nums[i] !== target) {
+            return i - left
+            }
+        }
+    }
+    return 0
+};
+```
+
+也可以在定义一个找有边界的函数
+
+
+
+[剑指 Offer 53 - II. 0～n-1中缺失的数字](https://leetcode.cn/problems/que-shi-de-shu-zi-lcof/) 【简单】
+
+一个长度为n-1的递增排序数组中的所有数字都是唯一的，并且每个数字都在范围0～n-1之内。在范围0～n-1内的n个数字中有且只有一个数字不在该数组中，请找出这个数字。
+
+```javascript
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var missingNumber = function(nums) {
+    let left = 0, right = nums.length-1
+    while (left <= right) {
+        let mid = left + Math.floor((right-left)/2)
+        if(nums[mid] <= mid) {
+            left = mid + 1
+        } else if (nums[mid] > mid) {
+            right = mid - 1
+        }
+    }
+    return left
+};
+```
+
