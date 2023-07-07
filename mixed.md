@@ -363,3 +363,85 @@ var missingNumber = function(nums) {
 };
 ```
 
+
+
+# 2023.7.7
+
+[剑指 Offer 04. 二维数组中的查找](https://leetcode.cn/problems/er-wei-shu-zu-zhong-de-cha-zhao-lcof/) 【中等】
+
+在一个 n * m 的二维数组中，每一行都按照从左到右 非递减 的顺序排序，每一列都按照从上到下 非递减 的顺序排序。请完成一个高效的函数，输入这样的一个二维数组和一个整数，判断数组中是否含有该整数。
+
+[
+  [1,   4,  7, 11, 15],
+  [2,   5,  8, 12, 19],
+  [3,   6,  9, 16, 22],
+  [10, 13, 14, 17, 24],
+  [18, 21, 23, 26, 30]
+]
+给定 target = 5，返回 true
+
+给定 target = 20，返回 false
+
+```javascript
+/**
+ * @param {number[][]} matrix
+ * @param {number} target
+ * @return {boolean}
+ */
+var findNumberIn2DArray = function(matrix, target) {
+    let m = matrix.length, n = matrix[0]?.length
+    let x = 0, y = n - 1
+    while(x<m && y>=0) {
+        if(matrix[x][y] === target) {
+            return true
+        } else if(matrix[x][y] > target) {
+            y--
+        } else {
+            x++
+        }
+    }
+    return false
+};
+```
+
+
+
+[剑指 Offer 11. 旋转数组的最小数字](https://leetcode.cn/problems/xuan-zhuan-shu-zu-de-zui-xiao-shu-zi-lcof/) 【简单】
+
+把一个数组最开始的若干个元素搬到数组的末尾，我们称之为数组的旋转。
+
+给你一个可能存在 重复 元素值的数组 numbers ，它原来是一个升序排列的数组，并按上述情形进行了一次旋转。请返回旋转数组的最小元素。例如，数组 [3,4,5,1,2] 为 [1,2,3,4,5] 的一次旋转，该数组的最小值为 1。  
+
+注意，数组 [a[0], a[1], a[2], ..., a[n-1]] 旋转一次 的结果为数组 [a[n-1], a[0], a[1], a[2], ..., a[n-2]] 。
+
+```javascript
+/**
+ * @param {number[]} numbers
+ * @return {number}
+ */
+var minArray = function(numbers) {
+    let left = 0, right = numbers.length-1
+    while(left < right) {
+        let mid = left + Math.floor((right - left)/2)
+        if(numbers[mid] < numbers[right]) {
+            right = mid
+        } else if(numbers[mid] > numbers[right]) {
+            left = mid + 1
+        } else {
+            right -= 1
+        }
+    }
+    return numbers[left]
+};
+```
+
+这题真还得想想
+
+
+
+
+
+
+
+
+
