@@ -439,9 +439,87 @@ var minArray = function(numbers) {
 
 
 
+# 2023.7.8
+
+[剑指 Offer 50. 第一个只出现一次的字符](https://leetcode.cn/problems/di-yi-ge-zhi-chu-xian-yi-ci-de-zi-fu-lcof/) 【简单】
+
+在字符串 s 中找出第一个只出现一次的字符。如果没有，返回一个单空格。 s 只包含小写字母。
+
+```javascript
+/**
+ * @param {string} s
+ * @return {character}
+ */
+var firstUniqChar = function(s) {
+    let map = new Map()
+    let len = s.length
+    for(let [i,ch] of Array.from(s).entries()) {
+        if(map.has(ch)) {
+            map.set(ch, -1)
+        } else {
+            map.set(ch, i)
+        }
+    }
+    let first = len
+    for(let index of map.values()) {
+        if(index !== -1 && index<first) {
+            first = index
+        }
+    }
+    return first===len ? ' ' :s[first]
+};
+```
+
+怎么这里还可以用lodash的呀
+
+```javascript
+var firstUniqChar = function(s) {
+    const frequency = _.countBy(s);
+    for (const ch of s) {
+        if (frequency[ch] === 1) {
+            return ch;
+        }
+    }
+    return ' ';
+};
+```
 
 
 
+[剑指 Offer 32 - I. 从上到下打印二叉树](https://leetcode.cn/problems/cong-shang-dao-xia-da-yin-er-cha-shu-lcof/) 【简单】
+
+从上到下打印出二叉树的每个节点，同一层的节点按照从左到右的顺序打印。
+
+```javascript
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val) {
+ *     this.val = val;
+ *     this.left = this.right = null;
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {number[]}
+ */
+var levelOrder = function(root) {
+    let res  = []
+    if(root === null) return res
+    let queue = [root]
+    while(queue.length) {
+        let n = queue.length
+        while(n--) {
+            let cur = queue.shift()
+            res.push(cur.val)
+            cur.left && queue.push(cur.left)
+            cur.right && queue.push(cur.right)
+        }
+    }
+    return res
+};
+```
+
+就是喜欢层次遍历
 
 
 

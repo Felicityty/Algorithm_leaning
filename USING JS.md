@@ -1204,12 +1204,11 @@ var levelOrder = function(root) {
     let queue = [root]
     while(queue.length) {
         let len = queue.length
-        while(len>0) { // 这个循环是为了去找数的深度，如果只是遍历，就不用放在while循环里
+        while(len--) { // 这个循环是为了去找数的深度，如果只是遍历，就不用放在while循环里
             let cur = queue.shift()
             res.push(cur.val)
             cur.left && queue.push(cur.left)
             cur.right && queue.push(cur.right)
-            len-- // 这步别忘了
         }
     }
     return res
