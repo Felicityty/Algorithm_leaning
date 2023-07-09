@@ -523,3 +523,116 @@ var levelOrder = function(root) {
 
 
 
+# 2023.7.9
+
+[剑指 Offer 32 - II. 从上到下打印二叉树 II](https://leetcode.cn/problems/cong-shang-dao-xia-da-yin-er-cha-shu-ii-lcof/) 【简单】
+
+从上到下按层打印二叉树，同一层的节点按从左到右的顺序打印，每一层打印到一行。
+
+```javascript
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val) {
+ *     this.val = val;
+ *     this.left = this.right = null;
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {number[][]}
+ */
+var levelOrder = function(root) {
+    let res = []
+    if(root === null) return res
+    let queue = [root]
+    while(queue.length) {
+        let n = queue.length
+        let level = []
+        while(n--) {
+            let cur = queue.shift()
+            level.push(cur.val)
+            cur.left && queue.push(cur.left) 
+            cur.right && queue.push(cur.right) 
+        }
+        res.push(level)
+    }
+    return res
+};
+```
+
+
+
+[剑指 Offer 32 - III. 从上到下打印二叉树 III](https://leetcode.cn/problems/cong-shang-dao-xia-da-yin-er-cha-shu-iii-lcof/) 【简单】
+
+请实现一个函数按照之字形顺序打印二叉树，即第一行按照从左到右的顺序打印，第二层按照从右到左的顺序打印，第三行再按照从左到右的顺序打印，其他行以此类推。
+
+```javascript
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val) {
+ *     this.val = val;
+ *     this.left = this.right = null;
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {number[][]}
+ */
+var levelOrder = function(root) {
+    let res = []
+    let isLeft = true
+    if(root === null) return res
+    let queue = [root]
+    while(queue.length) {
+        let n = queue.length
+        let level = []
+        while(n--) {
+            let cur = queue.shift()
+            if(isLeft) {
+                level.push(cur.val)
+            } else {
+                level.unshift(cur.val)
+            }
+            cur.left && queue.push(cur.left)
+            cur.right && queue.push(cur.right)
+        }
+        res.push(level)
+        isLeft = !isLeft
+    }
+    return res
+};
+```
+
+
+
+[剑指 Offer 26. 树的子结构](https://leetcode.cn/problems/shu-de-zi-jie-gou-lcof/) 【中等】
+
+输入两棵二叉树A和B，判断B是不是A的子结构。(约定空树不是任意一个树的子结构)
+
+B是A的子结构， 即 A中有出现和B相同的结构和节点值。
+
+```javascript
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val) {
+ *     this.val = val;
+ *     this.left = this.right = null;
+ * }
+ */
+/**
+ * @param {TreeNode} A
+ * @param {TreeNode} B
+ * @return {boolean}
+ */
+var isSubStructure = function(A, B) {
+    if(!A || !B) return false
+    function dfs(A, B) {
+        if(B === null) return true
+        return A ? A.val===B.val && dfs(A.left, B.left) && dfs(A.right, B.right):false
+    }
+    return dfs(A,B) || isSubStructure(A.left, B) || isSubStructure(A.right, B)
+};
+```
+
+❗️看了题解的
+
