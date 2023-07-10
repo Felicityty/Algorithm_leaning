@@ -636,3 +636,61 @@ var isSubStructure = function(A, B) {
 
 ❗️看了题解的
 
+
+
+# 2023.7.10
+
+[剑指 Offer 27. 二叉树的镜像](https://leetcode.cn/problems/er-cha-shu-de-jing-xiang-lcof/) 【简单】
+
+请完成一个函数，输入一个二叉树，该函数输出它的镜像。
+
+```javascript
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val) {
+ *     this.val = val;
+ *     this.left = this.right = null;
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {TreeNode}
+ */
+var mirrorTree = function(root) {
+    if(root === null) return null
+    let left = mirrorTree(root.left)
+    let right = mirrorTree(root.right)
+    root.left = right
+    root.right = left
+    return root
+};
+```
+
+
+
+[剑指 Offer 28. 对称的二叉树](https://leetcode.cn/problems/dui-cheng-de-er-cha-shu-lcof/) 【中等】
+
+请实现一个函数，用来判断一棵二叉树是不是对称的。如果一棵二叉树和它的镜像一样，那么它是对称的。
+
+```javascript
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val) {
+ *     this.val = val;
+ *     this.left = this.right = null;
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {boolean}
+ */
+var isSymmetric = function(root) {
+    return check(root, root)
+    function check(left, right) {
+        if(left === null && right === null) return true
+        else if(left === null || right === null) return false
+        return left.val===right.val && check(left.left,right.right) && check(left.right, right.left)
+    }
+};
+```
+
