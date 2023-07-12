@@ -740,13 +740,57 @@ var exist = function(board, word) {
 
 # 2023.7.12
 
+[剑指 Offer 13. 机器人的运动范围](https://leetcode.cn/problems/ji-qi-ren-de-yun-dong-fan-wei-lcof/) 【中等】
+
+地上有一个m行n列的方格，从坐标 [0,0] 到坐标 [m-1,n-1] 。一个机器人从坐标 [0, 0] 的格子开始移动，它每次可以向左、右、上、下移动一格（不能移动到方格外），也不能进入行坐标和列坐标的数位之和大于k的格子。例如，当k为18时，机器人能够进入方格 [35, 37] ，因为3+5+3+7=18。但它不能进入方格 [35, 38]，因为3+5+3+8=19。请问该机器人能够到达多少个格子？
+
+```javascript
+/**
+ * @param {number} m
+ * @param {number} n
+ * @param {number} k
+ * @return {number}
+ */
+var movingCount = function(m, n, k) {
+    let visited = Array(m).fill().map(()=> Array(n).fill(false))
+    function sum(n) {
+        return n % 10 + Math.floor(n/10)
+    }
+    function dfs(i, j){
+        if(i>=m || j>=n || sum(i)+sum(j)>k || visited[i][j]) {
+            return 0
+        } else {
+            visited[i][j] = true
+            return dfs(i+1, j) + dfs(i, j+1) + 1
+        }
+    }
+    return dfs(0, 0)
+};
+```
 
 
 
+[剑指 Offer 42. 连续子数组的最大和](https://leetcode.cn/problems/lian-xu-zi-shu-zu-de-zui-da-he-lcof/) 【简单】
 
+输入一个整型数组，数组中的一个或连续多个整数组成一个子数组。求所有子数组的和的最大值。
 
+要求时间复杂度为O(n)。
 
-
+```javascript
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var maxSubArray = function(nums) {
+    let res = 0, max = nums[0]
+    for(let num of nums) {
+        res += num
+        if(res > max) max = res
+        if(res<0) res = 0
+    }
+    return max
+};
+```
 
 
 
