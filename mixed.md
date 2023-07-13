@@ -794,6 +794,64 @@ var maxSubArray = function(nums) {
 
 
 
+# 2023.7.13
+
+[剑指 Offer 39. 数组中出现次数超过一半的数字](https://leetcode.cn/problems/shu-zu-zhong-chu-xian-ci-shu-chao-guo-yi-ban-de-shu-zi-lcof/) 【简单】
+
+数组中有一个数字出现的次数超过数组长度的一半，请找出这个数字。
+
+你可以假设数组是非空的，并且给定的数组总是存在多数元素。
+
+```javascript
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var majorityElement = function(nums) {
+    let len = Math.floor(nums.length / 2)+1
+    let map = new Map()
+    for(let num of nums) {
+        if(map.has(num)) {
+            let cur = map.get(num)+1
+            if(cur >= len) return num
+            map.set(num, cur)
+        } else {
+            map.set(num, 1)
+        }
+    }
+    return nums[0]
+};
+```
+
+
+
+[剑指 Offer 66. 构建乘积数组](https://leetcode.cn/problems/gou-jian-cheng-ji-shu-zu-lcof/) 【中等】
+
+给定一个数组 A[0,1,…,n-1]，请构建一个数组 B[0,1,…,n-1]，其中 B[i] 的值是数组 A 中除了下标 i 以外的元素的积, 即 B[i]=A[0]×A[1]×…×A[i-1]×A[i+1]×…×A[n-1]。不能使用除法。
+
+```javascript
+/**
+ * @param {number[]} a
+ * @return {number[]}
+ */
+var constructArr = function(a) {
+    let prefix = [1], suffix = [], res = []
+    suffix[a.length-1] = 1
+    for(let i=1; i<a.length; i++) {
+        prefix[i] = a[i-1] * prefix[i-1]
+    }
+    for(let i=a.length-2; i>=0; i--) {
+        suffix[i] = a[i+1] * suffix[i+1]
+    }
+    for(let i=0; i<a.length; i++) {
+        res[i] = prefix[i] * suffix[i]
+    }
+    return res
+};
+```
+
+这个真的有意思啊 前缀和&后缀和
+
 
 
 
