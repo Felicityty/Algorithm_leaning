@@ -854,5 +854,71 @@ var constructArr = function(a) {
 
 
 
+# 2023.7.14
 
+[剑指 Offer 29. 顺时针打印矩阵](https://leetcode.cn/problems/shun-shi-zhen-da-yin-ju-zhen-lcof/) 【简单】
+
+输入一个矩阵，按照从外向里以顺时针的顺序依次打印出每一个数字。
+
+```javascript
+/**
+ * @param {number[][]} matrix
+ * @return {number[]}
+ */
+var spiralOrder = function(matrix) {
+    let res = []
+    if(!matrix.length) return res
+    let left = 0, right = matrix[0].length-1, top = 0, bottom = matrix.length-1
+    while(left<=right && top<=bottom) {
+        for(let i=left; i<=right; i++) {
+            res.push(matrix[top][i])
+        }
+        for(let i=top+1; i<=bottom; i++) {
+            res.push(matrix[i][right])
+        }
+        if(left<right && top<bottom) {
+            for(let i=right-1; i>=left; i--) {
+                res.push(matrix[bottom][i])
+            }
+            for(let i=bottom-1; i>=top+1; i--) {
+                res.push(matrix[i][top])
+            }
+        }
+        [left, right, top, bottom] = [left+1, right-1, top+1, bottom-1]
+    }
+    return res
+};
+```
+
+举个例子就出来了😎
+
+
+
+[剑指 Offer 61. 扑克牌中的顺子](https://leetcode.cn/problems/bu-ke-pai-zhong-de-shun-zi-lcof/) 【简单】
+
+从若干副扑克牌中随机抽 5 张牌，判断是不是一个顺子，即这5张牌是不是连续的。2～10为数字本身，A为1，J为11，Q为12，K为13，而大、小王为 0 ，可以看成任意数字。A 不能视为 14。
+
+```javascript
+/**
+ * @param {number[]} nums
+ * @return {boolean}
+ */
+var isStraight = function(nums) {
+    let set = new Set()
+    let max = -Infinity, min = Infinity
+    for(let num of nums) {
+        if(num === 0) {
+            continue
+        } else {
+            if(set.has(num)) {
+                return false
+            }
+            set.add(num)
+        }
+        max = Math.max(max, num)
+        min = Math.min(min, num)
+    }
+    return (max-min) <= 4
+};
+```
 
