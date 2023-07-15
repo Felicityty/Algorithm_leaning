@@ -922,3 +922,57 @@ var isStraight = function(nums) {
 };
 ```
 
+
+
+# 2023.7.15
+
+[剑指 Offer 45. 把数组排成最小的数](https://leetcode.cn/problems/ba-shu-zu-pai-cheng-zui-xiao-de-shu-lcof/) 【中等】
+
+输入一个非负整数数组，把数组里所有数字拼接起来排成一个数，打印能拼接出的所有数字中最小的一个。
+
+```javascript
+/**
+ * @param {number[]} nums
+ * @return {string}
+ */
+var minNumber = function(nums) {
+    nums = nums.sort((a,b) => {
+        return Number(String(a)+b) - Number(String(b)+a)
+    })
+    return nums.join("")
+};
+```
+
+
+
+[剑指 Offer 47. 礼物的最大价值](https://leetcode.cn/problems/li-wu-de-zui-da-jie-zhi-lcof/) 【中等】
+
+在一个 m*n 的棋盘的每一格都放有一个礼物，每个礼物都有一定的价值（价值大于 0）。你可以从棋盘的左上角开始拿格子里的礼物，并每次向右或者向下移动一格、直到到达棋盘的右下角。给定一个棋盘及其上面的礼物的价值，请计算你最多能拿到多少价值的礼物？
+
+```javascript
+/**
+ * @param {number[][]} grid
+ * @return {number}
+ */
+var maxValue = function(grid) {
+    const m = grid.length, n = grid[0].length
+    const res = new Array(m).fill(0).map(() => new Array(n).fill(0))
+    for (let i = 0; i < m; i++) {
+        for (let j = 0; j < n; j++) {
+            if (i > 0) {
+                res[i][j] = res[i - 1][j]
+            }
+            if (j > 0) {
+                res[i][j] = Math.max(res[i][j], res[i][j - 1])
+            }
+            res[i][j] += grid[i][j]
+        }
+    }
+    return res[m - 1][n - 1]
+};
+```
+
+
+
+
+
