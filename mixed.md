@@ -974,5 +974,105 @@ var maxValue = function(grid) {
 
 
 
+# 2023.7.16
+
+[剑指 Offer 55 - I. 二叉树的深度](https://leetcode.cn/problems/er-cha-shu-de-shen-du-lcof/) 【简单】
+
+输入一棵二叉树的根节点，求该树的深度。从根节点到叶节点依次经过的节点（含根、叶节点）形成树的一条路径，最长路径的长度为树的深度。
+
+```javascript
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val) {
+ *     this.val = val;
+ *     this.left = this.right = null;
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {number}
+ */
+var maxDepth = function(root) {
+    let depth = 0
+    if(root === null) return depth
+    let queue = [root]
+    while(queue.length) {
+        let num = queue.length
+        depth++
+        while(num--) {
+            let cur = queue.shift()
+            cur.left && queue.push(cur.left)
+            cur.right && queue.push(cur.right)
+        }
+    }
+    return depth
+};
+```
+
+
+
+[剑指 Offer 54. 二叉搜索树的第k大节点](https://leetcode.cn/problems/er-cha-sou-suo-shu-de-di-kda-jie-dian-lcof/) 【简单】
+
+给定一棵二叉搜索树，请找出其中第 `k` 大的节点的值。
+
+```javascript
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val) {
+ *     this.val = val;
+ *     this.left = this.right = null;
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @param {number} k
+ * @return {number}
+ */
+var kthLargest = function(root, k) {
+    let res = []
+    let queue = [root]
+    while(queue.length) {
+        let num = queue.length
+        while(num--) {
+            let cur = queue.shift()
+            res.push(cur.val)
+            cur.left && queue.push(cur.left)
+            cur.right && queue.push(cur.right)
+        }
+    }
+    res.sort((a,b) => b-a)
+    return res[k-1]
+};
+```
+
+
+
+[剑指 Offer 10- II. 青蛙跳台阶问题](https://leetcode.cn/problems/qing-wa-tiao-tai-jie-wen-ti-lcof/) 【简单】
+
+一只青蛙一次可以跳上1级台阶，也可以跳上2级台阶。求该青蛙跳上一个 n 级的台阶总共有多少种跳法。
+
+答案需要取模 1e9+7（1000000007），如计算初始结果为：1000000008，请返回 1。
+
+```javascript
+/**
+ * @param {number} n
+ * @return {number}
+ */
+var numWays = function(n) {
+    if(n <= 1) return 1
+    let dp = new Array(3)
+    dp[1] = 1
+    dp[2] = 2
+    for(let i=3; i<=n; i++) {
+        let sum = (dp[1] + dp[2]) % 1000000007
+        dp[1] = dp[2]
+        dp[2] = sum
+    }
+    return dp[2]
+};
+```
+
+
+
 
 
