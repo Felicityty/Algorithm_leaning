@@ -1074,5 +1074,55 @@ var numWays = function(n) {
 
 
 
+# 2023.7.17
+
+[剑指 Offer 34. 二叉树中和为某一值的路径](https://leetcode.cn/problems/er-cha-shu-zhong-he-wei-mou-yi-zhi-de-lu-jing-lcof/) 【中等】
+
+给你二叉树的根节点 root 和一个整数目标和 targetSum ，找出所有 从根节点到叶子节点 路径总和等于给定目标和的路径。
+
+```javascript
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @param {number} target
+ * @return {number[][]}
+ */
+var pathSum = function(root, target) {
+    let res = []
+    function dfs(root, count, nums) {
+        if(root) {
+            count += root.val
+            nums = [...nums, root.val]
+            if(count === target && !root.right && !root.left) {
+                res.push(nums)
+            }
+            dfs(root.left, count, nums)
+            dfs(root.right, count, nums)
+        }
+    }
+    dfs(root, 0, [])
+    return res
+};
+```
+
+还卡挺久
+
+区别：
+
+`nums.push(root.val) ` ❌
+
+`nums` 是一个引用，每次递归调用都会向 `nums` 数组中添加当前节点的值 `root.val`。然后将这个 `nums` 数组直接添加到 `res` 数组中，所以最终 `res` 数组会包含指向相同 `nums` 引用的多个数组，而这些数组的值会根据递归调用的变化而变化。
+
+`nums = [...nums, root.val]` ☑️
+
+每次递归调用都会创建一个新的 `nums` 数组
+
 
 
