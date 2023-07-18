@@ -1126,3 +1126,56 @@ var pathSum = function(root, target) {
 
 
 
+# 2023.7.18
+
+[剑指 Offer 55 - II. 平衡二叉树](https://leetcode.cn/problems/ping-heng-er-cha-shu-lcof/) 【简单】
+
+输入一棵二叉树的根节点，判断该树是不是平衡二叉树。如果某二叉树中任意节点的左右子树的深度相差不超过1，那么它就是一棵平衡二叉树。
+
+```javascript
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val) {
+ *     this.val = val;
+ *     this.left = this.right = null;
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {boolean}
+ */
+var isBalanced = function(root) {
+    function getDepth(node) {
+        if(node === null) return 0
+        let leftDepth = getDepth(node.left)
+        if(leftDepth === -1) return -1
+        let rightDepth = getDepth(node.right)
+        if(rightDepth === -1) return -1 
+        if(Math.abs(leftDepth - rightDepth) > 1) return -1
+        else return Math.max(leftDepth, rightDepth)+1
+    }
+    return !(getDepth(root) === -1)
+};
+
+```
+
+
+
+[剑指 Offer 64. 求1+2+…+n](https://leetcode.cn/problems/qiu-12n-lcof/) 【中等】
+
+求 `1+2+...+n` ，要求不能使用乘除法、for、while、if、else、switch、case等关键字及条件判断语句（A?B:C）。
+
+```javascript
+/**
+ * @param {number} n
+ * @return {number}
+ */
+var sumNums = function(n) {
+    return n===0 ? 0 : n + sumNums(n-1)
+};
+```
+
+
+
+
+
