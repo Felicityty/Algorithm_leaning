@@ -1254,3 +1254,113 @@ var lowestCommonAncestor = function(root, p, q) {
 ```
 
 这个还是有点儿难想的
+
+
+
+# 2023.7.22
+
+[剑指 Offer 40. 最小的k个数](https://leetcode.cn/problems/zui-xiao-de-kge-shu-lcof/) 【简单】
+
+输入整数数组 `arr` ，找出其中最小的 `k` 个数。例如，输入4、5、1、6、2、7、3、8这8个数字，则最小的4个数字是1、2、3、4。
+
+```javascript
+/**
+ * @param {number[]} arr
+ * @param {number} k
+ * @return {number[]}
+ */
+var getLeastNumbers = function(arr, k) {
+    arr.sort((a,b) => a-b)
+    return arr.slice(0, k)
+};
+```
+
+
+
+[剑指 Offer 10- I. 斐波那契数列](https://leetcode.cn/problems/fei-bo-na-qi-shu-lie-lcof/) 【简单】
+
+写一个函数，输入 n ，求斐波那契（Fibonacci）数列的第 n 项（即 F(N)）。斐波那契数列的定义如下：
+
+F(0) = 0,   F(1) = 1
+F(N) = F(N - 1) + F(N - 2), 其中 N > 1.
+斐波那契数列由 0 和 1 开始，之后的斐波那契数就是由之前的两数相加而得出。
+
+答案需要取模 1e9+7（1000000007），如计算初始结果为：1000000008，请返回 1。
+
+```javascript
+/**
+ * @param {number} n
+ * @return {number}
+ */
+var fib = function(n) {
+    let p = 0, q = 1
+    if(n<=1) return n
+    for(let i=2; i<=n; i++) {
+        let sum = (p + q) % 1000000007
+        p = q
+        q = sum
+    }
+    return q
+};
+```
+
+递归居然超时
+
+
+
+[剑指 Offer 63. 股票的最大利润](https://leetcode.cn/problems/gu-piao-de-zui-da-li-run-lcof/) 【简单】
+
+假设把某股票的价格按照时间先后顺序存储在数组中，请问买卖该股票**一次**可能获得的最大利润是多少？
+
+```javascript
+/**
+ * @param {number[]} prices
+ * @return {number}
+ */
+var maxProfit = function(prices) {
+    let res = 0, minPrice = prices[0]
+    for(let price of prices) {
+        minPrice = Math.min(minPrice, price)
+        res = Math.max(res, price-minPrice)
+    }
+    return res
+};
+```
+
+
+
+[剑指 Offer 48. 最长不含重复字符的子字符串](https://leetcode.cn/problems/zui-chang-bu-han-zhong-fu-zi-fu-de-zi-zi-fu-chuan-lcof/) 【中等】
+
+请从字符串中找出一个最长的不包含重复字符的子字符串，计算该最长子字符串的长度。
+
+```javascript
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var lengthOfLongestSubstring = function(s) {
+    let left = 0, right = 0, res = 0
+    let map = new Map()
+    while(right < s.length) {
+        let cur = s[right]
+        right++
+        if(map.has(cur)) {
+            map.set(cur, map.get(cur)+1)
+        } else {
+            map.set(cur, 1)
+        }
+        while(map.get(cur) > 1) {
+            let leftCur = s[left]
+            left++
+            map.set(leftCur, map.get(leftCur)-1)
+        }
+        res = Math.max(right-left, res)
+    }
+    return res
+};
+```
+
+滑动窗口
+
+
+
