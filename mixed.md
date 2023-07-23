@@ -1364,3 +1364,82 @@ var lengthOfLongestSubstring = function(s) {
 
 
 
+# 2023.7.23
+
+[剑指 Offer 38. 字符串的排列](https://leetcode.cn/problems/zi-fu-chuan-de-pai-lie-lcof/) 【中等】
+
+输入一个字符串，打印出该字符串中字符的所有排列。
+
+你可以以任意顺序返回这个字符串数组，但里面不能有重复元素。
+
+```javascript
+/**
+ * @param {string} s
+ * @return {string[]}
+ */
+var permutation = function(s) {
+    let res = [], path = []
+    s = Array.from(s)
+    s.sort((a,b) => a.charCodeAt() - b.charCodeAt())
+    function backTracking(nums, len, used) {
+        if(path.length === len) res.push(path.join(''))
+        for(let i=0; i<len; i++) {
+            if(i>0 && nums[i]===nums[i-1] && !used[i-1] || used[i]) continue
+            path.push(nums[i])
+            used[i] = true
+            backTracking(nums, nums.length, used)
+            path.pop()
+            used[i] = false
+        }
+    }
+    backTracking(s, s.length, [])
+    return res
+};
+```
+
+注意一下字符串排序 用 `charCodeAt()`
+
+这是包含重复元素的全排列 😖
+
+
+
+[剑指 Offer 49. 丑数](https://leetcode.cn/problems/chou-shu-lcof/) 【中等】
+
+我们把只包含质因子 2、3 和 5 的数称作丑数（Ugly Number）。求按从小到大的顺序的第 n 个丑数。
+
+```javascript
+/**
+ * @param {number} n
+ * @return {number}
+ */
+var nthUglyNumber = function(n) {
+    let ugly = new Array(n+1)
+    let p=1, p2 = 1, p3 = 1, p5 = 1
+    let product2 = 1, product3 = 1, product5 = 1
+    while(p <= n) {
+        let min = Math.min(product2, Math.min(product3, product5))
+        ugly[p++] = min
+        if(min === product2) {
+            product2 = 2 * ugly[p2++]
+        } 
+        if(min === product3) {
+            product3 = 3 * ugly[p3++]
+        }
+         if(min === product5) {
+            product5 = 5 * ugly[p5++]
+        }
+    }
+    return ugly[n]
+};
+```
+
+看作三个链表，判断得是并列的if 🫣
+
+
+
+
+
+
+
+
+
