@@ -1437,7 +1437,36 @@ var nthUglyNumber = function(n) {
 
 
 
+# 2023.7.24
 
+[46. 全排列](https://leetcode.cn/problems/permutations/) 【中等】
+
+给定一个不含重复数字的数组 `nums` ，返回其 *所有可能的全排列* 。你可以 **按任意顺序** 返回答案。
+
+```javascript
+/**
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+var permute = function(nums) {
+    let res = [], path = []
+    function backTracking(nums, len, used) {
+        if(path.length === len) res.push([...path])
+        for(let i=0; i<len; i++) {
+            if(used[i]) continue
+            path.push(nums[i])
+            used[i] = true
+            backTracking(nums, nums.length, used)
+            path.pop()
+            used[i] = false
+        }
+    }
+    backTracking(nums, nums.length, [])
+    return res
+};
+```
+
+不含重复元素
 
 
 
