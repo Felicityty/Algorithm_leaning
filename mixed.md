@@ -1503,15 +1503,63 @@ var translateNum = function(num) {
 
 
 
+[剑指 Offer 07. 重建二叉树](https://leetcode.cn/problems/zhong-jian-er-cha-shu-lcof/) 【中等】
+
+输入某二叉树的前序遍历和中序遍历的结果，请构建该二叉树并返回其根节点。
+
+假设输入的前序遍历和中序遍历的结果中都不含重复的数字。
+
+```javascript
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val) {
+ *     this.val = val;
+ *     this.left = this.right = null;
+ * }
+ */
+/**
+ * @param {number[]} preorder
+ * @param {number[]} inorder
+ * @return {TreeNode}
+ */
+var buildTree = function(preorder, inorder) {
+    if(preorder.length === 0) {
+        return null
+    }
+    const index = inorder.findIndex(item => item===preorder[0])
+    return {
+        val: preorder[0],
+        left: buildTree(preorder.slice(1, index+1), inorder.slice(0, index)),
+        right: buildTree(preorder.slice(index+1), inorder.slice(index+1))
+    }
+};
+```
 
 
 
+[剑指 Offer 16. 数值的整数次方](https://leetcode.cn/problems/shu-zhi-de-zheng-shu-ci-fang-lcof/) 【中等】
 
+实现 [pow(*x*, *n*)](https://www.cplusplus.com/reference/valarray/pow/) ，即计算 x 的 n 次幂函数（即，xn）。不得使用库函数，同时不需要考虑大数问题。
 
-
-
-
-
+```javascript
+/**
+ * @param {number} x
+ * @param {number} n
+ * @return {number}
+ */
+var myPow = function(x, n) {
+    if(n === 0) return 1
+    if(n < 0) {
+        return myPow(1/x, -n)
+    }
+    if(n % 2 === 1) {
+        return x * myPow(x, n-1)
+    } else {
+        let sub = myPow(x, n/2)
+        return sub * sub
+    }
+};
+```
 
 
 
