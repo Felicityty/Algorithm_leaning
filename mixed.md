@@ -1445,28 +1445,73 @@ var nthUglyNumber = function(n) {
 
 ```javascript
 /**
- * @param {number[]} nums
- * @return {number[][]}
+ * @param {number} n
+ * @return {number[]}
  */
-var permute = function(nums) {
-    let res = [], path = []
-    function backTracking(nums, len, used) {
-        if(path.length === len) res.push([...path])
-        for(let i=0; i<len; i++) {
-            if(used[i]) continue
-            path.push(nums[i])
-            used[i] = true
-            backTracking(nums, nums.length, used)
-            path.pop()
-            used[i] = false
+var dicesProbability = function(n) {
+    let res = new Array(n+1).fill().map(()=> new Array(n*6+1).fill(0))
+    // 肯定先有一个初始值嘛
+    for(let j=1; j<=6; j++) {
+        res[1][j] = 1/6.0
+    }
+    for(let i=2; i<=n; i++) {
+        for(let j=i; j<=6*n; j++) {
+            for(let k=1; k<=6; k++) {
+                if(j - k > 0) res[i][j] += res[i-1][j-k]/6.0
+            }
         }
     }
-    backTracking(nums, nums.length, [])
-    return res
+    return res[n].splice(n)
 };
 ```
 
 不含重复元素
+
+
+
+# 2023.7.25
+
+[剑指 Offer 46. 把数字翻译成字符串](https://leetcode.cn/problems/ba-shu-zi-fan-yi-cheng-zi-fu-chuan-lcof/) 【中等】
+
+给定一个数字，我们按照如下规则把它翻译为字符串：0 翻译成 “a” ，1 翻译成 “b”，……，11 翻译成 “l”，……，25 翻译成 “z”。一个数字可能有多个翻译。请编程实现一个函数，用来计算一个数字有多少种不同的翻译方法。
+
+```javascript
+/**
+ * @param {number} num
+ * @return {number}
+ */
+var translateNum = function(num) {
+    let str = num.toString()
+    let len = str.length
+    // dp[i] 表示第i-1个元素拥有的多少种不同翻译方法
+    let dp = new Array(str.length+1).fill(0)
+    dp[0] = 1, dp[1] = 1
+    for(let i=2; i<=len; i++) {
+        let first = str[i-2], second = str[i-1]
+        if(second<='9' && second>='0') {
+            dp[i] += dp[i-1]
+        }
+        if(first==='1' || first==='2' && second <= '5') {
+            dp[i] += dp[i-2]
+        }
+    }
+    return dp[len]
+};
+```
+
+只要数字就行了
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

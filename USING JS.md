@@ -2042,23 +2042,20 @@ push之后used中元素赋true，pop后赋false
 
 ```js
 var permute = function(nums) {
-    let result = [], path = []
-    // 递归函数的参数其实只要used就行了
-    var backtracking = function(n, k, used) {
-        if(path.length === k) {
-            result.push([...path])
-        }
-        for(let i=0; i<k; i++) {
-            if(used[nums[i]]) continue
+    let res = [], path = []
+    function backTracking(nums, len, used) {
+        if(path.length === len) res.push([...path])
+        for(let i=0; i<len; i++) {
+            if(used[i]) continue
             path.push(nums[i])
-            used[nums[i]] = true
-            backtracking(n, k, used)
+            used[i] = true
+            backTracking(nums, nums.length, used)
             path.pop()
-            used[nums[i]] = false
+            used[i] = false
         }
     }
-    backtracking(nums, nums.length, [])
-    return result
+    backTracking(nums, nums.length, [])
+    return res
 };
 ```
 
@@ -2102,6 +2099,8 @@ var permuteUnique = function(nums) {
     return result
 };
 ```
+
+👉 字符串排序`s.sort((a,b) => a.charCodeAt() - b.charCodeAt())`
 
 
 
