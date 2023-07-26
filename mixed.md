@@ -1563,5 +1563,43 @@ var myPow = function(x, n) {
 
 
 
+# 2023.7.26
+
+[剑指 Offer 18. 删除链表的节点](https://leetcode.cn/problems/shan-chu-lian-biao-de-jie-dian-lcof/) 【简单】
+
+给定单向链表的头指针和一个要删除的节点的值，定义一个函数删除该节点。
+
+返回删除后的链表的头节点
+
+```javascript
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val) {
+ *     this.val = val;
+ *     this.next = null;
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @param {number} val
+ * @return {ListNode}
+ */
+var deleteNode = function(head, val) {
+    let dummy = new ListNode(-1)
+    let q = dummy
+    let p = head // 原数组
+    while(p !== null) {
+        if(p.val !== val) {
+            q.next = p
+            q = q.next
+        }
+        let temp = p.next
+        p.next = null
+        p = temp
+    }
+    return dummy.next
+};
+```
+
 
 
