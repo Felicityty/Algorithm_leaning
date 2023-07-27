@@ -1603,3 +1603,91 @@ var deleteNode = function(head, val) {
 
 
 
+# 2023.7.27
+
+[剑指 Offer 22. 链表中倒数第k个节点](https://leetcode.cn/problems/lian-biao-zhong-dao-shu-di-kge-jie-dian-lcof/) 【简单】
+
+输入一个链表，输出该链表中倒数第k个节点。为了符合大多数人的习惯，本题从1开始计数，即链表的尾节点是倒数第1个节点。
+
+例如，一个链表有 6 个节点，从头节点开始，它们的值依次是 1、2、3、4、5、6。这个链表的倒数第 3 个节点是值为 4 的节点。
+
+```javascript
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val) {
+ *     this.val = val;
+ *     this.next = null;
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @param {number} k
+ * @return {ListNode}
+ */
+var getKthFromEnd = function(head, k) {
+    let p1 = head, p2 = head
+    while(k--) {
+        p1 = p1.next
+    }
+    while(p1 !== null) {
+        p1 = p1.next
+        p2 = p2.next
+    }
+    return p2
+};
+```
+
+
+
+# 2023.7.28
+
+[剑指 Offer 25. 合并两个排序的链表](https://leetcode.cn/problems/he-bing-liang-ge-pai-xu-de-lian-biao-lcof/) 【简单】
+
+输入两个递增排序的链表，合并这两个链表并使新链表中的节点仍然是递增排序的。
+
+```javascript
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val) {
+ *     this.val = val;
+ *     this.next = null;
+ * }
+ */
+/**
+ * @param {ListNode} l1
+ * @param {ListNode} l2
+ * @return {ListNode}
+ */
+var mergeTwoLists = function(l1, l2) {
+    let dummy = new ListNode(-1), p = dummy
+    let p1 = l1, p2 = l2
+    while(p1 !== null && p2 !== null) {
+        if(p1.val > p2.val) {
+            p.next = p2
+            p2 = p2.next
+        } else {
+            p.next = p1
+            p1 = p1.next
+        }
+        p = p.next
+    }
+    if(p1 !== null) {
+        p.next = p1
+    }
+    if(p2 !== null) {
+        p.next = p2
+    }
+    return dummy.next
+};
+```
+
+
+
+
+
+
+
+
+
+
+
