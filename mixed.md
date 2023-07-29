@@ -1683,7 +1683,97 @@ var mergeTwoLists = function(l1, l2) {
 
 
 
+# 2023.7.29
 
+[剑指 Offer 52. 两个链表的第一个公共节点](https://leetcode.cn/problems/liang-ge-lian-biao-de-di-yi-ge-gong-gong-jie-dian-lcof/) 【简单】
+
+输入两个链表，找出它们的第一个公共节点。
+
+```javascript
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val) {
+ *     this.val = val;
+ *     this.next = null;
+ * }
+ */
+
+/**
+ * @param {ListNode} headA
+ * @param {ListNode} headB
+ * @return {ListNode}
+ */
+var getIntersectionNode = function(headA, headB) {
+    let p1 = headA, p2 = headB
+    while(p1 !== p2) {
+        if(p1 === null) {
+            p1 = headB
+        } else {
+            p1 = p1.next
+        }
+        if(p2 === null) {
+            p2 = headA
+        } else {
+            p2 = p2.next
+        }
+    }
+    return p1
+};
+```
+
+
+
+[剑指 Offer 21. 调整数组顺序使奇数位于偶数前面](https://leetcode.cn/problems/diao-zheng-shu-zu-shun-xu-shi-qi-shu-wei-yu-ou-shu-qian-mian-lcof/) 【简单】
+
+输入一个整数数组，实现一个函数来调整该数组中数字的顺序，使得所有奇数在数组的前半部分，所有偶数在数组的后半部分。
+
+```javascript
+/**
+ * @param {number[]} nums
+ * @return {number[]}
+ */
+var exchange = function(nums) {
+    let slow = 0, fast = 0
+    while(fast < nums.length) {
+        if(nums[fast] % 2 === 1) {
+            let temp = nums[slow]
+            nums[slow] = nums[fast]
+            nums[fast] = temp
+            slow++
+        }
+        fast++
+    }
+    return nums
+};
+```
+
+
+
+[剑指 Offer 57. 和为s的两个数字](https://leetcode.cn/problems/he-wei-sde-liang-ge-shu-zi-lcof/) 【简单】
+
+输入一个递增排序的数组和一个数字s，在数组中查找两个数，使得它们的和正好是s。如果有多对数字的和等于s，则输出任意一对即可。
+
+```javascript
+/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number[]}
+ */
+var twoSum = function(nums, target) {
+    let left = 0, right = nums.length - 1
+    while(left < right) {
+        let sum = nums[left] + nums[right]
+        if(sum < target) {
+            left++
+        } else if(sum > target) {
+            right--
+        } else {
+            return [nums[left], nums[right]]
+        }
+    }
+    return null
+};
+```
 
 
 
