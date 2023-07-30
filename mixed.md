@@ -1777,7 +1777,56 @@ var twoSum = function(nums, target) {
 
 
 
+# 2023.7.30
+
+[剑指 Offer 58 - I. 翻转单词顺序](https://leetcode.cn/problems/fan-zhuan-dan-ci-shun-xu-lcof/) 【简单】
+
+输入一个英文句子，翻转句子中单词的顺序，但单词内字符的顺序不变。为简单起见，标点符号和普通字母一样处理。例如输入字符串"I am a student. "，则输出"student. a am I"。
+
+```javascript
+/**
+ * @param {string} s
+ * @return {string}
+ */
+var reverseWords = function(s) {
+    let len = s.length, res = []
+    let i = 0, j = 0
+    s = s.trim()
+    while(j < len) {
+        while(j<len && s[j] !== ' ') {
+            j++
+        }
+        res.unshift(s.slice(i, j))
+        while(j<len && s[j] === ' ') {
+            j++
+        }
+        i = j
+    }
+    return res.join(' ')
+};
+```
 
 
 
+[剑指 Offer 17. 打印从1到最大的n位数](https://leetcode.cn/problems/da-yin-cong-1dao-zui-da-de-nwei-shu-lcof/) 【简单】
+
+输入数字 `n`，按顺序打印出从 1 到最大的 n 位十进制数。比如输入 3，则打印出 1、2、3 一直到最大的 3 位数 999。
+
+```javascript
+/**
+ * @param {number} n
+ * @return {number[]}
+ */
+var printNumbers = function(n) {
+    let maxNum = 0
+    for (let i = 0; i < n; i++) {
+        maxNum = 10 * maxNum + 9
+    }
+    let res = new Array(maxNum)
+    for (let i = 1; i <= maxNum; i++) {
+        res[i - 1] = i
+    }
+    return res
+};
+```
 
