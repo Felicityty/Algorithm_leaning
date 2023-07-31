@@ -1808,7 +1808,7 @@ var reverseWords = function(s) {
 
 
 
-[剑指 Offer 17. 打印从1到最大的n位数](https://leetcode.cn/problems/da-yin-cong-1dao-zui-da-de-nwei-shu-lcof/) 【简单】
+[剑指 Offer 17. 打印从1到最大的n位数](https://leetcode.cn/problems/da-yin-cong-1dao-zui-da-de-nwei-shu-lcof/) 【简单】 
 
 输入数字 `n`，按顺序打印出从 1 到最大的 n 位十进制数。比如输入 3，则打印出 1、2、3 一直到最大的 3 位数 999。
 
@@ -1825,6 +1825,76 @@ var printNumbers = function(n) {
     let res = new Array(maxNum)
     for (let i = 1; i <= maxNum; i++) {
         res[i - 1] = i
+    }
+    return res
+};
+```
+
+
+
+# 2023.7.31
+
+[986. 区间列表的交集](https://leetcode.cn/problems/interval-list-intersections/) 【中等】
+
+给定两个由一些 闭区间 组成的列表，firstList 和 secondList ，其中 firstList[i] = [starti, endi] 而 secondList[j] = [startj, endj] 。每个区间列表都是成对 不相交 的，并且 已经排序 。
+
+返回这 两个区间列表的交集 。
+
+形式上，闭区间 [a, b]（其中 a <= b）表示实数 x 的集合，而 a <= x <= b 。
+
+两个闭区间的 交集 是一组实数，要么为空集，要么为闭区间。例如，[1, 3] 和 [2, 4] 的交集为 [2, 3] 。
+
+```javascript
+/**
+ * @param {number[][]} firstList
+ * @param {number[][]} secondList
+ * @return {number[][]}
+ */
+var intervalIntersection = function(firstList, secondList) {
+    let res = []
+    let i = 0, j = 0
+    while(i < firstList.length && j < secondList.length) {
+        let a1 = firstList[i][0], a2 = firstList[i][1]
+        let b1 = secondList[j][0], b2 = secondList[j][1]
+
+        if(b2 >= a1 && a2 >= b1) {
+            res.push([Math.max(a1, b1), Math.min(a2, b2)])
+        }
+        if(b2 < a2) {
+            j++
+        } else {
+            i++
+        }
+    }
+    return res
+};
+```
+
+
+
+[3. 无重复字符的最长子串](https://leetcode.cn/problems/longest-substring-without-repeating-characters/) 【中等】
+
+给定一个字符串 `s` ，请你找出其中不含有重复字符的 **最长子串** 的长度。
+
+```javascript
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var lengthOfLongestSubstring = function(s) {
+    // 用map吧
+    let window = new Map()
+    let left = 0, right = 0, res = 0
+    while (right < s.length) {
+        let c = s[right]
+        right++
+        window.set(c, (window.get(c) || 0) + 1)
+        while (window.get(c) > 1) {
+            let d = s[left]
+            left++
+            window.set(d, window.get(d) - 1)
+        }
+        res = Math.max(res, right - left)
     }
     return res
 };
