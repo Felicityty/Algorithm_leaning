@@ -1585,20 +1585,17 @@ var myPow = function(x, n) {
  * @return {ListNode}
  */
 var deleteNode = function(head, val) {
-    let dummy = new ListNode(-1)
-    let q = dummy
-    let p = head // 原数组
-    while(p !== null) {
-        if(p.val !== val) {
-            q.next = p
-            q = q.next
-        }
-        let temp = p.next
-        p.next = null
-        p = temp
+    // 双指针
+    if(head.val === val) return head.next
+    let pre = head, cur = head.next
+    while(cur.val !== val) {
+        pre = cur
+        cur = cur.next
     }
-    return dummy.next
+    pre.next = cur.next
+    return head
 };
+
 ```
 
 
@@ -1883,20 +1880,96 @@ var intervalIntersection = function(firstList, secondList) {
  */
 var lengthOfLongestSubstring = function(s) {
     // 用map吧
-    let window = new Map()
+    let map = new Map()
     let left = 0, right = 0, res = 0
-    while (right < s.length) {
-        let c = s[right]
-        right++
-        window.set(c, (window.get(c) || 0) + 1)
-        while (window.get(c) > 1) {
-            let d = s[left]
-            left++
-            window.set(d, window.get(d) - 1)
+    while(right < s.length) {
+        let c = s[right++]
+        map.set(c, map.get(c) ? map.get(c) + 1 : 1 )
+        while(map.get(c) > 1) {
+            let temp = s[left++]
+            map.set(temp, map.get(temp) - 1)
         }
         res = Math.max(res, right - left)
     }
     return res
 };
 ```
+
+
+
+# 2023.8.1
+
+[797. 所有可能的路径](https://leetcode.cn/problems/all-paths-from-source-to-target/) 【中等】
+
+给你一个有 n 个节点的 有向无环图（DAG），请你找出所有从节点 0 到节点 n-1 的路径并输出（不要求按特定顺序）
+
+ graph[i] 是一个从节点 i 可以访问的所有节点的列表（即从节点 i 到节点 graph[i][j]存在一条有向边）。
+
+```javascript
+/**
+ * @param {number[][]} graph
+ * @return {number[][]}
+ */
+var allPathsSourceTarget = function(graph) {
+    let stack = [0], res = []
+    const dfs = (graph, x, n) => {
+        if(x === n) {
+            res.push([...stack])
+            return
+        }
+        for(const i of graph[x]) {
+            stack.push(i)
+            dfs(graph, i, n)
+            stack.pop()
+        }
+    }
+    dfs(graph, 0, graph.length-1)
+    return res
+};
+```
+
+
+
+[151. 反转字符串中的单词](https://leetcode.cn/problems/reverse-words-in-a-string/) 【中等】
+
+给你一个字符串 s ，请你反转字符串中 单词 的顺序。
+
+单词 是由非空格字符组成的字符串。s 中使用至少一个空格将字符串中的 单词 分隔开。
+
+返回 单词 顺序颠倒且 单词 之间用单个空格连接的结果字符串。
+
+注意：输入字符串 s中可能会存在前导空格、尾随空格或者单词间的多个空格。返回的结果字符串中，单词间应当仅用单个空格分隔，且不包含任何额外的空格。
+
+```javascript
+/**
+ * @param {string} s
+ * @return {string}
+ */
+var reverseWords = function(s) {
+    let i = 0, j = 0, res = []
+    s = s.trim()
+    let len = s.length
+    while(j < len) {
+        while(j < len && s[j] !== ' ') {
+            j++
+        }
+        res.unshift(s.slice(i, j))
+        while(j < len && s[j] === ' ') {
+            j++
+        }
+        i = j
+    }
+    return res.join(' ')
+};
+```
+
+第二次嘞
+
+
+
+
+
+
+
+
 
