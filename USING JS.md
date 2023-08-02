@@ -1808,6 +1808,25 @@ var combinationSum2 = function(candidates, target) {
 
 递归结束条件是 `startIndex === s.length`
 
+🌟 2023.8.2 模版
+
+```javascript
+let path = [], res = []
+void backtracking(startIndex) {
+  	if( ……不符合…… ) return
+    if (…………) {
+        res.push( ……path…… )
+        return
+    }
+    for (let i=startIndex; i<len; i++) {
+      	if( ……不符合…… ) return / continue
+        path.push(…………)
+        backtracking(i+1)
+        path.pop()
+    }
+}
+```
+
 
 
 ### 6、分割回文子串

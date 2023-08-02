@@ -1911,6 +1911,7 @@ var lengthOfLongestSubstring = function(s) {
  * @return {number[][]}
  */
 var allPathsSourceTarget = function(graph) {
+  	// dfs
     let stack = [0], res = []
     const dfs = (graph, x, n) => {
         if(x === n) {
@@ -1927,6 +1928,8 @@ var allPathsSourceTarget = function(graph) {
     return res
 };
 ```
+
+回溯
 
 
 
@@ -1967,7 +1970,149 @@ var reverseWords = function(s) {
 
 
 
+# 2023.8.2
 
+🙌 开始逐块攻破叭
+
+回溯 - 分割 👉 需要startIndex
+
+[131. 分割回文串](https://leetcode.cn/problems/palindrome-partitioning/) 【中等】
+
+```javascript
+/**
+ * @param {string} s
+ * @return {string[][]}
+ */
+var partition = function(s) {
+    function isPalindorme(left, right, str) {
+        for(let i=left, j=right; i<j; i++, j--) {
+            if(str[i] !== str[j]) return false
+        }
+        return true
+    }
+    let path = [], res = []
+    let len = s.length
+    function backTracking(startIndex) {
+        if(startIndex === len) {
+            res.push([...path])
+          	return
+        }
+        for(let i=startIndex; i<len; i++) {
+            // 现阶段不是回文，但还有机会
+            if(!isPalindorme(startIndex, i, s)) continue
+            path.push(s.slice(startIndex, i+1))
+            backTracking(i+1)
+            path.pop()
+        }
+    }
+    backTracking(0)
+    return res
+};
+```
+
+
+
+[93. 复原 IP 地址](https://leetcode.cn/problems/restore-ip-addresses/) 【中等】
+
+有效 IP 地址 正好由四个整数（每个整数位于 0 到 255 之间组成，且不能含有前导 0），整数之间用 '.' 分隔。
+
+例如："0.1.2.201" 和 "192.168.1.1" 是 有效 IP 地址，但是 "0.011.255.245"、"192.168.1.312" 和 "192.168@1.1" 是 无效 IP 地址。
+给定一个只包含数字的字符串 s ，用以表示一个 IP 地址，返回所有可能的有效 IP 地址，这些地址可以通过在 s 中插入 '.' 来形成。你 不能 重新排序或删除 s 中的任何数字。你可以按 任何 顺序返回答案。
+
+```javascript
+/**
+ * @param {string} s
+ * @return {string[]}
+ */
+var restoreIpAddresses = function(s) {
+    function isValidate(str) {
+        if(str*1 > 255) return false
+        if(str.length > 1 && str[0] === '0') return false
+        return true
+    }
+    let path = [], res = []
+    let len = s.length
+    function backTracking(startIndex) {
+        if(path.length > 4) return
+        if(path.length === 4 && startIndex === len){
+            res.push(path.join('.'))
+        }
+        for(let i=startIndex; i<len; i++) {
+            if(!isValidate(s.slice(startIndex, i+1))) return
+            path.push(s.slice(startIndex, i+1))
+            backTracking(i+1)
+            path.pop()
+        }
+    }
+    backTracking(0)
+    return res
+};
+```
+
+
+
+---
+
+组合 一个数组 - 需要startIndex
+
+[77. 组合](https://leetcode.cn/problems/combinations/) 【中等】
+
+给定两个整数 `n` 和 `k`，返回范围 `[1, n]` 中所有可能的 `k` 个数的组合。
+
+你可以按 **任何顺序** 返回答案。
+
+```javascript
+/**
+ * @param {number} n
+ * @param {number} k
+ * @return {number[][]}
+ */
+var combine = function(n, k) {
+    let path = [], res = []
+    function backTracking(startIndex) {
+        if(path.length > k) return
+        if(path.length === k) {
+            res.push([...path])
+          	return
+        }
+        for(let i=startIndex; i<=n; i++) {
+            path.push(i)
+            backTracking(i+1)
+            path.pop()
+        }
+    }
+    backTracking(1)
+    return res
+};
+```
+
+在遍历中添加剪枝条件，会厉害很多👍
+
+```javascript
+/**
+ * @param {number} n
+ * @param {number} k
+ * @return {number[][]}
+ */
+var combine = function(n, k) {
+    let path = [], res = []
+    function backTracking(startIndex) {
+        if(path.length === k) {
+            res.push([...path])
+            return
+        }
+        for(let i=startIndex; i<=n-(k-path.length)+1; i++) {
+            path.push(i)
+            backTracking(i+1)
+            path.pop()
+        }
+    }
+    backTracking(1)
+    return res
+};
+```
+
+不错不错
 
 
 
