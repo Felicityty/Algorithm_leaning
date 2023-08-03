@@ -2112,7 +2112,168 @@ var combine = function(n, k) {
 };
 ```
 
+组合和分割确实不一样，组合这里的res.push条件就不是startIndex===len了，看题意
+
 不错不错
+
+
+
+# 2023.8.3
+
+[216. 组合总和 III](https://leetcode.cn/problems/combination-sum-iii/) 【中等】
+
+找出所有相加之和为 n 的 k 个数的组合，且满足下列条件：
+
+只使用数字1到9
+每个数字 最多使用一次 
+返回 所有可能的有效组合的列表 。该列表不能包含相同的组合两次，组合可以以任何顺序返回。
+
+```javascript
+/**
+ * @param {number} k
+ * @param {number} n
+ * @return {number[][]}
+ */
+var combinationSum3 = function(k, n) {
+    let path = [], res = []
+    function backTracking(startIndex, sum) {
+        if(path.length === k && sum === n) {
+            res.push([...path])
+            return
+        }
+        for(let i=startIndex; i<=9-(k-path.length)+1; i++) {
+            if(i + sum > n) return
+            path.push(i)
+            sum += i
+            backTracking(i+1, sum)
+            path.pop()
+            sum -= i
+        }
+    }
+    backTracking(1, 0)
+    return res
+};
+```
+
+
+
+[17. 电话号码的字母组合](https://leetcode.cn/problems/letter-combinations-of-a-phone-number/) 【中等】
+
+给定一个仅包含数字 2-9 的字符串，返回所有它能表示的字母组合。答案可以按 任意顺序 返回。
+
+给出数字到字母的映射如下（与电话按键相同）。注意 1 不对应任何字母。
+
+```javascript
+/**
+ * @param {string} digits
+ * @return {string[]}
+ */
+var letterCombinations = function(digits) {
+    const map = ["","","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"]
+    let path = [], res = []
+    if(digits.length === 0) return res
+    function backTracking(startIndex) {
+        if(path.length === digits.length) {
+            res.push(path.join(''))
+            return
+        }
+      	// 全都要嘛
+        for(let c of map[digits[startIndex]]) {
+            path.push(c)
+            backTracking(startIndex+1)
+            path.pop()
+        }
+    }
+    backTracking(0)
+    return res
+};
+```
+
+
+
+[39. 组合总和](https://leetcode.cn/problems/combination-sum/) 【中等】
+
+给你一个 无重复元素 的整数数组 candidates 和一个目标整数 target ，找出 candidates 中可以使数字和为目标数 target 的 所有 不同组合 ，并以列表形式返回。你可以按 任意顺序 返回这些组合。
+
+candidates 中的 同一个 数字可以 无限制重复被选取 。如果至少一个数字的被选数量不同，则两种组合是不同的。 
+
+对于给定的输入，保证和为 target 的不同组合数少于 150 个。
+
+```javascript
+/**
+ * @param {number[]} candidates
+ * @param {number} target
+ * @return {number[][]}
+ */
+var combinationSum = function(candidates, target) {
+    let path = [], res = []
+    // 要排序啊
+    candidates.sort((a, b) => a - b)
+    function backTracking(startIndex, sum) {
+        if(sum === target) {
+            res.push([...path])
+            return
+        }
+        for(let i=startIndex; i<candidates.length; i++) {
+            let cur = candidates[i]
+            if(sum + cur > target) return
+            path.push(cur)
+            sum += cur
+            backTracking(i, sum)
+            path.pop()
+            sum -= cur
+        }
+    }
+    backTracking(0, 0)
+    return res
+};
+```
+
+本身给的数组元素互不相同
+
+
+
+[40. 组合总和 II](https://leetcode.cn/problems/combination-sum-ii/) 【中等】
+
+给定一个候选人编号的集合 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。
+
+candidates 中的每个数字在每个组合中只能使用 一次 。
+
+注意：解集不能包含重复的组合。 
+
+```javascript
+/**
+ * @param {number[]} candidates
+ * @param {number} target
+ * @return {number[][]}
+ */
+var combinationSum2 = function(candidates, target) {
+    let path = [], res = []
+    candidates.sort((a, b) => a - b)
+    function backTracking(startIndex, sum) {
+        if(sum === target) {
+            res.push([...path])
+            return
+        }
+        for(let i=startIndex; i<candidates.length; i++) {
+            let cur = candidates[i]
+            if(cur + sum > target) return
+            // 同级去重 i是大于startIndex
+            if(i > startIndex && cur === candidates[i-1]) continue
+            path.push(cur)
+            sum += cur
+            // 每个组合只能使用一次 就是i+1
+            backTracking(i+1, sum)
+            path.pop()
+            sum -= cur
+        }
+    }
+    backTracking(0, 0)
+    return res
+};
+```
+
+这题真还有点点需要注意的
 
 
 

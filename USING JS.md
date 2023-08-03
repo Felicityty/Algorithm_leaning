@@ -1546,7 +1546,7 @@ map.set(root.val,map.has(root.val)?map.get(root.val)+1:1)
 void backtracking(参数) {
     if (终止条件) {
         存放结果;
-        return;
+        return; ❗️别忘❗️
     }
 
     for (选择：本层集合中元素（树中节点孩子的数量就是集合的大小）) {
@@ -1814,7 +1814,7 @@ var combinationSum2 = function(candidates, target) {
 let path = [], res = []
 void backtracking(startIndex) {
   	if( ……不符合…… ) return
-    if (…………) {
+    if (startIndex === len …………) {
         res.push( ……path…… )
         return
     }
