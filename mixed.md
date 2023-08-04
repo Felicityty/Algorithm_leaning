@@ -2173,7 +2173,7 @@ var letterCombinations = function(digits) {
     let path = [], res = []
     if(digits.length === 0) return res
     function backTracking(startIndex) {
-        if(path.length === digits.length) {
+        if(path.length === digits.length) {   // startIndex === len 也行
             res.push(path.join(''))
             return
         }
@@ -2273,7 +2273,172 @@ var combinationSum2 = function(candidates, target) {
 };
 ```
 
-这题真还有点点需要注意的
+`i>startIndex` 这里还真的要注意一下
+
+
+
+# 2023.8.4
+
+[78. 子集](https://leetcode.cn/problems/subsets/) 【中等】
+
+给你一个整数数组 `nums` ，数组中的元素 **互不相同** 。返回该数组所有可能的子集（幂集）。
+
+解集 **不能** 包含重复的子集。你可以按 **任意顺序** 返回解集。
+
+```javascript
+/**
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+var subsets = function(nums) {
+    let path = [], res = []
+    function backTracking(startIndex) {
+        res.push([...path])
+        for(let i=startIndex; i<nums.length; i++) {
+            path.push(nums[i])
+            backTracking(i+1)
+            path.pop()
+        }
+    }
+    backTracking(0)
+    return res
+};
+```
+
+分割和组合问题是找叶子，子集就是记录所有节点
+
+
+
+[90. 子集 II](https://leetcode.cn/problems/subsets-ii/) 【中等】
+
+给你一个整数数组 nums ，其中可能包含重复元素，请你返回该数组所有可能的子集（幂集）。
+
+解集 不能 包含重复的子集。返回的解集中，子集可以按 任意顺序 排列。
+
+```javascript
+/**
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+var subsetsWithDup = function(nums) {
+    let path = [], res = []
+    nums.sort((a, b) => a - b)
+    function backTracking(startIndex) {
+        res.push([...path])
+        for(let i=startIndex; i<nums.length; i++) {
+            if(i>startIndex && nums[i] === nums[i-1]) continue
+            path.push(nums[i])
+            backTracking(i+1)
+            path.pop()
+        }
+    }
+    backTracking(0)
+    return res
+};
+```
+
+
+
+[491. 递增子序列](https://leetcode.cn/problems/non-decreasing-subsequences/) 【中等】
+
+给你一个整数数组 nums ，找出并返回所有该数组中不同的递增子序列，递增子序列中 至少有两个元素 。你可以按 任意顺序 返回答案。
+
+数组中可能含有重复元素，如出现两个整数相等，也可以视作递增序列的一种特殊情况。
+
+```javascript
+/**
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+var findSubsequences = function(nums) {
+    let path = [], res = []
+    function backTracking(startIndex) {
+        if(path.length > 1) {
+            res.push([...path])
+        }
+        let map = new Map()
+        for(let i=startIndex; i<nums.length; i++) {
+            if(path.length>0 && nums[i]<path[path.length-1] || map.has(nums[i]))
+                continue
+            map.set(nums[i], 1)
+            path.push(nums[i])
+            backTracking(i+1)
+            path.pop()
+        }
+    }
+    backTracking(0)
+    return res
+};
+```
+
+因为要求递增子序列，这题不能排序去重，每层用map
+
+
+
+[46. 全排列](https://leetcode.cn/problems/permutations/) 【中等】
+
+给定一个不含重复数字的数组 `nums` ，返回其 *所有可能的全排列* 。你可以 **按任意顺序** 返回答案。
+
+```javascript
+/**
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+var permute = function(nums) {
+    let path = [], res = []
+    let len = nums.length
+    function backTracking(used) {
+        if(len === path.length) {
+            res.push([...path])
+        }
+        for(let i=0; i<len; i++) {
+            if(used[i]) continue
+            used[i] = true
+            path.push(nums[i])
+            backTracking(used)
+            used[i] = false
+            path.pop()
+        }
+    }
+    backTracking([])
+    return res
+};
+```
+
+
+
+[47. 全排列 II](https://leetcode.cn/problems/permutations-ii/) 【中等】
+
+给定一个可包含重复数字的序列 `nums` ，***按任意顺序*** 返回所有不重复的全排列。
+
+```javascript
+/**
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+var permuteUnique = function(nums) {
+    let path = [], res = []
+    let len = nums.length
+    nums.sort((a, b) => a - b)
+    function backTracking(used) {
+        if(path.length === len) {
+            res.push([...path])
+        }
+        for(let i=0; i<len; i++) {
+            if(used[i] || i>0 && nums[i] === nums[i-1] && !used[i-1]) continue
+            used[i] = true
+            path.push(nums[i])
+            backTracking(used)
+            used[i] = false
+            path.pop()
+        }
+    }
+    backTracking([])
+    return res
+};
+```
+
+这里的 `!used[i-1]` 得想想，一定是同层没用过才去重🤔
 
 
 
