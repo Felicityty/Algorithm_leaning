@@ -1946,6 +1946,28 @@ var validator = function(s) {
 
 ---
 
+### ✨ 子集总结
+
+要用到startIndex
+
+🌟 2023.8.5 模版
+
+```javascript
+let path = [], res = []
+void backtracking(startIndex) {
+  	// 来者不拒地记录就行
+    res.push( ……path…… )
+    for (let i=startIndex; i<len; i++) {
+      	if( ……不符合…… ) continue
+        path.push(…………)
+        backtracking(i+1)
+        path.pop()
+    }
+}
+```
+
+👉 重点在：来者不拒地记录
+
 
 
 ### 8、子集问题
@@ -2057,13 +2079,31 @@ var findSubsequences = function(nums) {
 
 ### ✨ 排列总结
 
-加一个used的数组
+加 `used` 数组
 
 push之后used中元素赋true，pop后赋false
 
 跳出递归条件 `path.length === k`
 
+🌟 2023.8.5 模版
 
+```javascript
+let path = [], res = []
+void backtracking(used) {
+    if(path.length === len) {
+        res.push([...path])
+        return
+    }
+    for (let i=0; i<len; i++) {
+      	if( used[i] || ……不符合…… ) continue
+      	used[i] = true
+        path.push(…………)
+        backtracking(used)
+      	used[i] = false
+        path.pop()
+    }
+}
+```
 
 
 

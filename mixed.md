@@ -2355,6 +2355,7 @@ var findSubsequences = function(nums) {
     function backTracking(startIndex) {
         if(path.length > 1) {
             res.push([...path])
+          	return
         }
         let map = new Map()
         for(let i=startIndex; i<nums.length; i++) {
@@ -2390,6 +2391,7 @@ var permute = function(nums) {
     function backTracking(used) {
         if(len === path.length) {
             res.push([...path])
+          	return
         }
         for(let i=0; i<len; i++) {
             if(used[i]) continue
@@ -2423,6 +2425,7 @@ var permuteUnique = function(nums) {
     function backTracking(used) {
         if(path.length === len) {
             res.push([...path])
+          	return
         }
         for(let i=0; i<len; i++) {
             if(used[i] || i>0 && nums[i] === nums[i-1] && !used[i-1]) continue
@@ -2439,6 +2442,149 @@ var permuteUnique = function(nums) {
 ```
 
 这里的 `!used[i-1]` 得想想，一定是同层没用过才去重🤔
+
+
+
+# 2023.8.5
+
+好吧 上动规了 😱💪
+
+[509. 斐波那契数](https://leetcode.cn/problems/fibonacci-number/) 【简单】
+
+斐波那契数 （通常用 F(n) 表示）形成的序列称为 斐波那契数列 。该数列由 0 和 1 开始，后面的每一项数字都是前面两项数字的和。也就是：
+
+F(0) = 0，F(1) = 1
+F(n) = F(n - 1) + F(n - 2)，其中 n > 1
+给定 n ，请计算 F(n) 。
+
+```javascript
+/**
+ * @param {number} n
+ * @return {number}
+ */
+var fib = function(n) {
+    if(n<1) return 0
+    let dp = new Array(2)
+    dp[0] = 0, dp[1] = 1
+    for(let i=2; i<=n; i++) {
+        let sum = dp[0] + dp[1]
+        dp[0] = dp[1]
+        dp[1] = sum
+    }
+    return dp[1]
+};
+```
+
+
+
+[70. 爬楼梯](https://leetcode.cn/problems/climbing-stairs/) 【简单】
+
+假设你正在爬楼梯。需要 `n` 阶你才能到达楼顶。
+
+每次你可以爬 `1` 或 `2` 个台阶。你有多少种不同的方法可以爬到楼顶呢？
+
+```javascript
+/**
+ * @param {number} n
+ * @return {number}
+ */
+var climbStairs = function(n) {
+    let dp = new Array(n+1)
+    dp[1] = 1, dp[2] = 2
+    for(let i=3; i<=n; i++) {
+        dp[i] = dp[i-1] + dp[i-2]
+    }
+    return dp[n]
+};
+```
+
+就是斐波那契数列，空间复杂度可以跟上一题那样优化
+
+
+
+[746. 使用最小花费爬楼梯](https://leetcode.cn/problems/min-cost-climbing-stairs/) 【简单】
+
+给你一个整数数组 cost ，其中 cost[i] 是从楼梯第 i 个台阶向上爬需要支付的费用。一旦你支付此费用，即可选择向上爬一个或者两个台阶。
+
+你可以选择从下标为 0 或下标为 1 的台阶开始爬楼梯。
+
+请你计算并返回达到楼梯顶部的最低花费。
+
+```javascript
+/**
+ * @param {number[]} cost
+ * @return {number}
+ */
+var minCostClimbingStairs = function(cost) {
+    let dp = [0, 0]
+    for(let i=2; i<=cost.length; i++) {
+        dp[i] = Math.min(dp[i-1] + cost[i-1], dp[i-2] + cost[i-2])
+    }
+    return dp[cost.length]
+};
+```
+
+
+
+[62. 不同路径](https://leetcode.cn/problems/unique-paths/) 【中等】
+
+一个机器人位于一个 m x n 网格的左上角 （起始点在下图中标记为 “Start” ）。
+
+机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为 “Finish” ）。
+
+问总共有多少条不同的路径？
+
+```javascript
+/**
+ * @param {number} m
+ * @param {number} n
+ * @return {number}
+ */
+var uniquePaths = function(m, n) {
+    let dp = new Array(m).fill().map(() => new Array(n))
+    for(let i=0; i<m; i++) dp[i][0] = 1
+    for(let j=0; j<n; j++) dp[0][j] = 1
+    for(let i=1; i<m; i++) {
+        for(let j=1; j<n; j++) {
+            dp[i][j] = dp[i-1][j] + dp[i][j-1]
+        }
+    }
+    return dp[m-1][n-1]
+};
+```
+
+
+
+[63. 不同路径 II](https://leetcode.cn/problems/unique-paths-ii/) 【中等】
+
+一个机器人位于一个 m x n 网格的左上角 （起始点在下图中标记为 “Start” ）。
+
+机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为 “Finish”）。
+
+现在考虑网格中有障碍物。那么从左上角到右下角将会有多少条不同的路径？
+
+网格中的障碍物和空位置分别用 1 和 0 来表示。
+
+```javascript
+/**
+ * @param {number[][]} obstacleGrid
+ * @return {number}
+ */
+var uniquePathsWithObstacles = function(obstacleGrid) {
+    let m = obstacleGrid.length, n = obstacleGrid[0].length
+    let dp = new Array(m).fill().map(() => new Array(n).fill(0))
+    for(let i=0; i<m && !obstacleGrid[i][0]; i++) dp[i][0] = 1
+    for(let j=0; j<n && !obstacleGrid[0][j]; j++) dp[0][j] = 1
+    for(let i=1; i<m; i++) {
+        for(let j=1; j<n; j++) {
+            dp[i][j] = obstacleGrid[i][j] === 1 ? 0 : dp[i-1][j] + dp[i][j-1]
+        }
+    }
+    return dp[m-1][n-1]
+};
+```
+
+慢慢回顾回顾叭💪 小冯加油
 
 
 
