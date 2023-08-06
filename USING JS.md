@@ -3322,6 +3322,8 @@ test();
 
 👉 **必须先遍历物品嵌套遍历背包容量哈**
 
+原来以前明白得挺透彻啊🤭
+
 ```js
 function testWeightBagProblem(wight, value, size) {
   const len = wight.length, 

@@ -2584,7 +2584,89 @@ var uniquePathsWithObstacles = function(obstacleGrid) {
 };
 ```
 
-慢慢回顾回顾叭💪 小冯加油
+⚠️for循环第二个参数不满足，循环就停了
+
+
+
+# 2023.8.6
+
+[343. 整数拆分](https://leetcode.cn/problems/integer-break/) 【中等】
+
+给定一个正整数 `n` ，将其拆分为 `k` 个 **正整数** 的和（ `k >= 2` ），并使这些整数的乘积最大化。
+
+返回 *你可以获得的最大乘积* 。
+
+```javascript
+/**
+ * @param {number} n
+ * @return {number}
+ */
+var integerBreak = function(n) {
+    let dp = new Array(n+1).fill(0)
+    dp[2] = 1
+    for(let i=3; i<=n; i++) {
+        for(let j=1; j<=i/2; j++) {
+            dp[i] = Math.max(dp[i], j*(i-j), j*dp[i-j])
+        }
+    }
+    return dp[n]
+};
+```
+
+
+
+[96. 不同的二叉搜索树](https://leetcode.cn/problems/unique-binary-search-trees/) 【中等】
+
+给你一个整数 `n` ，求恰由 `n` 个节点组成且节点值从 `1` 到 `n` 互不相同的 **二叉搜索树** 有多少种？返回满足题意的二叉搜索树的种数。
+
+```javascript
+/**
+ * @param {number} n
+ * @return {number}
+ */
+var numTrees = function(n) {
+    let dp = new Array(n+1).fill(0)
+    dp[0] = 1
+    for(let i=1; i<=n; i++) {
+        for(let j=1; j<=i; j++) {
+            dp[i] += dp[j-1] * dp[i-j]
+        }
+    }
+    return dp[n]
+};
+```
+
+我终于懂了😭
+
+
+
+[416. 分割等和子集](https://leetcode.cn/problems/partition-equal-subset-sum/) 【中等】
+
+给你一个 **只包含正整数** 的 **非空** 数组 `nums` 。请你判断是否可以将这个数组分割成两个子集，使得两个子集的元素和相等。
+
+```javascript
+/**
+ * @param {number[]} nums
+ * @return {boolean}
+ */
+var canPartition = function(nums) {
+    let sum = 0, len = nums.length
+    for(let num of nums) {
+        sum += num
+    }
+    if(sum % 2 === 1) return false
+    let half = sum / 2
+    let dp = new Array(half+1).fill(0)
+    for(let i=0; i<len; i++) {
+        for(let j=half; j>=nums[i]; j--) {
+            dp[j] = Math.max(dp[j], dp[j-nums[i]]+nums[i])
+        }
+    }
+    return dp[half] === half
+};
+```
+
+有些api要用起来呀
 
 
 
