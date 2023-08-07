@@ -3465,6 +3465,8 @@ var findTargetSumWays = function(nums, target) {
 
 👉 这题要把背包从两个维度想，都得从后往前遍历👍，难度的话会比之前那题好点儿~
 
+自己刷就觉得明显这题难啊 突然二维了诶🤯
+
 ```js
 var findMaxForm = function(strs, m, n) {
     let dp = new Array(m+1).fill().map(item => new Array(n+1).fill(0))

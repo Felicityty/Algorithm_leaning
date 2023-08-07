@@ -2668,6 +2668,161 @@ var canPartition = function(nums) {
 
 有些api要用起来呀
 
+```javascript
+/**
+ * @param {number[]} nums
+ * @return {boolean}
+ */
+var canPartition = function(nums) {
+    let len = nums.length
+    let sum = nums.reduce((a, b) => a + b)
+    if(sum & 1) return false
+    let half = sum / 2
+    let dp = new Array(half+1).fill(0)
+    for(let i=0; i<len; i++) {
+        for(let j=half; j>=nums[i]; j--) {
+            dp[j] = Math.max(dp[j], dp[j-nums[i]]+nums[i])
+        }
+    }
+    return dp[half] === half
+};
+```
+
+reduce得用，那个按位与1感觉也差不多
+
+
+
+# 2023.8.7
+
+[1049. 最后一块石头的重量 II](https://leetcode.cn/problems/last-stone-weight-ii/) 【中等】
+
+有一堆石头，用整数数组 stones 表示。其中 stones[i] 表示第 i 块石头的重量。
+
+每一回合，从中选出任意两块石头，然后将它们一起粉碎。假设石头的重量分别为 x 和 y，且 x <= y。那么粉碎的可能结果如下：
+
+如果 x == y，那么两块石头都会被完全粉碎；
+如果 x != y，那么重量为 x 的石头将会完全粉碎，而重量为 y 的石头新重量为 y-x。
+最后，最多只会剩下一块 石头。返回此石头 最小的可能重量 。如果没有石头剩下，就返回 0。
+
+```javascript
+/**
+ * @param {number[]} stones
+ * @return {number}
+ */
+var lastStoneWeightII = function(stones) {
+    let sum = stones.reduce((a, b) => a + b)
+    let half = Math.floor(sum / 2)
+    let dp = new Array(half+1).fill(0)
+    for(let i=0; i<stones.length; i++) {
+        for(let j=half; j>=stones[i]; j--) {
+            dp[j] = Math.max(dp[j], dp[j-stones[i]]+stones[i])
+        }
+    }
+    return sum - dp[half] - dp[half]
+};
+```
+
+拿捏
+
+
+
+[494. 目标和](https://leetcode.cn/problems/target-sum/) 【中等】
+
+给你一个非负整数数组 nums 和一个整数 target 。
+
+向数组中的每个整数前添加 '+' 或 '-' ，然后串联起所有整数，可以构造一个 表达式 ：
+
+例如，nums = [2, 1] ，可以在 2 之前添加 '+' ，在 1 之前添加 '-' ，然后串联起来得到表达式 "+2-1" 。
+返回可以通过上述方法构造的、运算结果等于 target 的不同 表达式 的数目。
+
+```javascript
+/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number}
+ */
+var findTargetSumWays = function(nums, target) {
+    let sum = nums.reduce((a, b) => a + b)
+    if(Math.abs(target) > sum) return 0
+    if((sum + target) % 2 === 1) return 0
+    let plusSum = (sum + target) / 2
+    let dp = new Array(plusSum + 1).fill(0)
+    dp[0] = 1
+    for(let i=0; i<nums.length; i++) {
+        for(let j=plusSum; j>=nums[i]; j--) {
+            dp[j] += dp[j - nums[i]]
+        }
+    }
+    return dp[plusSum]
+};
+```
+
+这里求的是组合，有点儿犯迷糊啊
+
+```javascript
+var findTargetSumWays = function(nums, target) {
+    let sum = nums.reduce((a, b) => a + b)
+    if(Math.abs(target) > sum) return 0
+    if((sum + target) % 2 === 1) return 0
+    let plusSum = (sum + target) / 2
+    let path = [], res = []
+    function backTracking(startIndex, sum) {
+        if(sum === plusSum) {
+            res.push([...path])
+        }
+        for(let i=startIndex; i<nums.length; i++) {
+            if(sum > plusSum) continue
+            path.push(nums[i])
+            sum += nums[i]
+            backTracking(i+1, sum)
+            path.pop()
+            sum -= nums[i]
+        }
+    }
+    backTracking(0, 0)
+    return res.length
+};
+```
+
+嘿嘿 还好回溯还没忘👍
+
+
+
+[474. 一和零](https://leetcode.cn/problems/ones-and-zeroes/) 【中等】
+
+给你一个二进制字符串数组 strs 和两个整数 m 和 n 。
+
+请你找出并返回 strs 的最大子集的长度，该子集中 最多 有 m 个 0 和 n 个 1 。
+
+如果 x 的所有元素也是 y 的元素，集合 x 是集合 y 的 子集 。
+
+```javascript
+/**
+ * @param {string[]} strs
+ * @param {number} m
+ * @param {number} n
+ * @return {number}
+ */
+var findMaxForm = function(strs, m, n) {
+    let dp = new Array(m+1).fill().map(() => new Array(n+1).fill(0))
+    for(let str of strs) {
+        let zeroNum = 0, oneNum = 0
+        for(let c of str) {
+            if(c === '1') oneNum++
+            else zeroNum++
+        }
+        for(i=m; i>=zeroNum; i--) {
+            for(j=n; j>=oneNum; j--) {
+                dp[i][j] = Math.max(dp[i][j], dp[i-zeroNum][j-oneNum]+1)
+            }
+        }
+    }
+    return dp[m][n]
+};
+```
+
+二维dp 头疼🤯
+
 
 
 
