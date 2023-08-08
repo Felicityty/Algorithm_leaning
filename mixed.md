@@ -2786,6 +2786,14 @@ var findTargetSumWays = function(nums, target) {
 
 嘿嘿 还好回溯还没忘👍
 
+❗️二刷 这里发现了个问题，`res.push` 那里后面不能加return
+
+因为大部分题目其实加上return会优化点性能嘛，习惯性会加上
+
+但是，这个 `return` 语句会在找到满足条件的路径之后立即结束当前的回溯分支。在这种情况下，当找到一个满足 `sum === half` 的路径时，直接将路径添加到结果数组中，并立即结束当前的回溯分支，不再进行进一步的搜索。
+
+当nums有0的时候，就会出现问题，比如`nums = [1,0] target=1` ，答案就变成1了，因为找到1就不继续往下找了
+
 
 
 [474. 一和零](https://leetcode.cn/problems/ones-and-zeroes/) 【中等】
@@ -2821,9 +2829,159 @@ var findMaxForm = function(strs, m, n) {
 };
 ```
 
-二维dp 头疼🤯
+可以
 
 
+
+# 2023.8.8
+
+[518. 零钱兑换 II](https://leetcode.cn/problems/coin-change-ii/) 【中等】
+
+给你一个整数数组 `coins` 表示不同面额的硬币，另给一个整数 `amount` 表示总金额。
+
+请你计算并返回可以凑成总金额的硬币组合数。如果任何硬币组合都无法凑出总金额，返回 `0` 。
+
+假设每一种面额的硬币有无限个。 
+
+题目数据保证结果符合 32 位带符号整数。
+
+```javascript
+/**
+ * @param {number} amount
+ * @param {number[]} coins
+ * @return {number}
+ */
+var change = function(amount, coins) {
+    let dp = new Array(amount + 1).fill(0)
+    dp[0] = 1
+    for(let i=0; i<coins.length; i++) {
+        for(let j=coins[i]; j<=amount; j++) {
+            dp[j] += dp[j-coins[i]]
+        }
+    }
+    return dp[amount]
+};
+```
+
+
+
+[377. 组合总和 Ⅳ](https://leetcode.cn/problems/combination-sum-iv/) 【中等】
+
+给你一个由 **不同** 整数组成的数组 `nums` ，和一个目标整数 `target` 。请你从 `nums` 中找出并返回总和为 `target` 的元素组合的个数。
+
+题目数据保证答案符合 32 位整数范围。
+
+```javascript
+/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number}
+ */
+var combinationSum4 = function(nums, target) {
+    // 这题是排列
+    let dp = new Array(target+1).fill(0)
+    dp[0] = 1
+    for(let i=0; i<=target; i++) {
+        for(let j=0; j<=nums.length; j++) {
+            if(i - nums[j] >= 0) {
+                dp[i] += dp[i-nums[j]]
+            }
+        }
+    }
+    return dp[target]
+};
+```
+
+
+
+[70. 爬楼梯](https://leetcode.cn/problems/climbing-stairs/) 【简单】
+
+假设你正在爬楼梯。需要 `n` 阶你才能到达楼顶。
+
+每次你可以爬 `1` 或 `2` 个台阶。你有多少种不同的方法可以爬到楼顶呢？
+
+```javascript
+/**
+ * @param {number} n
+ * @return {number}
+ */
+var climbStairs = function(n) {
+    // 好吧 动规again 排列 先背包后物品
+    let dp = new Array(n+1).fill(0)
+    dp[0] = 1
+    for(let i=0; i<=n; i++) {
+        for(let j=1; j<=2; j++) {
+            if(i - j >= 0) {
+                dp[i] += dp[i-j]
+            }
+        }
+    }
+    return dp[n]
+};
+```
+
+可以啊
+
+
+
+[322. 零钱兑换](https://leetcode.cn/problems/coin-change/) 【中等】
+
+给你一个整数数组 `coins` ，表示不同面额的硬币；以及一个整数 `amount` ，表示总金额。
+
+计算并返回可以凑成总金额所需的 **最少的硬币个数** 。如果没有任何一种硬币组合能组成总金额，返回 `-1` 。
+
+你可以认为每种硬币的数量是无限的。
+
+```javascript
+/**
+ * @param {number[]} coins
+ * @param {number} amount
+ * @return {number}
+ */
+var coinChange = function(coins, amount) {
+    if(!amount) {
+        return 0
+    }
+    let dp = new Array(amount+1).fill(Infinity)
+    dp[0] = 0
+    for(let i=0; i<coins.length; i++) {
+        for(let j=coins[i]; j<=amount; j++) {
+            dp[j] = Math.min(dp[j], dp[j-coins[i]]+1)
+        }
+    }
+    return dp[amount] === Infinity ? -1: dp[amount]
+};
+```
+
+这题是求个数 组合就行 剪点儿枝呗
+
+
+
+[279. 完全平方数](https://leetcode.cn/problems/perfect-squares/) 【中等】
+
+给你一个整数 `n` ，返回 *和为 `n` 的完全平方数的最少数量* 。
+
+**完全平方数** 是一个整数，其值等于另一个整数的平方；换句话说，其值等于一个整数自乘的积。例如，`1`、`4`、`9` 和 `16` 都是完全平方数，而 `3` 和 `11` 不是。
+
+```javascript
+/**
+ * @param {number} n
+ * @return {number}
+ */
+var numSquares = function(n) {
+    let dp = new Array(n+1).fill(Infinity)
+    dp[0] = 0
+    // 跟兑换最少个数的零钱一样嘛 组合 先遍历物品后背包
+    for(let i=0; i**2<=n; i++) {
+        for(let j=i**2; j<=n; j++) {
+            dp[j] = Math.min(dp[j], dp[j-i**2]+1)
+        }
+    }
+    return dp[n]
+};
+```
+
+我想回到旧版😭 产品经理没打点发现用旧版的人老多了嘛😭
 
 
 
