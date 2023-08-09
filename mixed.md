@@ -2355,7 +2355,6 @@ var findSubsequences = function(nums) {
     function backTracking(startIndex) {
         if(path.length > 1) {
             res.push([...path])
-          	return
         }
         let map = new Map()
         for(let i=startIndex; i<nums.length; i++) {
@@ -2917,10 +2916,20 @@ var climbStairs = function(n) {
         }
     }
     return dp[n]
+  	
+  	// 斐波那契
+    let dp = new Array(2).fill(0)
+    dp[0] = 1, dp[1] = 1
+    for(let i=2; i<=n; i++) {
+        let sum = dp[0] + dp[1]
+        dp[0] = dp[1]
+        dp[1] = sum
+    }
+    return dp[1]
 };
 ```
 
-可以啊
+可以啊👍
 
 
 
@@ -2972,7 +2981,7 @@ var numSquares = function(n) {
     let dp = new Array(n+1).fill(Infinity)
     dp[0] = 0
     // 跟兑换最少个数的零钱一样嘛 组合 先遍历物品后背包
-    for(let i=0; i**2<=n; i++) {
+    for(let i=1; i**2<=n; i++) {
         for(let j=i**2; j<=n; j++) {
             dp[j] = Math.min(dp[j], dp[j-i**2]+1)
         }
@@ -2981,7 +2990,209 @@ var numSquares = function(n) {
 };
 ```
 
-我想回到旧版😭 产品经理没打点发现用旧版的人老多了嘛😭
+
+
+# 2023.8.9 - mixed
+
+[131. 分割回文串](https://leetcode.cn/problems/palindrome-partitioning/) ✅
+
+```javascript
+/**
+ * @param {string} s
+ * @return {string[][]}
+ */
+var partition = function(s) {
+    // 回溯
+    function isPalindrome(left, right, str) {
+        for(let i=left, j=right; i<j; i++, j--) {
+            if(str[i] !== str[j]) return false
+        }
+        return true
+    }
+
+    let res = [], path = []
+    let len = s.length
+    function backTracking(startIndex) {
+        if(startIndex === len) {
+            res.push([...path])
+            return
+        }
+        for(let i=startIndex; i<len; i++) {
+            if(!isPalindrome(startIndex, i, s)) continue
+            path.push(s.slice(startIndex, i+1))
+            backTracking(i+1)
+            path.pop()
+        }
+    }
+    backTracking(0)
+    return res
+};
+```
 
 
 
+[93. 复原 IP 地址](https://leetcode.cn/problems/restore-ip-addresses/) ✅
+
+```javascript
+/**
+ * @param {string} s
+ * @return {string[]}
+ */
+var restoreIpAddresses = function(s) {
+    function isValidate(str) {
+        if(str*1 > 255) return false
+        if(str.length > 1 && str[0] === '0') return false
+        return true
+    }
+
+    let path = [], res = []
+    let len = s.length
+    function backTracking(startIndex) {
+        if(path.length > 4) return
+        if(path.length === 4 && startIndex === len) {
+            res.push(path.join('.'))
+        }
+        for(let i=startIndex; i<len; i++) {
+            if(!isValidate(s.slice(startIndex, i+1))) return
+            path.push(s.slice(startIndex, i+1))
+            backTracking(i+1)
+            path.pop()
+        }
+    }
+    backTracking(0)
+    return res
+};
+```
+
+
+
+[40. 组合总和 II](https://leetcode.cn/problems/combination-sum-ii/) ↩️
+
+```javascript
+/**
+ * @param {number[]} candidates
+ * @param {number} target
+ * @return {number[][]}
+ */
+var combinationSum2 = function(candidates, target) {
+    let path = [], res = []
+    candidates.sort((a, b) => a - b)
+    let len = candidates.length
+    function backTracking(startIndex, sum) {
+        if(sum > target) return
+        if(sum === target) {
+            res.push([...path])
+            return
+        }
+        for(let i=startIndex; i<len; i++) {
+            if(i>startIndex && candidates[i] === candidates[i-1]) continue
+            path.push(candidates[i])
+            sum += candidates[i]
+            backTracking(i+1, sum)
+            path.pop()
+            sum -= candidates[i]
+        }
+    }
+    backTracking(0, 0)
+    return res
+};
+```
+
+`if(sum > target) return` 这句一定得加
+
+
+
+[39. 组合总和](https://leetcode.cn/problems/combination-sum/) ✅
+
+```javascript
+/**
+ * @param {number[]} candidates
+ * @param {number} target
+ * @return {number[][]}
+ */
+var combinationSum = function(candidates, target) {
+    let res = [], path = []
+    let len = candidates.length
+    function backTracking(startIndex, sum) {
+        if(sum === target) {
+            res.push([...path])
+        }
+        for(let i=startIndex; i<len; i++) {
+            if(sum > target) return
+            path.push(candidates[i])
+            sum += candidates[i]
+            backTracking(i, sum)
+            path.pop()
+            sum -= candidates[i]
+        }
+    }
+    backTracking(0, 0)
+    return res
+};
+```
+
+
+
+[491. 递增子序列](https://leetcode.cn/problems/non-decreasing-subsequences/) ✅
+
+```javascript
+/**
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+var findSubsequences = function(nums) {
+    let path = [], res = []
+    let len = nums.length
+    function backTracking(startIndex) {
+        if(path.length > 1) {
+            res.push([...path])
+        }
+        // 只保证每一层的元素不一样就行
+        let map = new Map()
+        for(let i=startIndex; i<len; i++) {
+            if(map.has(nums[i]) || path.length>0 && nums[i]<path[path.length-1]) continue
+            map.set(nums[i], 1)
+            path.push(nums[i])
+            backTracking(i+1)
+            path.pop()
+        }
+    }
+    backTracking(0)
+    return res
+};
+```
+
+这道题就是典型的不能在push后return掉的题，还有子集的题也是不能随便return
+
+
+
+[47. 全排列 II](https://leetcode.cn/problems/permutations-ii/) ✅
+
+```javascript
+/**
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+var permuteUnique = function(nums) {
+    let path = [], res = []
+    nums.sort((a, b) => a - b)
+    let len = nums.length
+    function backTracking(used) {
+        if(path.length === len) {
+            res.push([...path])
+        }
+        for(let i=0; i<len; i++) {
+            if(used[i] || nums[i] === nums[i-1] && used[i-1]) continue
+            path.push(nums[i])
+            used[i] = true
+            backTracking(used)
+            path.pop()
+            used[i] = false
+        }
+    }
+    backTracking([])
+    return res
+};
+```
+
+拿下
