@@ -3196,3 +3196,149 @@ var permuteUnique = function(nums) {
 ```
 
 拿下
+
+
+
+# 2023.8.10 - mixed
+
+[63. 不同路径 II](https://leetcode.cn/problems/unique-paths-ii/) ✅
+
+```javascript
+/**
+ * @param {number[][]} obstacleGrid
+ * @return {number}
+ */
+var uniquePathsWithObstacles = function(obstacleGrid) {
+    let m = obstacleGrid.length, n = obstacleGrid[0].length
+    let dp = new Array(m).fill().map(() => new Array(n).fill(0))
+    for(let i=0; i<m && !obstacleGrid[i][0]; i++) dp[i][0] = 1
+    for(let j=0; j<n && !obstacleGrid[0][j]; j++) dp[0][j] = 1
+    for(let i=1; i<m; i++) {
+        for(let j=1; j<n; j++) {
+            dp[i][j] = obstacleGrid[i][j] === 1 ? 0 : dp[i-1][j] + dp[i][j-1]
+        }
+    }
+    return dp[m-1][n-1]
+};
+```
+
+
+
+[96. 不同的二叉搜索树](https://leetcode.cn/problems/unique-binary-search-trees/) ✅
+
+```javascript
+/**
+ * @param {number} n
+ * @return {number}
+ */
+var numTrees = function(n) {
+    let dp = new Array(n+1).fill(0)
+    dp[0] = 1, dp[1] = 1
+    for(let i=2; i<=n; i++) {
+        for(let j=1; j<=i; j++) {
+            dp[i] += dp[j-1]*dp[i-j]
+        }
+    }
+    return dp[n]
+};
+```
+
+
+
+[494. 目标和](https://leetcode.cn/problems/target-sum/) ↩️
+
+```javascript
+/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number}
+ */
+var findTargetSumWays = function(nums, target) {
+    let sum = nums.reduce((a, b) => a + b)
+    if((sum + target) % 2 === 1) return 0
+    if(Math.abs(target) > sum) return 0
+    let plusSum = (sum + target) / 2
+    let dp = new Array(plusSum+1).fill(0)
+    dp[0] = 1
+    // 01 组合
+    for(let i=0; i<nums.length; i++) {
+        for(let j=plusSum; j>=nums[i]; j--) {
+            dp[j] += dp[j-nums[i]]
+        }
+    }
+    return dp[plusSum]
+};
+```
+
+
+
+[474. 一和零](https://leetcode.cn/problems/ones-and-zeroes/) ✅
+
+```javascript
+/**
+ * @param {string[]} strs
+ * @param {number} m
+ * @param {number} n
+ * @return {number}
+ */
+var findMaxForm = function(strs, m, n) {
+    // 二维dp 组合
+    let dp = new Array(m+1).fill().map(() => new Array(n+1).fill(0))
+    for(let str of strs) {
+        let zeroNum = 0, oneNum = 0
+        for(let c of str) {
+            if(c === '0') zeroNum++
+            else oneNum++
+        }
+        for(let i=m; i>=zeroNum; i--) {
+            for(let j=n; j>=oneNum; j--) {
+                dp[i][j] = Math.max(dp[i][j], dp[i-zeroNum][j-oneNum]+1)
+            }
+        }
+    }
+    return dp[m][n]
+};
+```
+
+
+
+[139. 单词拆分](https://leetcode.cn/problems/word-break/) 【中等】
+
+```javascript
+/**
+ * @param {string} s
+ * @param {string[]} wordDict
+ * @return {boolean}
+ */
+var wordBreak = function(s, wordDict) {
+    // 完全背包 组合
+    let dp = new Array(s.length+1).fill(false)
+    dp[0] = true
+    for(let i=0; i<=s.length; i++) {
+        for(let j=0; j<wordDict.length; j++) {
+            if(i - wordDict[j].length >= 0) {
+                if(s.slice(i - wordDict[j].length, i) === wordDict[j] && dp[i - wordDict[j].length]) {
+                    dp[i] = true
+                }
+            }
+        }
+    }
+    return dp[s.length]
+};
+```
+
+可不兴下面这种看似有道理，其实离谱的写法啊🫣 ，有些后面的会更改前面的结果的呀
+
+```
+if(s.slice(i-wordDict[j].length, i) === wordDict[j]) {
+    dp[i] = dp[i-wordDict[j].length]
+}
+```
+
+这里的gs就改变了原来s的结果
+
+![image-20230810223146136](mixed.assets/image-20230810223146136.png)
+
+
+
+↩️ 的俩三天后见吧 🔪
