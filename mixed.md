@@ -3342,3 +3342,124 @@ if(s.slice(i-wordDict[j].length, i) === wordDict[j]) {
 
 
 ↩️ 的俩三天后见吧 🔪
+
+
+
+# 2023.8.11
+
+[198. 打家劫舍](https://leetcode.cn/problems/house-robber/) 【中等】
+
+你是一个专业的小偷，计划偷窃沿街的房屋。每间房内都藏有一定的现金，影响你偷窃的唯一制约因素就是相邻的房屋装有相互连通的防盗系统，**如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警**。
+
+给定一个代表每个房屋存放金额的非负整数数组，计算你 **不触动警报装置的情况下** ，一夜之内能够偷窃到的最高金额。
+
+```javascript
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var rob = function(nums) {
+    let dp = new Array(nums.length).fill(0)
+    dp[0] = nums[0], dp[1] = Math.max(nums[0], nums[1])
+    for(let i=2; i<nums.length; i++) {
+        dp[i] = Math.max(dp[i-2]+nums[i], dp[i-1])
+    }
+    return dp[nums.length-1]
+};
+```
+
+
+
+[213. 打家劫舍 II](https://leetcode.cn/problems/house-robber-ii/) 【中等】
+
+你是一个专业的小偷，计划偷窃沿街的房屋，每间房内都藏有一定的现金。这个地方所有的房屋都 **围成一圈** ，这意味着第一个房屋和最后一个房屋是紧挨着的。同时，相邻的房屋装有相互连通的防盗系统，**如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警** 。
+
+给定一个代表每个房屋存放金额的非负整数数组，计算你 **在不触动警报装置的情况下** ，今晚能够偷窃到的最高金额。
+
+```javascript
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var rob = function(nums) {
+    if(nums.length === 1) return nums[0]
+    let nums1 = nums.slice(0, nums.length-1)
+    let nums2 = nums.slice(1)
+    function steal(nums) {
+        let dp = new Array(nums.length)
+        dp[0] = nums[0], dp[1] = Math.max(nums[0], nums[1])
+        for(let i=2; i<nums.length; i++) {
+            dp[i] = Math.max(dp[i-2]+nums[i], dp[i-1])
+        }
+        return dp[nums.length-1]
+    }
+    return Math.max(steal(nums1), steal(nums2))
+};
+```
+
+
+
+[337. 打家劫舍 III](https://leetcode.cn/problems/house-robber-iii/) 【中等】
+
+小偷又发现了一个新的可行窃的地区。这个地区只有一个入口，我们称之为 `root` 。
+
+除了 `root` 之外，每栋房子有且只有一个“父“房子与之相连。一番侦察之后，聪明的小偷意识到“这个地方的所有房屋的排列类似于一棵二叉树”。 如果 **两个直接相连的房子在同一天晚上被打劫** ，房屋将自动报警。
+
+给定二叉树的 `root` 。返回 ***在不触动警报的情况下** ，小偷能够盗取的最高金额* 。
+
+```javascript
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {number}
+ */
+var rob = function(root) {
+    function traverse(cur) {
+        // 后序
+        if(!cur) return [0, 0]
+        let left = traverse(cur.left)
+        let right = traverse(cur.right)
+        let unSteal = Math.max(left[0], left[1]) + Math.max(right[0], right[1])
+        let steal = left[0] + right[0] + cur.val
+        return [unSteal, steal]
+    }
+    let res = traverse(root)
+    return Math.max(...res)
+};
+```
+
+
+
+[300. 最长递增子序列](https://leetcode.cn/problems/longest-increasing-subsequence/) 【中等】
+
+给你一个整数数组 `nums` ，找到其中最长严格递增子序列的长度。
+
+**子序列** 是由数组派生而来的序列，删除（或不删除）数组中的元素而不改变其余元素的顺序。例如，`[3,6,2,7]` 是数组 `[0,3,1,6,2,2,7]` 的子序列。
+
+```javascript
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var lengthOfLIS = function(nums) {
+    let dp = new Array(nums.length).fill(1)
+    for(let i=1; i<nums.length; i++) {
+        for(let j=0; j<i; j++) {
+            if(nums[i] > nums[j]) {
+                dp[i] = Math.max(dp[i], dp[j]+1)
+            }
+        }
+    }
+    return Math.max(...dp)
+};
+```
+
+
+
