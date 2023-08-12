@@ -3382,24 +3382,25 @@ var rob = function(nums) {
  * @return {number}
  */
 var rob = function(nums) {
+    // 围成一圈 两种方法取大值
     if(nums.length === 1) return nums[0]
     let nums1 = nums.slice(0, nums.length-1)
     let nums2 = nums.slice(1)
-    function steal(nums) {
-        let dp = new Array(nums.length)
+    function stealFunc(nums) {
+        let dp = new Array(nums.length).fill(0)
         dp[0] = nums[0], dp[1] = Math.max(nums[0], nums[1])
         for(let i=2; i<nums.length; i++) {
-            dp[i] = Math.max(dp[i-2]+nums[i], dp[i-1])
+            dp[i] = Math.max(dp[i-1], dp[i-2]+nums[i])
         }
         return dp[nums.length-1]
     }
-    return Math.max(steal(nums1), steal(nums2))
+    return Math.max(stealFunc(nums1), stealFunc(nums2))
 };
 ```
 
 
 
-[337. 打家劫舍 III](https://leetcode.cn/problems/house-robber-iii/) 【中等】
+[337. 打家劫舍 III](https://leetcode.cn/problems/house-robber-iii/) 【中等】↩️
 
 小偷又发现了一个新的可行窃的地区。这个地区只有一个入口，我们称之为 `root` 。
 
@@ -3421,12 +3422,15 @@ var rob = function(nums) {
  * @return {number}
  */
 var rob = function(root) {
+    // 树的遍历 这里只能后序遍历了 左 -> 右 -> 根
+    // 返回每个节点 [不偷，偷]
     function traverse(cur) {
-        // 后序
         if(!cur) return [0, 0]
         let left = traverse(cur.left)
         let right = traverse(cur.right)
+        // 本节点 不偷 左右节点都取大值
         let unSteal = Math.max(left[0], left[1]) + Math.max(right[0], right[1])
+        // 本节点 偷 左右节点就不能偷了
         let steal = left[0] + right[0] + cur.val
         return [unSteal, steal]
     }
@@ -3449,17 +3453,191 @@ var rob = function(root) {
  * @return {number}
  */
 var lengthOfLIS = function(nums) {
+    // 外循环从1开始 内循环把外循环之前的都遍历一遍
     let dp = new Array(nums.length).fill(1)
     for(let i=1; i<nums.length; i++) {
         for(let j=0; j<i; j++) {
             if(nums[i] > nums[j]) {
-                dp[i] = Math.max(dp[i], dp[j]+1)
+                dp[i] = Math.max(dp[i], dp[j] + 1)
             }
         }
     }
     return Math.max(...dp)
 };
 ```
+
+
+
+# 2023.8.12
+
+[674. 最长连续递增序列](https://leetcode.cn/problems/longest-continuous-increasing-subsequence/) 【简单】
+
+给定一个未经排序的整数数组，找到最长且 **连续递增的子序列**，并返回该序列的长度。
+
+**连续递增的子序列** 可以由两个下标 `l` 和 `r`（`l < r`）确定，如果对于每个 `l <= i < r`，都有 `nums[i] < nums[i + 1]` ，那么子序列 `[nums[l], nums[l + 1], ..., nums[r - 1], nums[r]]` 就是连续递增子序列。
+
+```javascript
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var findLengthOfLCIS = function(nums) {
+    let dp = new Array(nums.length).fill(1)
+    for(let i=1; i<nums.length; i++) {
+        if(nums[i] > nums[i-1]) {
+            dp[i] = Math.max(dp[i], dp[i-1]+1)
+        }
+    }
+    return Math.max(...dp)
+};
+```
+
+
+
+[1143. 最长公共子序列](https://leetcode.cn/problems/longest-common-subsequence/) 【中等】
+
+给定两个字符串 `text1` 和 `text2`，返回这两个字符串的最长 **公共子序列** 的长度。如果不存在 **公共子序列** ，返回 `0` 。
+
+一个字符串的 **子序列** 是指这样一个新的字符串：它是由原字符串在不改变字符的相对顺序的情况下删除某些字符（也可以不删除任何字符）后组成的新字符串。
+
+- 例如，`"ace"` 是 `"abcde"` 的子序列，但 `"aec"` 不是 `"abcde"` 的子序列。
+
+两个字符串的 **公共子序列** 是这两个字符串所共同拥有的子序列。
+
+[1035. 不相交的线](https://leetcode.cn/problems/uncrossed-lines/) 【中等】
+
+在两条独立的水平线上按给定的顺序写下 `nums1` 和 `nums2` 中的整数。
+
+现在，可以绘制一些连接两个数字 `nums1[i]` 和 `nums2[j]` 的直线，这些直线需要同时满足满足：
+
+-  `nums1[i] == nums2[j]`
+- 且绘制的直线不与任何其他连线（非水平线）相交。
+
+请注意，连线即使在端点也不能相交：每个数字只能属于一条连线。
+
+以这种方法绘制线条，并返回可以绘制的最大连线数。
+
+```javascript
+/**
+ * @param {string} text1
+ * @param {string} text2
+ * @return {number}
+ */
+var longestCommonSubsequence = function(text1, text2) {
+    let dp = new Array(text1.length+1).fill().map(() => new Array(text2.length+1).fill(0))
+    for(let i=1; i<=text1.length; i++) {
+        for(let j=1; j<=text2.length; j++) {
+            if(text1[i-1] === text2[j-1]) {
+                dp[i][j] = dp[i-1][j-1] + 1
+            } else {
+                dp[i][j] = Math.max(dp[i-1][j], dp[i][j-1])
+            }
+        }
+    }
+    return dp[text1.length][text2.length]
+};
+```
+
+[392. 判断子序列](https://leetcode.cn/problems/is-subsequence/) 【简单】
+
+给定字符串 **s** 和 **t** ，判断 **s** 是否为 **t** 的子序列。
+
+字符串的一个子序列是原始字符串删除一些（也可以不删除）字符而不改变剩余字符相对位置形成的新字符串。（例如，`"ace"`是`"abcde"`的一个子序列，而`"aec"`不是）。
+
+```javascript
+/**
+ * @param {string} s
+ * @param {string} t
+ * @return {boolean}
+ */
+var isSubsequence = function(s, t) {
+    let len1 = s.length, len2 = t.length
+    let dp = new Array(len1+1).fill().map(() => new Array(len2+1).fill(0))
+    for(let i=1; i<=len1; i++) {
+        for(let j=1; j<=len2; j++) {
+            if(s[i-1] === t[j-1]) {
+                dp[i][j] = dp[i-1][j-1] + 1
+            } else {
+                dp[i][j] = Math.max(dp[i-1][j], dp[i][j-1])
+            }
+        }
+    }
+    return dp[len1][len2] === len1
+};
+```
+
+诶 还是这题啊 这三题都一样
+
+[583. 两个字符串的删除操作](https://leetcode.cn/problems/delete-operation-for-two-strings/) 【中等】
+
+给定两个单词 `word1` 和 `word2` ，返回使得 `word1` 和 `word2` **相同**所需的**最小步数**。
+
+**每步** 可以删除任意一个字符串中的一个字符。
+
+```javascript
+return len1 + len2 - dp[len1][len2] * 2
+```
+
+诶 这题又一样
+
+
+
+[53. 最大子数组和](https://leetcode.cn/problems/maximum-subarray/) 【中等】
+
+给你一个整数数组 `nums` ，请你找出一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
+
+**子数组** 是数组中的一个连续部分。
+
+```javascript
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var maxSubArray = function(nums) {
+    let dp = new Array(nums.length).fill(-Infinity)
+    dp[0] = nums[0]
+    for(let i=1; i<nums.length; i++) {
+        dp[i] = Math.max(dp[i-1]+nums[i], nums[i])
+    }
+    return Math.max(...dp)
+};
+```
+
+
+
+[115. 不同的子序列](https://leetcode.cn/problems/distinct-subsequences/) 【困难】
+
+给你两个字符串 `s` 和 `t` ，统计并返回在 `s` 的 **子序列** 中 `t` 出现的个数。
+
+题目数据保证答案符合 32 位带符号整数范围。
+
+```javascript
+/**
+ * @param {string} s
+ * @param {string} t
+ * @return {number}
+ */
+var numDistinct = function(s, t) {
+    let sLen = s.length
+    let tLen = t.length
+    let dp = new Array(sLen+1).fill().map(() => new Array(tLen+1).fill(0))
+    for(let i=0; i<=sLen; i++) {
+        dp[i][0] = 1
+    }
+    for(let i=1; i<=sLen; i++) {
+        for(let j=1; j<=tLen; j++) {
+            if(s[i-1] === t[j-1]) {
+                dp[i][j] = dp[i-1][j-1] + dp[i-1][j]
+            } else {
+                dp[i][j] = dp[i-1][j]
+            }
+        }
+    }
+    return dp[sLen][tLen]
+};
+```
+
+
 
 
 
