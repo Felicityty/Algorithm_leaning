@@ -2297,7 +2297,7 @@ var findContentChildren = function(g, s) {
     let index = s.length-1
     let num = 0
     // 遍历胃口，把大饼干先满足大胃口
-    for(let i=g.length; i>=0; i--) {
+    for(let i=g.length-1; i>=0; i--) {
         if(s[index]>=g[i] && index>=0) {
             index--
             num++
@@ -4132,6 +4132,14 @@ var isSubsequence = function(s, t) {
 
 `dp[0][0]`应该是1，空字符串s，可以删除0个元素，变成空字符串t
 
+👉 2023.8.13 现在对于初值的理解：
+
+牢记都是拿s去匹配t，`dp[i][0]` 表示t为空，用s字符串去匹配，所以肯定是有方法的，初值就都是1
+
+`dp[0][j]` 表示s为空，反而是t有值，所以不管怎样，也匹配不上，初值就都是0
+
+`dp[0][0]` s和t都为空，能匹配上，初值为1，就这样吧
+
 ```js
 var numDistinct = function(s, t) {
     let sLen = s.length
@@ -4153,8 +4161,6 @@ var numDistinct = function(s, t) {
     return dp[sLen][tLen]
 };
 ```
-
-真挺复杂的，不过是困难诶，可以悄咪咪……
 
 
 
@@ -4182,6 +4188,8 @@ var minDistance = function(word1, word2) {
     return len1 + len2 - dp[len1][len2] * 2
 };
 ```
+
+👉 求最长公共子序列这些题，横竖都得多加一列
 
 
 

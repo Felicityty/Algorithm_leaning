@@ -3504,7 +3504,7 @@ var findLengthOfLCIS = function(nums) {
 
 两个字符串的 **公共子序列** 是这两个字符串所共同拥有的子序列。
 
-[1035. 不相交的线](https://leetcode.cn/problems/uncrossed-lines/) 【中等】
+[1035. 不相交的线](https://leetcode.cn/problems/uncrossed-lines/) 【中等】↩️
 
 在两条独立的水平线上按给定的顺序写下 `nums1` 和 `nums2` 中的整数。
 
@@ -3578,7 +3578,9 @@ var isSubsequence = function(s, t) {
 return len1 + len2 - dp[len1][len2] * 2
 ```
 
-诶 这题又一样
+诶 这题又一样  
+
+这四题挑一题做就行了
 
 
 
@@ -3605,7 +3607,7 @@ var maxSubArray = function(nums) {
 
 
 
-[115. 不同的子序列](https://leetcode.cn/problems/distinct-subsequences/) 【困难】
+[115. 不同的子序列](https://leetcode.cn/problems/distinct-subsequences/) 【困难】↩️
 
 给你两个字符串 `s` 和 `t` ，统计并返回在 `s` 的 **子序列** 中 `t` 出现的个数。
 
@@ -3618,15 +3620,19 @@ var maxSubArray = function(nums) {
  * @return {number}
  */
 var numDistinct = function(s, t) {
-    let sLen = s.length
-    let tLen = t.length
+    // 用s字符串去做匹配
+    // 1 不匹配 -> 上面拿下来 s当前的就当不存在
+    // 2 匹配 -> 斜上方拿下来 用s当前的去匹配 + 上面拿下来 不用s当前的去匹配
+    let sLen = s.length, tLen = t.length
     let dp = new Array(sLen+1).fill().map(() => new Array(tLen+1).fill(0))
+    // 这里就当拿s去和空的t匹配 初值都是1
     for(let i=0; i<=sLen; i++) {
         dp[i][0] = 1
     }
     for(let i=1; i<=sLen; i++) {
         for(let j=1; j<=tLen; j++) {
             if(s[i-1] === t[j-1]) {
+                // 不用去管这俩到底有没有值
                 dp[i][j] = dp[i-1][j-1] + dp[i-1][j]
             } else {
                 dp[i][j] = dp[i-1][j]
@@ -3638,6 +3644,140 @@ var numDistinct = function(s, t) {
 ```
 
 
+
+# 2023.8.13
+
+上贪心❕
+
+[455. 分发饼干](https://leetcode.cn/problems/assign-cookies/) 【简单】
+
+假设你是一位很棒的家长，想要给你的孩子们一些小饼干。但是，每个孩子最多只能给一块饼干。
+
+对每个孩子 `i`，都有一个胃口值 `g[i]`，这是能让孩子们满足胃口的饼干的最小尺寸；并且每块饼干 `j`，都有一个尺寸 `s[j]` 。如果 `s[j] >= g[i]`，我们可以将这个饼干 `j` 分配给孩子 `i` ，这个孩子会得到满足。你的目标是尽可能满足越多数量的孩子，并输出这个最大数值。
+
+```javascript
+/**
+ * @param {number[]} g
+ * @param {number[]} s
+ * @return {number}
+ */
+var findContentChildren = function(g, s) {
+    g.sort((a, b) => a - b)
+    s.sort((a, b) => a - b)
+    let res = 0, index = s.length-1
+    for(let i=g.length-1; i>=0; i--) {
+        if(s[index]>=g[i] && index>=0) {
+            index--
+            res++
+        }
+    }
+    return res
+};
+```
+
+
+
+[376. 摆动序列](https://leetcode.cn/problems/wiggle-subsequence/) 【中等】
+
+如果连续数字之间的差严格地在正数和负数之间交替，则数字序列称为 **摆动序列 。**第一个差（如果存在的话）可能是正数或负数。仅有一个元素或者含两个不等元素的序列也视作摆动序列。
+
+- 例如， `[1, 7, 4, 9, 2, 5]` 是一个 **摆动序列** ，因为差值 `(6, -3, 5, -7, 3)` 是正负交替出现的。
+- 相反，`[1, 4, 7, 2, 5]` 和 `[1, 7, 4, 5, 5]` 不是摆动序列，第一个序列是因为它的前两个差值都是正数，第二个序列是因为它的最后一个差值为零。
+
+**子序列** 可以通过从原始序列中删除一些（也可以不删除）元素来获得，剩下的元素保持其原始顺序。
+
+给你一个整数数组 `nums` ，返回 `nums` 中作为 **摆动序列** 的 **最长子序列的长度** 。
+
+```javascript
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var wiggleMaxLength = function(nums) {
+    if(nums.length <= 1) return nums.length
+    let preDiff = 0, curDiff = 0
+    let res = 1
+    for(let i=0; i<nums.length; i++) {
+        curDiff = nums[i] - nums[i-1]
+        if(preDiff>=0 && curDiff<0 || preDiff<=0 && curDiff>0) {
+            res++
+            preDiff = curDiff
+        }
+    }
+    return res
+};
+```
+
+
+
+[53. 最大子数组和](https://leetcode.cn/problems/maximum-subarray/) 【中等】
+
+给你一个整数数组 `nums` ，请你找出一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
+
+**子数组** 是数组中的一个连续部分。
+
+```javascript
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var maxSubArray = function(nums) {
+    let num = 0, res = -Infinity
+    for(let i=0; i<nums.length; i++) {
+        num += nums[i]
+        if(num > res) res = num
+        if(num < 0) num = 0
+    }
+    return res
+};
+```
+
+
+
+[122. 买卖股票的最佳时机 II](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-ii/) 【中等】
+
+给你一个整数数组 `prices` ，其中 `prices[i]` 表示某支股票第 `i` 天的价格。
+
+在每一天，你可以决定是否购买和/或出售股票。你在任何时候 **最多** 只能持有 **一股** 股票。你也可以先购买，然后在 **同一天** 出售。
+
+返回 *你能获得的 **最大** 利润* 。
+
+```javascript
+/**
+ * @param {number[]} prices
+ * @return {number}
+ */
+var maxProfit = function(prices) {
+    let res = 0
+    for(let i=1; i<prices.length; i++) {
+        res += Math.max(prices[i]-prices[i-1], 0)
+    }
+    return res
+};
+```
+
+
+
+[55. 跳跃游戏](https://leetcode.cn/problems/jump-game/) 【中等】
+
+给你一个非负整数数组 `nums` ，你最初位于数组的 **第一个下标** 。数组中的每个元素代表你在该位置可以跳跃的最大长度。
+
+判断你是否能够到达最后一个下标，如果可以，返回 `true` ；否则，返回 `false` 。
+
+```javascript
+/**
+ * @param {number[]} nums
+ * @return {boolean}
+ */
+var canJump = function(nums) {
+    let maxCover = 0
+    for(let i=0; i<=maxCover; i++) {
+        maxCover = Math.max(maxCover, i+nums[i])
+        if(maxCover >= nums.length-1) return true
+    }
+    return false
+};
+```
 
 
 
