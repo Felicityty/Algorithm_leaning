@@ -3066,7 +3066,7 @@ var restoreIpAddresses = function(s) {
 
 
 
-[40. 组合总和 II](https://leetcode.cn/problems/combination-sum-ii/) ↩️
+[40. 组合总和 II](https://leetcode.cn/problems/combination-sum-ii/) ↩️↩️
 
 ```javascript
 /**
@@ -3245,7 +3245,7 @@ var numTrees = function(n) {
 
 
 
-[494. 目标和](https://leetcode.cn/problems/target-sum/) ↩️
+[494. 目标和](https://leetcode.cn/problems/target-sum/) ↩️✅
 
 ```javascript
 /**
@@ -3758,7 +3758,7 @@ var maxProfit = function(prices) {
 
 
 
-[55. 跳跃游戏](https://leetcode.cn/problems/jump-game/) 【中等】
+[55. 跳跃游戏](https://leetcode.cn/problems/jump-game/) 【中等】↩️
 
 给你一个非负整数数组 `nums` ，你最初位于数组的 **第一个下标** 。数组中的每个元素代表你在该位置可以跳跃的最大长度。
 
@@ -3778,6 +3778,81 @@ var canJump = function(nums) {
     return false
 };
 ```
+
+
+
+# 2023.8.14
+
+[40. 组合总和 II](https://leetcode.cn/problems/combination-sum-ii/) ↩️
+
+给定一个候选人编号的集合 `candidates` 和一个目标数 `target` ，找出 `candidates` 中所有可以使数字和为 `target` 的组合。
+
+`candidates` 中的每个数字在每个组合中只能使用 **一次** 。
+
+**注意：**解集不能包含重复的组合。 
+
+```javascript
+/**
+ * @param {number[]} candidates
+ * @param {number} target
+ * @return {number[][]}
+ */
+var combinationSum2 = function(candidates, target) {
+    // 回溯 组合
+    let path = [], res = []
+    candidates.sort((a, b) => a - b)
+    function backTracking(startIndex, sum) {
+        if(sum === target) {
+            res.push([...path])
+            return
+        }
+        for(let i=startIndex; i<candidates.length; i++) {
+            if(sum > target) return
+            if(i>startIndex && candidates[i]===candidates[i-1]) continue
+            path.push(candidates[i])
+            sum += candidates[i]
+            backTracking(i+1, sum)
+            path.pop()
+            sum -= candidates[i]
+        }
+    }
+    backTracking(0, 0)
+    return res
+};
+```
+
+`if(sum > target) return` 还是忘了这句话啦 
+
+其实这个就跟题目设置有关了，不加这句话有些用例会超出时间限制的
+
+
+
+[494. 目标和](https://leetcode.cn/problems/target-sum/) ✅
+
+```javascript
+/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number}
+ */
+var findTargetSumWays = function(nums, target) {
+    // dp 01背包 组合
+    let sum = nums.reduce((a, b) => a + b)
+    if((sum + target) % 2 === 1) return 0
+    if(Math.abs(target) > sum) return 0
+    let half = (sum + target) / 2
+    let dp = new Array(half+1).fill(0)
+    dp[0] = 1
+    for(let i=0; i<nums.length; i++) {
+        for(j=half; j>=nums[i]; j--) {
+            dp[j] += dp[j-nums[i]]
+        }
+    }
+    return dp[half]
+};
+```
+
+莫得问题
 
 
 
