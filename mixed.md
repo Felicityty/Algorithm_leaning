@@ -3856,3 +3856,71 @@ var findTargetSumWays = function(nums, target) {
 
 
 
+# 2023.8.15
+
+[45. 跳跃游戏 II](https://leetcode.cn/problems/jump-game-ii/) 【中等】
+
+给定一个长度为 `n` 的 **0 索引**整数数组 `nums`。初始位置为 `nums[0]`。
+
+每个元素 `nums[i]` 表示从索引 `i` 向前跳转的最大长度。换句话说，如果你在 `nums[i]` 处，你可以跳转到任意 `nums[i + j]` 处:
+
+- `0 <= j <= nums[i]` 
+- `i + j < n`
+
+返回到达 `nums[n - 1]` 的最小跳跃次数。生成的测试用例可以到达 `nums[n - 1]`。
+
+```javascript
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var jump = function(nums) {
+    let curCover = 0
+    let nextCover = 0
+    let step = 0
+    let len = nums.length
+    for(let i=0; i<len-1; i++) {
+        nextCover = Math.max(i+nums[i], nextCover)
+        if(i === curCover) {
+            curCover = nextCover
+            step++
+        }
+    }
+    return step
+};
+```
+
+
+
+[1005. K 次取反后最大化的数组和](https://leetcode.cn/problems/maximize-sum-of-array-after-k-negations/) 【简单】
+
+给你一个整数数组 `nums` 和一个整数 `k` ，按以下方法修改该数组：
+
+- 选择某个下标 `i` 并将 `nums[i]` 替换为 `-nums[i]` 。
+
+重复这个过程恰好 `k` 次。可以多次选择同一个下标 `i` 。
+
+以这种方式修改数组后，返回数组 **可能的最大和** 。
+
+```javascript
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {number}
+ */
+var largestSumAfterKNegations = function(nums, k) {
+    let res = 0
+    nums.sort((a,b) => Math.abs(b) - Math.abs(a))
+    for(let i=0; i<nums.length; i++) {
+        if(nums[i]<0 && k){
+            nums[i] *= -1
+            k--
+        }
+        res += nums[i]
+    }
+    if(k%2 !== 0) {
+        res -= 2*nums[nums.length-1]
+    }
+    return res
+};
+```
