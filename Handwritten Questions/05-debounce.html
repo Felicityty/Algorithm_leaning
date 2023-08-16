@@ -2,38 +2,54 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
 </head>
 
 <body>
-    <input type="text">
+  <input type="text">
 
-<script>
+  <script>
     // 防抖：用户触发事件过于频繁，只要最后一次事件的操作
     let inp = document.querySelector("input")
     // 输入的时候触发
-    inp.oninput = debounce(function(){
-        console.log(this.value)
+    // 这里务必不要用箭头函数
+    inp.oninput = debounce(function () {
+      console.log(this.value)
     }, 500)
 
+    // ✅ 统一下呗
     function debounce(fn, delay) {
-        let timer = null
-        return function() {
-            let args = arguments
-            if(timer !== null) {
-                clearTimeout(timer)
-            }
-            timer = setTimeout(() => {
-                // fn 指向的是 window 这里的this指向的是input
-                fn.apply(this, args)
-            }, delay)
+      let timer = null
+      return function (...args) {
+        if (timer !== null) {
+          clearTimeout(timer)
         }
+        timer = setTimeout(() => {
+          fn.apply(this, args)
+        }, delay)
+      }
     }
 
-</script>
+    // -----------------------------------
+    // 一个很无聊的触发方式 用for循环模拟手动触发
+
+    let values = ["a", "b", "c", "d", "e"];
+
+    const debounceHandler = debounce(function () {
+      console.log(this.value)
+    }, 500)
+
+    for (let i = 0; i < values.length; i++) {
+      setTimeout(() => {
+        inp.value = values[i]
+        debounceHandler.call(inp)
+      }, i * 300)
+    }
+
+  </script>
 
 </body>
 

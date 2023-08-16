@@ -4,61 +4,92 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-
+  <title>图片懒加载</title>
 </head>
 
 <body>
-  <img src="lazyLoadPics/loading.gif" data-src="lazyLoadPics/banner1.png" alt="">
-  <img src="lazyLoadPics/loading.gif" data-src="lazyLoadPics/banner2.png" alt="">
-  <img src="lazyLoadPics/loading.gif" data-src="lazyLoadPics/banner3.png" alt="">
-  <img src="lazyLoadPics/loading.gif" data-src="lazyLoadPics/banner4.png" alt="">
-  <img src="lazyLoadPics/loading.gif" data-src="lazyLoadPics/banner5.png" alt="">
+  <div>
+    <img src="lazyLoadPics/loading.gif" data-src="lazyLoadPics/banner1.png" alt="">
+    <img src="lazyLoadPics/loading.gif" data-src="lazyLoadPics/banner2.png" alt="">
+    <img src="lazyLoadPics/loading.gif" data-src="lazyLoadPics/banner3.png" alt="">
+    <img src="lazyLoadPics/loading.gif" data-src="lazyLoadPics/banner4.png" alt="">
+    <img src="lazyLoadPics/loading.gif" data-src="lazyLoadPics/banner5.png" alt="">
+  </div>
+  <style>
+    img {
+      display: block;
+      width: 500px;
+      height: 500px;
+    }
+  </style>
 </body>
-<style>
-  img {
-    display: block;
-    width: 500px;
-    height: 500px;
-  }
-</style>
 
 </html>
 
 <script>
-  let img = document.getElementsByTagName('img')
-  console.log('img', img)
   let index = 0
   function lazyLoad() {
-    let innerHeight = window.innerHeight
+    let imgs = document.getElementsByTagName('img')
+    // 浏览器兼容
+    let innerHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
     console.log('innerHeight', innerHeight)
     let scrollTop = document.documentElement.scrollTop
     console.log('scrollTop', scrollTop)
-    for (let i = index; i < img.length; i++) {
-      // 这里涉及js判断图片是否在视口内
-      // if (img[i].offsetTop < innerHeight + scrollTop) {
-      if (img[i].getBoundingClientRect().top < innerHeight) {
-        if (img[i].getAttribute('src')) {
-          img[i].src = img[i].getAttribute('data-src')
+    for (let i = index; i < imgs.length; i++) {
+      // 判断元素是否在视口内（3种）
+      // 1 intersection Observer
+      // 2 offsetTop + innerHeight + scrollTop
+      // if (imgs[i].offsetTop < innerHeight + scrollTop) {
+      // 3 getBoundingClientRect() 直接拿到元素相对于视口的位置
+      if (imgs[i].getBoundingClientRect().top < innerHeight) {
+        if (imgs[i].getAttribute('src') === 'lazyLoadPics/loading.gif') {
+          console.log(imgs[i].getAttribute('data-src'))
+          imgs[i].src = imgs[i].getAttribute('data-src')
         }
+        // 当前已在第几张
         index = i + 1
       }
     }
   }
+  // 节流
   function throttle(fn, delay) {
-    let flag = true
-    return function () {
-      let args = arguments
-      if (flag) {
-        setTimeout(() => {
-          // fn.apply(this, args)
-          fn.call(this)
-          flag = true
+    let timer = null
+    return function (...args) {
+      if (timer === null) {
+        timer = setTimeout(() => {
+          fn.apply(this, args)
+          timer = null
         }, delay)
       }
-      flag = false
     }
   }
   lazyLoad()
-  window.addEventListener('scroll', throttle(lazyLoad, 200))
+  window.addEventListener('scroll', throttle(lazyLoad, 1000))
+
+  // 1
+  // function lazyLoad(entries, observer) {
+  //   entries.forEach(entry => {
+  //     if (entry.isIntersecting) {
+  //       const img = entry.target
+  //       if (img.getAttribute('src') === 'lazyLoadPics/loading.gif') {
+  //         img.src = img.getAttribute('data-src')
+  //       }
+  //       observer.unobserve(img)
+  //     }
+  //   });
+  // }
+
+  // const options = {
+  //   root: null,
+  //   rootMargin: '0px',
+  // 临界点 有点儿意思
+  //   threshold: 0.5,
+  // };
+
+  // const observer = new IntersectionObserver(lazyLoad, options)
+
+  // const imgs = document.getElementsByTagName('img')
+  // for (const img of imgs) {
+  //   observer.observe(img)
+  // }
 </script>

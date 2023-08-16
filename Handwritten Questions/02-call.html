@@ -1,57 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script>
-        let Person = {
-            name: 'Tom',
-            say() {
-                console.log(this)
-                console.log(`我叫${this.name}`)
-            }
-        }
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script>
+    let Person = {
+      name: 'Tom',
+      say() {
+        console.log(this)
+        console.log(`我叫${this.name}`)
+      }
+    }
 
-        // 先看代码执行效果
-        // Person.say() //我叫Tom 
+    // 先看代码执行效果
+    // Person.say() //我叫Tom 
 
-        Person1 = {
-            name: 'Tom1'
-        }
+    Person1 = {
+      name: 'Tom1'
+    }
 
-        // 我们尝试用原生方法call来实现this指向Person1
-        // Person.say.call(Person1) //我叫Tom1
+    // 我们尝试用原生方法call来实现this指向Person1
+    // Person.say.call(Person1) //我叫Tom1
 
-        function mySymbol(obj) {
-            let unique = (Math.random() + new Date().getTime()).toString(32).slice(0, 8)
-            
-        }
+    function mySymbol(obj) {
+      let unique = (Math.random() + new Date().getTime()).toString(32).slice(0, 8)
+      if (obj.hasOwnProperty(unique)) {
+        return mySymbol(obj) //递归调用
+      } else {
+        return unique
+      }
+    }
 
-        Function.prototype.MyCall = function(context = window, ...args) {
-            // 阻止这个方法被直接调用
-            if(this === Function.prototype) {
-                return undefined
-            }
+    Function.prototype.MyCall = function (context = window, ...args) {
+      // 阻止这个方法被直接调用
+      if (this === Function.prototype) {
+        return undefined
+      }
 
-            // emm 这里的symbol其实也可以手写的
-            const fn = Symbol()
-            // 给context添加一个方法 指向this
-            context[fn] = this // 这里的this就是say方法
+      // emm 这里的symbol其实也可以手写的
+      const fn = Symbol()
+      // 给context添加一个方法 指向this
+      context[fn] = this // 这里的this就是say方法
 
-            const result = context[fn](...args)
+      const result = context[fn](...args)
 
-            // 删除方法
-            delete context[fn]
-        }
+      // console.log('this', this)
+      // console.log('context', context)
+      // console.log('result', result)
 
-        // 测试
-        Person.say.MyCall(Person1)//我叫Tom1
+      // 删除方法
+      delete context[fn]
 
-    </script>
+      return result
+    }
+
+    // 测试
+    Person.say.MyCall(Person1) // 我叫Tom1
+
+  </script>
 </head>
+
 <body>
-    
+
 </body>
+
 </html>

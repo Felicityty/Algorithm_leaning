@@ -4,61 +4,56 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-
+  <title>throttle</title>
 </head>
 
 <body>
-  <img src="lazyLoadPics/loading.gif" data-src="lazyLoadPics/banner1.png" alt="">
-  <img src="lazyLoadPics/loading.gif" data-src="lazyLoadPics/banner2.png" alt="">
-  <img src="lazyLoadPics/loading.gif" data-src="lazyLoadPics/banner3.png" alt="">
-  <img src="lazyLoadPics/loading.gif" data-src="lazyLoadPics/banner4.png" alt="">
-  <img src="lazyLoadPics/loading.gif" data-src="lazyLoadPics/banner5.png" alt="">
+  <div>
+    <input type="text">
+  </div>
+  <style>
+    body {
+      height: 2000px;
+    }
+  </style>
 </body>
-<style>
-  img {
-    display: block;
-    width: 500px;
-    height: 500px;
-  }
-</style>
 
 </html>
 
 <script>
-  let img = document.getElementsByTagName('img')
-  console.log('img', img)
-  let index = 0
-  function lazyLoad() {
-    let innerHeight = window.innerHeight
-    console.log('innerHeight', innerHeight)
-    let scrollTop = document.documentElement.scrollTop
-    console.log('scrollTop', scrollTop)
-    for (let i = index; i < img.length; i++) {
-      // 这里涉及js判断图片是否在视口内
-      // if (img[i].offsetTop < innerHeight + scrollTop) {
-      if (img[i].getBoundingClientRect().top < innerHeight) {
-        if (img[i].getAttribute('src')) {
-          img[i].src = img[i].getAttribute('data-src')
-        }
-        index = i + 1
-      }
-    }
-  }
+  // let inp = document.querySelector('input')
+  // console.log(inp)
+  // inp.oninput = debounce(function () {
+  //   console.log(this.value)
+  // }, 500)
+
+  // function debounce(fn, delay) {
+  //   let timer = null
+  //   return function () {
+  //     console.log('-------this', this)
+  //     let args = arguments
+  //     console.log('args', args)
+  //     if (timer !== null) {
+  //       clearTimeout(timer)
+  //     }
+  //     timer = setTimeout(() => {
+  //       fn.apply(this, args)
+  //     }, delay)
+  //   }
+  // }
+
+  window.onscroll = throttle(() => {
+    console.log('this')
+  }, 1000)
   function throttle(fn, delay) {
-    let flag = true
-    return function () {
-      let args = arguments
-      if (flag) {
-        setTimeout(() => {
-          // fn.apply(this, args)
-          fn.call(this)
-          flag = true
+    let timer = null
+    return function (...args) {
+      if (!timer) {
+        timer = setTimeout(() => {
+          fn.apply(this, args)
+          timer = null
         }, delay)
       }
-      flag = false
     }
   }
-  lazyLoad()
-  window.addEventListener('scroll', throttle(lazyLoad, 200))
 </script>

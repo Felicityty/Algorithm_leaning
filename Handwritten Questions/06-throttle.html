@@ -35,16 +35,19 @@
     //     flag = false
     //   }
     // }
+
+    // ✅ 统一下呗
     function throttle(fn, delay) {
-      let flag = true
-      return function () {
-        if (flag) {
-          setTimeout(() => {
-            fn.call(this)
-            flag = true
-          }, delay)
+      let timer = null
+      return function (...args) {
+        console.log('arguments', arguments)
+        console.log('args', args)
+        if (timer === null) {
+          timer = setTimeout(() => {
+            fn.apply(this, args)
+            timer = null
+          }, 1000)
         }
-        flag = false
       }
     }
   </script>

@@ -3924,3 +3924,67 @@ var largestSumAfterKNegations = function(nums, k) {
     return res
 };
 ```
+
+
+
+# 2023.8.16
+
+[134. 加油站](https://leetcode.cn/problems/gas-station/) 【中等】 ↩️
+
+在一条环路上有 `n` 个加油站，其中第 `i` 个加油站有汽油 `gas[i]` 升。
+
+你有一辆油箱容量无限的的汽车，从第 `i` 个加油站开往第 `i+1` 个加油站需要消耗汽油 `cost[i]` 升。你从其中的一个加油站出发，开始时油箱为空。
+
+给定两个整数数组 `gas` 和 `cost` ，如果你可以按顺序绕环路行驶一周，则返回出发时加油站的编号，否则返回 `-1` 。如果存在解，则 **保证** 它是 **唯一** 的。
+
+```javascript
+/**
+ * @param {number[]} gas
+ * @param {number[]} cost
+ * @return {number}
+ */
+var canCompleteCircuit = function(gas, cost) {
+    let curSum = 0, totalSum = 0, startIndex = 0
+    for(let i=0; i<gas.length; i++) {
+        let rest = gas[i] - cost[i]
+        curSum += rest
+        totalSum += rest
+        if(curSum < 0) {
+            startIndex = i+1
+            curSum = 0
+        }
+    }
+    if(totalSum < 0) return -1
+    return startIndex
+};
+```
+
+
+
+[406. 根据身高重建队列](https://leetcode.cn/problems/queue-reconstruction-by-height/) 【中等】
+
+假设有打乱顺序的一群人站成一个队列，数组 `people` 表示队列中一些人的属性（不一定按顺序）。每个 `people[i] = [hi, ki]` 表示第 `i` 个人的身高为 `hi` ，前面 **正好** 有 `ki` 个身高大于或等于 `hi` 的人。
+
+请你重新构造并返回输入数组 `people` 所表示的队列。返回的队列应该格式化为数组 `queue` ，其中 `queue[j] = [hj, kj]` 是队列中第 `j` 个人的属性（`queue[0]` 是排在队列前面的人）。
+
+```javascript
+/**
+ * @param {number[][]} people
+ * @return {number[][]}
+ */
+var reconstructQueue = function(people) {
+    let queue = []
+    people.sort((a, b) => {
+        if(a[0] !== b[0]) {
+            return b[0] - a[0]
+        } else {
+            return a[1] - b[1]
+        }
+    })
+    for(let i=0; i<people.length; i++) {
+        queue.splice(people[i][1], 0, people[i])
+    }
+    return queue
+};
+```
+
