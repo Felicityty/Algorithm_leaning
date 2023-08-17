@@ -3988,3 +3988,66 @@ var reconstructQueue = function(people) {
 };
 ```
 
+
+
+# 2023.8.17
+
+[452. 用最少数量的箭引爆气球](https://leetcode.cn/problems/minimum-number-of-arrows-to-burst-balloons/) 【中等】
+
+有一些球形气球贴在一堵用 XY 平面表示的墙面上。墙面上的气球记录在整数数组 `points` ，其中`points[i] = [xstart, xend]` 表示水平直径在 `xstart` 和 `xend`之间的气球。你不知道气球的确切 y 坐标。
+
+一支弓箭可以沿着 x 轴从不同点 **完全垂直** 地射出。在坐标 `x` 处射出一支箭，若有一个气球的直径的开始和结束坐标为 `x``start`，`x``end`， 且满足  `xstart ≤ x ≤ x``end`，则该气球会被 **引爆** 。可以射出的弓箭的数量 **没有限制** 。 弓箭一旦被射出之后，可以无限地前进。
+
+给你一个数组 `points` ，*返回引爆所有气球所必须射出的 **最小** 弓箭数* 。
+
+```javascript
+/**
+ * @param {number[][]} points
+ * @return {number}
+ */
+var findMinArrowShots = function(points) {
+    let res = 1
+    points.sort((a, b) => a[0] - b[0])
+    for(let i=1; i<points.length; i++) {
+        if(points[i][0] <= points[i-1][1]) {
+            points[i][1] = Math.min(points[i][1], points[i-1][1])
+        } else {
+            res++
+        }
+    }
+    return res
+};
+```
+
+
+
+[435. 无重叠区间](https://leetcode.cn/problems/non-overlapping-intervals/) 【中等】↩️
+
+给定一个区间的集合 `intervals` ，其中 `intervals[i] = [starti, endi]` 。返回 *需要移除区间的最小数量，使剩余区间互不重叠* 。
+
+```javascript
+/**
+ * @param {number[][]} intervals
+ * @return {number}
+ */
+var eraseOverlapIntervals = function(intervals) {
+    // 按右边界生序
+    intervals.sort((a, b) => a[1] - b[1])
+    let count = 1, end = intervals[0][1]
+    // 找没有重叠的区间
+    for(let i=1; i<intervals.length; i++) {
+        if(intervals[i][0] >= end) {
+            count++
+            end = intervals[i][1]
+        }
+    }
+    return intervals.length - count
+};
+```
+
+有点点累😭 难顶
+
+加油加油叭
+
+
+

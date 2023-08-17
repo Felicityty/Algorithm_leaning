@@ -1,0 +1,60 @@
+<!--
+ * @Author: Felicity💪
+ * @Date: 2023-08-17 15:46:42
+ * @LastEditTime: 2023-08-17 16:58:44
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    img {
+      display: block;
+      height: 500px;
+      width: 500px;
+    }
+  </style>
+</head>
+
+<body>
+  <img src="lazyLoadPics/loading.gif" data-src="lazyLoadPics/banner1.png" alt="">
+  <img src="lazyLoadPics/loading.gif" data-src="lazyLoadPics/banner2.png" alt="">
+  <img src="lazyLoadPics/loading.gif" data-src="lazyLoadPics/banner3.png" alt="">
+  <img src="lazyLoadPics/loading.gif" data-src="lazyLoadPics/banner4.png" alt="">
+  <img src="lazyLoadPics/loading.gif" data-src="lazyLoadPics/banner5.png" alt="">
+</body>
+
+</html>
+
+<script>
+  let index = 0
+  function lazyLoad() {
+    let imgs = document.getElementsByTagName('img')
+    let innerHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
+    // 判断图片是否在视口区域
+    for (let i = index; i < imgs.length; i++) {
+      if (imgs[i].getBoundingClientRect().top < innerHeight) {
+        if (imgs[i].getAttribute('src') === 'lazyLoadPics/loading.gif') {
+          imgs[i].src = imgs[i].getAttribute('data-src')
+        }
+        // 只能写这儿哈 写外面就都不加载了
+        index = i + 1
+      }
+    }
+  }
+  function threshold(fn, delay) {
+    let timer = null
+    return function (...args) {
+      if (timer === null) {
+        timer = setTimeout(() => {
+          fn.apply(this, args)
+        }, delay)
+      }
+    }
+  }
+  lazyLoad()
+  window.addEventListener('scroll', threshold(lazyLoad, 1000))
+</script>
