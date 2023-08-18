@@ -3992,7 +3992,7 @@ var reconstructQueue = function(people) {
 
 # 2023.8.17
 
-[452. 用最少数量的箭引爆气球](https://leetcode.cn/problems/minimum-number-of-arrows-to-burst-balloons/) 【中等】
+[452. 用最少数量的箭引爆气球](https://leetcode.cn/problems/minimum-number-of-arrows-to-burst-balloons/) 【中等】↩️
 
 有一些球形气球贴在一堵用 XY 平面表示的墙面上。墙面上的气球记录在整数数组 `points` ，其中`points[i] = [xstart, xend]` 表示水平直径在 `xstart` 和 `xend`之间的气球。你不知道气球的确切 y 坐标。
 
@@ -4045,9 +4045,74 @@ var eraseOverlapIntervals = function(intervals) {
 };
 ```
 
-有点点累😭 难顶
+这两题还真得想想诶
 
-加油加油叭
+
+
+# 2023.8.18
+
+[763. 划分字母区间](https://leetcode.cn/problems/partition-labels/) 【中等】
+
+给你一个字符串 `s` 。我们要把这个字符串划分为尽可能多的片段，同一字母最多出现在一个片段中。
+
+注意，划分结果需要满足：将所有划分结果按顺序连接，得到的字符串仍然是 `s` 。
+
+返回一个表示每个字符串片段的长度的列表。
+
+```js
+/**
+ * @param {string} s
+ * @return {number[]}
+ */
+var partitionLabels = function(s) {
+    let map = new Map()
+    let res = [], left = 0, right = 0
+    for(let i=0; i<s.length; i++) {
+        map.set(s[i], i)
+    }
+    for(let i=0; i<s.length; i++) {
+        right = Math.max(right, map.get(s[i]))
+        if(right === i) {
+            res.push(right-left+1)
+            left = i+1
+        }
+    }
+    return res
+};
+```
+
+
+
+[56. 合并区间](https://leetcode.cn/problems/merge-intervals/) 【中等】
+
+以数组 `intervals` 表示若干个区间的集合，其中单个区间为 `intervals[i] = [starti, endi]` 。请你合并所有重叠的区间，并返回 *一个不重叠的区间数组，该数组需恰好覆盖输入中的所有区间* 。
+
+```js
+/**
+ * @param {number[][]} intervals
+ * @return {number[][]}
+ */
+var merge = function(intervals) {
+    intervals.sort((a, b) => a[0] - b[0])
+    let left = intervals[0][0], right = intervals[0][1]
+    let res = []
+    for(let i=1; i<intervals.length; i++) {
+        if(intervals[i][0] <= right) {
+            right = Math.max(right, intervals[i][1])
+        } else {
+            res.push([left, right])
+            left = intervals[i][0]
+            right = intervals[i][1]
+        }
+    }
+    res.push([left, right])
+    return res
+};
+```
+
+
+
+
 
 
 
