@@ -4112,7 +4112,68 @@ var merge = function(intervals) {
 
 
 
+# 2023.8.19
+
+[738. 单调递增的数字](https://leetcode.cn/problems/monotone-increasing-digits/) 【中等】
+
+当且仅当每个相邻位数上的数字 `x` 和 `y` 满足 `x <= y` 时，我们称这个整数是**单调递增**的。
+
+给定一个整数 `n` ，返回 *小于或等于 `n` 的最大数字，且数字呈 **单调递增*** 。
+
+```javascript
+/**
+ * @param {number} n
+ * @return {number}
+ */
+var monotoneIncreasingDigits = function(n) {
+    n = n.toString()
+    n = n.split('').map(item => +item)
+    let flag = Infinity
+    for(let i=n.length-1; i>0; i--) {
+        if(n[i-1] > n[i]) {
+            flag = i
+            n[i-1]--
+            n[i] = 9
+        }
+    }
+    for(let i=flag; i<n.length; i++) {
+        n[i] = 9
+    }
+    n = n.join('')
+    return n
+};
+```
 
 
 
+[714. 买卖股票的最佳时机含手续费](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/) 【中等】
+
+给定一个整数数组 `prices`，其中 `prices[i]`表示第 `i` 天的股票价格 ；整数 `fee` 代表了交易股票的手续费用。
+
+你可以无限次地完成交易，但是你每笔交易都需要付手续费。如果你已经购买了一个股票，在卖出它之前你就不能再继续购买股票了。
+
+返回获得利润的最大值。
+
+**注意：**这里的一笔交易指买入持有并卖出股票的整个过程，每笔交易你只需要为支付一次手续费。
+
+```javascript
+/**
+ * @param {number[]} prices
+ * @param {number} fee
+ * @return {number}
+ */
+var maxProfit = function(prices, fee) {
+    let res = 0, minPrice = prices[0]
+    for(let i=0; i<prices.length; i++) {
+        if(prices[i] < minPrice) {
+            minPrice = prices[i]
+        }
+        if(prices[i] > minPrice + fee) {
+            res += prices[i] - minPrice - fee
+            minPrice = prices[i] - fee
+        }
+    }
+    return res
+};
+```
 
