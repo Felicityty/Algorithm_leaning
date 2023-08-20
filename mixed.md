@@ -4051,7 +4051,7 @@ var eraseOverlapIntervals = function(intervals) {
 
 # 2023.8.18
 
-[763. 划分字母区间](https://leetcode.cn/problems/partition-labels/) 【中等】
+[763. 划分字母区间](https://leetcode.cn/problems/partition-labels/) 【中等】 ✅
 
 给你一个字符串 `s` 。我们要把这个字符串划分为尽可能多的片段，同一字母最多出现在一个片段中。
 
@@ -4083,7 +4083,7 @@ var partitionLabels = function(s) {
 
 
 
-[56. 合并区间](https://leetcode.cn/problems/merge-intervals/) 【中等】
+[56. 合并区间](https://leetcode.cn/problems/merge-intervals/) 【中等】✅
 
 以数组 `intervals` 表示若干个区间的集合，其中单个区间为 `intervals[i] = [starti, endi]` 。请你合并所有重叠的区间，并返回 *一个不重叠的区间数组，该数组需恰好覆盖输入中的所有区间* 。
 
@@ -4114,7 +4114,7 @@ var merge = function(intervals) {
 
 # 2023.8.19
 
-[738. 单调递增的数字](https://leetcode.cn/problems/monotone-increasing-digits/) 【中等】
+[738. 单调递增的数字](https://leetcode.cn/problems/monotone-increasing-digits/) 【中等】✅
 
 当且仅当每个相邻位数上的数字 `x` 和 `y` 满足 `x <= y` 时，我们称这个整数是**单调递增**的。
 
@@ -4146,7 +4146,7 @@ var monotoneIncreasingDigits = function(n) {
 
 
 
-[714. 买卖股票的最佳时机含手续费](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/) 【中等】
+[714. 买卖股票的最佳时机含手续费](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/) 【中等】↩️
 
 给定一个整数数组 `prices`，其中 `prices[i]`表示第 `i` 天的股票价格 ；整数 `fee` 代表了交易股票的手续费用。
 
@@ -4163,17 +4163,49 @@ var monotoneIncreasingDigits = function(n) {
  * @return {number}
  */
 var maxProfit = function(prices, fee) {
-    let res = 0, minPrice = prices[0]
-    for(let i=0; i<prices.length; i++) {
-        if(prices[i] < minPrice) {
+    // 首先 这题是多次买卖 所以不用管具体啥时候买卖 跟之前一样 只要有获利就加起来
+    let minPrice = prices[0], profit = 0
+    for (let i = 0; i < prices.length; i++) {
+        if (prices[i] < minPrice) {
             minPrice = prices[i]
-        }
-        if(prices[i] > minPrice + fee) {
-            res += prices[i] - minPrice - fee
+        } else if (prices[i] - minPrice > fee) {
+            profit += prices[i] - minPrice - fee
             minPrice = prices[i] - fee
         }
     }
-    return res
+    return profit
 };
 ```
+
+
+
+# 2023.8.20 - mixed
+
+[121. 买卖股票的最佳时机](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock/) 【简单】（一次买卖）
+
+给定一个数组 `prices` ，它的第 `i` 个元素 `prices[i]` 表示一支给定股票第 `i` 天的价格。
+
+你只能选择 **某一天** 买入这只股票，并选择在 **未来的某一个不同的日子** 卖出该股票。设计一个算法来计算你所能获取的最大利润。
+
+返回你可以从这笔交易中获取的最大利润。如果你不能获取任何利润，返回 `0` 。
+
+```javascript
+/**
+ * @param {number[]} prices
+ * @return {number}
+ */
+var maxProfit = function(prices) {
+    let minPrice = prices[0], maxProfit = 0
+    for(let i=1; i<prices.length; i++) {
+        if(prices[i] < minPrice) {
+            minPrice = prices[i]
+        } else if(maxProfit < prices[i] - minPrice) {
+            maxProfit = prices[i] - minPrice
+        }
+    }
+    return maxProfit
+};
+```
+
+多次买卖：把大于0的利润全加起来
 
