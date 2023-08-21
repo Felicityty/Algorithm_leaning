@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-08-20 20:13:05
- * @LastEditTime: 2023-08-20 21:51:21
+ * @LastEditTime: 2023-08-21 16:27:40
  */
 // 想到啥就写点儿
 
@@ -58,3 +58,72 @@ function curry(fn, ...args) {
 const currySum = curry(sum)
 
 // console.log(currySum(1, 2, 3))
+
+// ----------------------------------------------------------------------
+
+// call apply bind
+// bind 忘光光咯🥺
+
+const Person1 = {
+  name: 'aa',
+  sayHi: function () {
+    console.log(`I am ${this.name}`)
+  }
+}
+
+const Person2 = {
+  name: 'bb'
+}
+
+// Person1.sayHi.call(Person2)
+
+Function.prototype.myCall = function (context = window, ...args) {
+  if (this === Function.prototype) {
+    return undefined
+  }
+  let fn = Symbol()
+  context[fn] = this
+  const result = context[fn](...args)
+  delete context[fn]
+  return result
+}
+
+// Person1.sayHi.myCall(Person2, 1, 2)
+
+Function.prototype.myApply = function (context = window, args = []) {
+  if (this === Function.prototype) {
+    return undefined
+  }
+  let fn = Symbol()
+  context[fn] = this
+  let result
+  // o 这样写就说明参数得是个数组，否则无效
+  if (Array.isArray(args)) {
+    result = context[fn](...args)
+  } else {
+    result = context[fn]()
+  }
+  delete context[fn]
+  return result
+}
+
+// Person1.sayHi.myApply(Person2, [1, 2])
+
+Function.prototype.myBind = function (context = window, ...args) {
+  if (this === Function.prototype) {
+    return undefined
+  }
+  const _this = this
+  return function F(...args2) {
+    if (this instanceof F) {
+      return new _this(...args, ...args2)
+    } else {
+      return _this.apply(context, args.concat(args2))
+    }
+  }
+}
+
+const bindFunc2 = Person1.sayHi.myBind(Person2, 1, 2)
+
+// bindFunc2()
+

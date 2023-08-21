@@ -3400,7 +3400,7 @@ var rob = function(nums) {
 
 
 
-[337. 打家劫舍 III](https://leetcode.cn/problems/house-robber-iii/) 【中等】↩️
+[337. 打家劫舍 III](https://leetcode.cn/problems/house-robber-iii/) 【中等】↩️ ✅
 
 小偷又发现了一个新的可行窃的地区。这个地区只有一个入口，我们称之为 `root` 。
 
@@ -3504,7 +3504,7 @@ var findLengthOfLCIS = function(nums) {
 
 两个字符串的 **公共子序列** 是这两个字符串所共同拥有的子序列。
 
-[1035. 不相交的线](https://leetcode.cn/problems/uncrossed-lines/) 【中等】↩️
+[1035. 不相交的线](https://leetcode.cn/problems/uncrossed-lines/) 【中等】↩️ ✅
 
 在两条独立的水平线上按给定的顺序写下 `nums1` 和 `nums2` 中的整数。
 
@@ -3607,7 +3607,7 @@ var maxSubArray = function(nums) {
 
 
 
-[115. 不同的子序列](https://leetcode.cn/problems/distinct-subsequences/) 【困难】↩️
+[115. 不同的子序列](https://leetcode.cn/problems/distinct-subsequences/) 【困难】↩️ 🔜
 
 给你两个字符串 `s` 和 `t` ，统计并返回在 `s` 的 **子序列** 中 `t` 出现的个数。
 
@@ -3783,7 +3783,7 @@ var canJump = function(nums) {
 
 # 2023.8.14
 
-[40. 组合总和 II](https://leetcode.cn/problems/combination-sum-ii/) ↩️
+[40. 组合总和 II](https://leetcode.cn/problems/combination-sum-ii/) ↩️ ✅
 
 给定一个候选人编号的集合 `candidates` 和一个目标数 `target` ，找出 `candidates` 中所有可以使数字和为 `target` 的组合。
 
@@ -3929,7 +3929,7 @@ var largestSumAfterKNegations = function(nums, k) {
 
 # 2023.8.16
 
-[134. 加油站](https://leetcode.cn/problems/gas-station/) 【中等】 ↩️
+[134. 加油站](https://leetcode.cn/problems/gas-station/) 【中等】 ↩️ ✅
 
 在一条环路上有 `n` 个加油站，其中第 `i` 个加油站有汽油 `gas[i]` 升。
 
@@ -3992,7 +3992,7 @@ var reconstructQueue = function(people) {
 
 # 2023.8.17
 
-[452. 用最少数量的箭引爆气球](https://leetcode.cn/problems/minimum-number-of-arrows-to-burst-balloons/) 【中等】↩️
+[452. 用最少数量的箭引爆气球](https://leetcode.cn/problems/minimum-number-of-arrows-to-burst-balloons/) 【中等】↩️ ✅
 
 有一些球形气球贴在一堵用 XY 平面表示的墙面上。墙面上的气球记录在整数数组 `points` ，其中`points[i] = [xstart, xend]` 表示水平直径在 `xstart` 和 `xend`之间的气球。你不知道气球的确切 y 坐标。
 
@@ -4021,7 +4021,7 @@ var findMinArrowShots = function(points) {
 
 
 
-[435. 无重叠区间](https://leetcode.cn/problems/non-overlapping-intervals/) 【中等】↩️
+[435. 无重叠区间](https://leetcode.cn/problems/non-overlapping-intervals/) 【中等】↩️ ✅
 
 给定一个区间的集合 `intervals` ，其中 `intervals[i] = [starti, endi]` 。返回 *需要移除区间的最小数量，使剩余区间互不重叠* 。
 
@@ -4146,7 +4146,7 @@ var monotoneIncreasingDigits = function(n) {
 
 
 
-[714. 买卖股票的最佳时机含手续费](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/) 【中等】↩️
+[714. 买卖股票的最佳时机含手续费](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/) 【中等】↩️ ✅
 
 给定一个整数数组 `prices`，其中 `prices[i]`表示第 `i` 天的股票价格 ；整数 `fee` 代表了交易股票的手续费用。
 
@@ -4209,3 +4209,264 @@ var maxProfit = function(prices) {
 
 多次买卖：把大于0的利润全加起来
 
+
+
+# 2023.8.21 - mixed
+
+[1035. 不相交的线](https://leetcode.cn/problems/uncrossed-lines/) 【中等】
+
+在两条独立的水平线上按给定的顺序写下 `nums1` 和 `nums2` 中的整数。
+
+现在，可以绘制一些连接两个数字 `nums1[i]` 和 `nums2[j]` 的直线，这些直线需要同时满足满足：
+
+-  `nums1[i] == nums2[j]`
+- 且绘制的直线不与任何其他连线（非水平线）相交。
+
+请注意，连线即使在端点也不能相交：每个数字只能属于一条连线。
+
+以这种方法绘制线条，并返回可以绘制的最大连线数。
+
+```js
+/**
+ * @param {number[]} nums1
+ * @param {number[]} nums2
+ * @return {number}
+ */
+var maxUncrossedLines = function(nums1, nums2) {
+    let len1 = nums1.length, len2 = nums2.length
+    // 求的是最长公共子序的长度
+    let dp = new Array(len1+1).fill().map(() => new Array(len2+1).fill(0))
+    for(let i=1; i<=len1; i++) {
+        for(let j=1; j<=len2; j++) {
+            if(nums1[i-1] === nums2[j-1]) {
+                dp[i][j] = dp[i-1][j-1] + 1
+            } else {
+                dp[i][j] = Math.max(dp[i-1][j], dp[i][j-1])
+            }
+        }
+    }
+    return dp[len1][len2]
+};
+```
+
+
+
+[55. 跳跃游戏](https://leetcode.cn/problems/jump-game/) 【中等】
+
+给你一个非负整数数组 `nums` ，你最初位于数组的 **第一个下标** 。数组中的每个元素代表你在该位置可以跳跃的最大长度。
+
+判断你是否能够到达最后一个下标，如果可以，返回 `true` ；否则，返回 `false` 。
+
+```js
+/**
+ * @param {number[]} nums
+ * @return {boolean}
+ */
+var canJump = function(nums) {
+    let maxCover = 0
+    for(let i=0; i<=maxCover; i++) {
+        maxCover = Math.max(maxCover, i+nums[i])
+        if(maxCover >= nums.length-1) return true
+    }
+    return false
+};
+```
+
+
+
+[40. 组合总和 II](https://leetcode.cn/problems/combination-sum-ii/) 【中等】
+
+给定一个候选人编号的集合 `candidates` 和一个目标数 `target` ，找出 `candidates` 中所有可以使数字和为 `target` 的组合。
+
+`candidates` 中的每个数字在每个组合中只能使用 **一次** 。
+
+**注意：**解集不能包含重复的组合。 
+
+```js
+/**
+ * @param {number[]} candidates
+ * @param {number} target
+ * @return {number[][]}
+ */
+var combinationSum2 = function(candidates, target) {
+    // 我想用回溯 组合
+    let path = [], res = []
+    candidates.sort((a, b) => a - b)
+    function backTracking(startIndex, sum) {
+        if(sum > target) return
+        if(sum === target) {
+            res.push([...path])
+        }
+        for(let i=startIndex; i<candidates.length; i++) {
+            if(i>startIndex && candidates[i]===candidates[i-1]) continue
+            path.push(candidates[i])
+            sum += candidates[i]
+            backTracking(i+1, sum)
+            path.pop()
+            sum -= candidates[i]
+        }
+    }
+    backTracking(0, 0)
+    return res
+};
+```
+
+
+
+[134. 加油站](https://leetcode.cn/problems/gas-station/) 【中等】
+
+在一条环路上有 `n` 个加油站，其中第 `i` 个加油站有汽油 `gas[i]` 升。
+
+你有一辆油箱容量无限的的汽车，从第 `i` 个加油站开往第 `i+1` 个加油站需要消耗汽油 `cost[i]` 升。你从其中的一个加油站出发，开始时油箱为空。
+
+给定两个整数数组 `gas` 和 `cost` ，如果你可以按顺序绕环路行驶一周，则返回出发时加油站的编号，否则返回 `-1` 。如果存在解，则 **保证** 它是 **唯一** 的。
+
+```js
+/**
+ * @param {number[]} gas
+ * @param {number[]} cost
+ * @return {number}
+ */
+var canCompleteCircuit = function(gas, cost) {
+    // 这题得是贪心了诶
+    let curCost = 0, total = 0, startIndex = 0
+    for(let i=0; i<gas.length; i++) {
+        let rest = gas[i] - cost[i]
+        total += rest
+        curCost += rest
+        if(curCost < 0) {
+            startIndex = i + 1
+            curCost = 0
+        }
+    }
+    if(total < 0) return -1
+    return startIndex
+};
+```
+
+
+
+[452. 用最少数量的箭引爆气球](https://leetcode.cn/problems/minimum-number-of-arrows-to-burst-balloons/) 【中等】
+
+有一些球形气球贴在一堵用 XY 平面表示的墙面上。墙面上的气球记录在整数数组 `points` ，其中`points[i] = [xstart, xend]` 表示水平直径在 `xstart` 和 `xend`之间的气球。你不知道气球的确切 y 坐标。
+
+一支弓箭可以沿着 x 轴从不同点 **完全垂直** 地射出。在坐标 `x` 处射出一支箭，若有一个气球的直径的开始和结束坐标为 `x``start`，`x``end`， 且满足  `xstart ≤ x ≤ x``end`，则该气球会被 **引爆** 。可以射出的弓箭的数量 **没有限制** 。 弓箭一旦被射出之后，可以无限地前进。
+
+给你一个数组 `points` ，*返回引爆所有气球所必须射出的 **最小** 弓箭数* 。
+
+```js
+/**
+ * @param {number[][]} points
+ * @return {number}
+ */
+var findMinArrowShots = function(points) {
+    points.sort((a, b) => a[1] - b[1])
+    let end = points[0][1], count = 1
+    for(let i=1; i<points.length; i++) {
+        if(points[i][0] > end) {
+            count++
+            end = points[i][1]
+        }
+    }
+    return count
+};
+```
+
+
+
+[435. 无重叠区间](https://leetcode.cn/problems/non-overlapping-intervals/) 【中等】
+
+给定一个区间的集合 `intervals` ，其中 `intervals[i] = [starti, endi]` 。返回 *需要移除区间的最小数量，使剩余区间互不重叠* 。
+
+```js
+/**
+ * @param {number[][]} intervals
+ * @return {number}
+ */
+var eraseOverlapIntervals = function(intervals) {
+    // 就是算有多少重叠的嘛
+    intervals.sort((a, b) => a[1] - b[1])
+    let count = 0, end = intervals[0][1]
+    for(let i=1; i<intervals.length; i++) {
+        if(intervals[i][0] < end) {
+            count++
+        } else {
+            end = intervals[i][1]
+        }
+    }
+    return count
+};
+```
+
+哇哇哇 🐮哇 这两题虽然代码少 但已经迷糊了一年了 右边界排序yyds
+
+
+
+[763. 划分字母区间](https://leetcode.cn/problems/partition-labels/) 【中等】
+
+给你一个字符串 `s` 。我们要把这个字符串划分为尽可能多的片段，同一字母最多出现在一个片段中。
+
+注意，划分结果需要满足：将所有划分结果按顺序连接，得到的字符串仍然是 `s` 。
+
+返回一个表示每个字符串片段的长度的列表。
+
+```js
+/**
+ * @param {string} s
+ * @return {number[]}
+ */
+var partitionLabels = function(s) {
+    // 记录每个字母的最后出现下标
+    let map = new Map()
+    let res = [], left = 0, right = 0
+    for(let i=0; i<s.length; i++) {
+        map.set(s[i], i)
+    }
+    for(let i=0; i<s.length; i++) {
+        right = Math.max(map.get(s[i]), right)
+        if(right === i) {
+            res.push(right - left + 1)
+            left = i + 1
+        }
+    }
+    return res
+};
+```
+
+
+
+[714. 买卖股票的最佳时机含手续费](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/) 【中等】
+
+给定一个整数数组 `prices`，其中 `prices[i]`表示第 `i` 天的股票价格 ；整数 `fee` 代表了交易股票的手续费用。
+
+你可以无限次地完成交易，但是你每笔交易都需要付手续费。如果你已经购买了一个股票，在卖出它之前你就不能再继续购买股票了。
+
+返回获得利润的最大值。
+
+**注意：**这里的一笔交易指买入持有并卖出股票的整个过程，每笔交易你只需要为支付一次手续费。
+
+```js
+/**
+ * @param {number[]} prices
+ * @param {number} fee
+ * @return {number}
+ */
+var maxProfit = function(prices, fee) {
+    // 首先这里是多次买卖
+    let maxProfit = 0, minPrice = prices[0]
+    for(let i=1; i<prices.length; i++) {
+        if(minPrice > prices[i]) {
+            minPrice = prices[i]
+        }
+        if(prices[i] - minPrice > fee) {
+            maxProfit += prices[i] - minPrice - fee
+            minPrice = prices[i] - fee // 想想这个例子就明白了[1,4,5]
+        }
+    }
+    return maxProfit
+};
+```
+
+还可以诶
+
+就在今晚 笔试开张 紧张🫣
