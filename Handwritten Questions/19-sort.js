@@ -1,13 +1,13 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-08-20 16:52:27
- * @LastEditTime: 2023-08-20 20:08:53
+ * @LastEditTime: 2023-08-22 16:57:50
  */
 
 // 手写几种排序
 // 稳定的：冒泡、基数、插入、归并（排序前后，两个相等的数位置不变）
 
-// 冒泡排序
+// 冒泡排序 ✅
 // 从后往前 两两比较 依次往上冒
 function bubbleSort(arr) {
   let len = arr.length
@@ -28,7 +28,7 @@ console.log('bubbleSort', bubbleSort([3, 4, 2, 5, 1, 2]))
 
 // --------------------------------------------------
 
-// 选择排序
+// 选择排序 ✅
 // 逐个比较，找到最小，一次完成对调
 function selectionSort(arr) {
   let len = arr.length
@@ -48,7 +48,7 @@ console.log('selectionSort', selectionSort([3, 4, 2, 5, 1, 2]))
 
 // --------------------------------------------------
 
-// 插入排序
+// 插入排序 ✅
 // 左侧有序，往左一个个找位置
 function insertionSort(arr) {
   let len = arr.length
@@ -70,7 +70,7 @@ console.log('insertionSort', insertionSort([3, 4, 2, 5, 1, 2]))
 
 // --------------------------------------------------
 
-// 快速排序
+// 快速排序 ↩️
 // 设置一个target，小往左，大往右
 let arr = [3, 4, 2, 5, 1, 2]
 function quickSort(arr, start, end) {
@@ -99,10 +99,10 @@ console.log('quickSort', quickSort([3, 4, 2, 5, 1, 2], 0, 5))
 
 // --------------------------------------------------
 
-// 堆排序
+// 堆排序 ↩️
 // 构建大顶堆 -> 交换堆顶和当前最后一个 -> 对之前的进行下沉
 function heapSort(arr) {
-  creteHeap(arr)
+  createHeap(arr)
   for (let i = arr.length - 1; i > 0; i--) {
     // 交换首尾 调整其他
     [arr[0], arr[i]] = [arr[i], arr[0]]
@@ -111,7 +111,7 @@ function heapSort(arr) {
   return arr
 }
 
-function creteHeap(arr) {
+function createHeap(arr) {
   // 构建大顶堆
   let len = arr.length
   let start = Math.floor(len / 2) - 1
@@ -137,4 +137,4 @@ function adjust(arr, target, len) {
 
 console.log('quickSort', heapSort([3, 4, 2, 5, 1, 2]))
 
-// 堆排序真还挺难的 重复重复叭
+// 感觉差不多了 过两天再来一遍叭

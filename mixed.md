@@ -4469,4 +4469,238 @@ var maxProfit = function(prices, fee) {
 
 还可以诶
 
-就在今晚 笔试开张 紧张🫣
+
+
+# 2023.8.22
+
+上差分❕
+
+[1109. 航班预订统计](https://leetcode.cn/problems/corporate-flight-bookings/) 【中等】
+
+这里有 `n` 个航班，它们分别从 `1` 到 `n` 进行编号。
+
+有一份航班预订表 `bookings` ，表中第 `i` 条预订记录 `bookings[i] = [firsti, lasti, seatsi]` 意味着在从 `firsti` 到 `lasti` （**包含** `firsti` 和 `lasti` ）的 **每个航班** 上预订了 `seatsi` 个座位。
+
+请你返回一个长度为 `n` 的数组 `answer`，里面的元素是每个航班预定的座位总数。
+
+```js
+/**
+ * @param {number[][]} bookings
+ * @param {number} n
+ * @return {number[]}
+ */
+var corpFlightBookings = function(bookings, n) {
+    // 上差分数组
+    let diff = new Array(n).fill(0)
+    for(let booking of bookings) {
+        diff[booking[0]-1] += booking[2]
+        if(booking[1] < n) {
+            diff[booking[1]] -= booking[2]
+        }
+    }
+    for(let i=1; i<n; i++) {
+        diff[i] += diff[i-1]
+    }
+    return diff
+};
+```
+
+
+
+上链表❕
+
+[21. 合并两个有序链表](https://leetcode.cn/problems/merge-two-sorted-lists/) 【简单】
+
+将两个升序链表合并为一个新的 **升序** 链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。
+
+```js
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} list1
+ * @param {ListNode} list2
+ * @return {ListNode}
+ */
+var mergeTwoLists = function(list1, list2) {
+    // 哑节点 + 游标
+    let dummy = new ListNode(-1)
+    let p = dummy
+    while(list1 !== null && list2 !== null) {
+        if(list1.val <= list2.val) {
+            p.next = list1
+            list1 = list1.next
+        } else {
+            p.next = list2
+            list2 = list2.next
+        }
+        p = p.next
+    }
+    p.next = list1 === null ? list2 : list1
+    return dummy.next
+};
+```
+
+
+
+[86. 分隔链表](https://leetcode.cn/problems/partition-list/) 【中等】✅
+
+给你一个链表的头节点 `head` 和一个特定值 `x` ，请你对链表进行分隔，使得所有 **小于** `x` 的节点都出现在 **大于或等于** `x` 的节点之前。
+
+你应当 **保留** 两个分区中每个节点的初始相对位置。
+
+```js
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @param {number} x
+ * @return {ListNode}
+ */
+var partition = function(head, x) {
+    let dummy1 = new ListNode(-1), dummy2 = new ListNode(-1)
+    let p1 = dummy1, p2 = dummy2
+    while(head !== null) {
+        if(head.val < x) {
+            p1.next = head
+            p1 = p1.next
+        } else {
+            p2.next = head
+            p2 = p2.next
+        }
+        head = head.next
+    }
+    p2.next = null
+    p1.next = dummy2.next
+    return dummy1.next
+};
+```
+
+嘿嘿 不错
+
+
+
+[23. 合并 K 个升序链表](https://leetcode.cn/problems/merge-k-sorted-lists/) 【困难】✅
+
+给你一个链表数组，每个链表都已经按升序排列。
+
+请你将所有链表合并到一个升序链表中，返回合并后的链表。
+
+```js
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode[]} lists
+ * @return {ListNode}
+ */
+var mergeKLists = function(lists) {
+    // 就先用合并两个数组的思想叭
+    let dummy = null
+    for(let i=0; i<lists.length; i++) {
+        dummy = mergeTwoList(dummy, lists[i])
+    }
+    return dummy
+};
+function mergeTwoList(list1, list2) {
+    let dummy = new ListNode(-1)
+    let p = dummy
+    while(list1 !== null && list2 !== null) {
+        if(list1.val <= list2.val) {
+            p.next = list1
+            list1 = list1.next
+        } else {
+            p.next = list2
+            list2 = list2.next
+        }
+        p = p.next
+    }
+    p.next = list1===null ? list2 : list1
+    return dummy.next
+}
+```
+
+**返回空链表就是直接指向null就行了**，其他没问题
+
+
+
+[19. 删除链表的倒数第 N 个结点](https://leetcode.cn/problems/remove-nth-node-from-end-of-list/) 【中等】✅
+
+给你一个链表，删除链表的倒数第 `n` 个结点，并且返回链表的头结点。
+
+```js
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @param {number} n
+ * @return {ListNode}
+ */
+var removeNthFromEnd = function(head, n) {
+    // 快慢指针呗
+    let dummy = new ListNode(-1)
+    dummy.next = head
+    let p1 = dummy, p2 = dummy
+    while(n--) {
+        p1 = p1.next
+    }
+    while(p1 !== null && p1.next !== null) {
+        p1 = p1.next
+        p2 = p2.next
+    }
+    p2.next = p2.next.next
+    return dummy.next
+};
+```
+
+一开始没用哑节点还调了还挺久，这里还是得用上，head = [1], n = 1，不然这种没法做，不加哑节点其他都能通过的
+
+
+
+[876. 链表的中间结点](https://leetcode.cn/problems/middle-of-the-linked-list/) 【简单】✅
+
+给你单链表的头结点 `head` ，请你找出并返回链表的中间结点。
+
+如果有两个中间结点，则返回第二个中间结点。
+
+```js
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @return {ListNode}
+ */
+var middleNode = function(head) {
+    // 快慢指针呗
+    let p1 = head, p2 = head
+    while(p2 !== null && p2.next !== null) {
+        p1 = p1.next
+        p2 = p2.next.next
+    }
+    return p1
+};
+```
+

@@ -90,6 +90,61 @@
 
 **需要创造一条新链表（链表合并/链条分解……）**
 
+```js
+// 2022-12-02 by FTT
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} list1
+ * @param {ListNode} list2
+ * @return {ListNode}
+ */
+var mergeTwoLists = function(list1, list2) {
+    // // 1 迭代
+    // // 先定义一个虚拟头结点（哑结点），作为结果链表的开头（保留指向结果链表开头的位置）
+    // const dummy = new ListNode(-1)
+    // // 这是一个游标，标识结果链表的结尾（会一直后移的）
+    // let p = dummy
+    // while(list1 != null && list2 != null) {
+    //     if(list1.val <= list2.val) {
+    //         // 把list1的头结点拼接到结果链表的结尾 - 等价于数组的push
+    //         p.next = list1
+    //         // 把list1指向下一节点 - 等价于数组的i++
+    //         list1 = list1.next
+    //     } else {
+    //         p.next = list2
+    //         list2 = list2.next
+    //     }
+    //     // 添加完后 p还是指向之前的 所以要 移动结果链表的结尾指针
+    //     p = p.next
+    // }
+    // // 多余的拼接到结果链表后面 这里拼接的是之后所有的链表关系
+    // p.next = list1===null ? list2:list1
+
+    // // dummy一开始指向的是一个空节点，所以要用.next去跳过这个空节点，去返回哑结点的下一位置
+    // return dummy.next
+
+    // 2 递归
+    if(list1 === null) {
+        return list2
+    } else if(list2 === null) {
+        return list1
+    }else if(list1.val < list2.val) {
+        list1.next = mergeTwoLists(list1.next, list2) // 参数就变成list1.next了
+        return list1
+    } else {
+        list2.next = mergeTwoLists(list1, list2.next)
+        return list2
+    }
+
+};
+```
+
 
 
 2022.12.3
@@ -105,6 +160,48 @@
 1、用 **const** 定义 **dummy** 这个哑结点，用 **let** 定义 **p** 这个游标（dummy是标记开头的，p是会往后的）
 
 2、链表最后一定要记得**手动置空**，不然这道题有些地方会节点成环`p2.next = null`
+
+```js
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @param {number} x
+ * @return {ListNode}
+ */
+var partition = function(head, x) {
+    // 用const定义dummy这个哑结点
+    const dummy1 = new ListNode(-1)
+    // 用let定义p这个游标
+    let p1 = dummy1
+    const dummy2 = new ListNode(-1)
+    let p2 = dummy2
+    while(head !== null) {
+        if(head.val < x) {
+            p1.next = head
+            p1 = p1.next
+        } else {
+            p2.next = head
+            p2 = p2.next
+        }
+        // head也自己往后移
+        head = head.next
+    }
+    // 链表最后一定要记得手动置空，不然这道题有些地方会节点成环
+    // eg：[1,4,3,2,5,2]  3  最后的p2是5，p2.next是有指向2的，就会出现环，所以链表最后都置一下空好了
+    p2.next = null
+    // 这里的连接要注意
+    p1.next = dummy2.next
+    // 最后返回的是dummy1.next，因为要跳过那个一开始的空节点
+    return dummy1.next
+
+};
+```
 
 
 
@@ -123,6 +220,95 @@
 4 优先队列 😭😭😭 遗留！ **❌1**
 
 感觉和暴力求解可能差不多❓❓❓ 实在解不出来，留个小问题在这里吧
+
+```js
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode[]} lists
+ * @return {ListNode}
+ */
+
+// 顺序 - 借鉴一下合并两个的方法
+// var mergeKLists = function(lists) {
+//     let ans = null
+//     for(let i=0; i<lists.length; i++) {
+//         ans  = mergeTwoLists(ans, lists[i])
+//     }
+//     return ans
+// };
+
+// 分治 - 借鉴一下合并两个的方法
+// var mergeKLists = function(lists) {
+//     return merge(lists, 0, lists.length-1)
+// };
+
+// var merge = function(lists, l, r) {
+//     if(l===r) {
+//         return lists[l]
+//     }
+//     if(l>r) {
+//         return null
+//     }
+//     let mid = (l+r) >> 1
+//     return mergeTwoLists(merge(lists, l, mid), merge(lists, mid+1, r))
+// };
+
+// var mergeTwoLists = function(a, b) {
+//     if(a == null || b == null) {
+//         return a != null ? a : b
+//     }
+//     const dummy = new ListNode(-1)
+//     let p = dummy, aPtr = a, bPtr = b
+//     while(aPtr != null && bPtr != null) {
+//         if(aPtr.val < bPtr.val) {
+//             p.next = aPtr
+//             aPtr = aPtr.next
+//         } else {
+//             p.next = bPtr
+//             bPtr = bPtr.next
+//         }
+//         p = p.next
+//     }
+//     p.next = aPtr!==null ? aPtr : bPtr
+//     return dummy.next
+// }
+
+// 暴力求解
+var mergeKLists = function(lists) {
+    // 定义一个数组存储所有链表的值
+    const temp = []
+    if(lists.length === 0) return null
+    for(let i=0; i<lists.length; i++) {
+        // 去遍历每个内部数组，只要有值就push到数组中
+        while(lists[i]) {
+            temp.push(lists[i].val)
+            lists[i] = lists[i].next  // 这个其实就相当于i++
+        }
+    }
+    // 时刻提防空数组 二维空数组也是
+    if(temp.length === 0) return null
+    // 升序排序 其实括号里不写也没事 默认升序
+    temp.sort((a,b) => a-b);
+    // 数组排好序了 再把它们变成一个新链表
+    // 还是跟之前一样 定义一个哑结点
+    const muddy = new ListNode(-1)
+    // p是游标
+    let p = muddy
+    for(let i=0; i<temp.length; i++) {
+        // 依次把数组的值实例化为链表节点，赋值给p.next，然后p指针后移
+        p.next = new ListNode(temp[i])
+        p = p.next
+    }
+    return muddy.next
+};
+
+```
 
 
 
@@ -144,6 +330,48 @@
 
 2、链表最后都会接一个空指针
 
+```js
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @param {number} n
+ * @return {ListNode}
+ */
+var removeNthFromEnd = function(head, n) {
+    // 还是先定义一个哑结点
+    const dummy = new ListNode(-1)
+    // 把哑结点跟链表连上，连在链表之前
+    dummy.next = head
+    // 要删除倒数第n个结点，就是要先找到倒数第n+1个结点
+    let x = findEnd(dummy, n+1)
+    // 删除那一个结点
+    x.next = x.next.next
+    return dummy.next
+};
+
+var findEnd = function(head, k) {
+    // 先定义p1和p2同时指向头结点
+    let p1 = head
+    let p2 = head
+    // 先让p1走k步
+    for(let i=0; i<k; i++) {
+        p1 = p1.next
+    }
+    // p1 和 p2 一起走n-k步，这样p2就是指向了n-k+1个节点，即倒数第k个节点
+    while(p1 !== null) {
+        p1 = p1.next
+        p2 = p2.next
+    }
+    return p2
+}
+```
+
 
 
 ### 5 单链表的中点
@@ -161,6 +389,30 @@
 **这里可以继续前进的条件是，当前快指针和当前快指针的下一个结点都非空** -> 当有两个中间结点时，找出来的是后一个
 
 如果题目要求在两个中间结点的时候，返回前一个中间结点，此时快指针可以前进的条件改为：**当前快指针的下一个结点和当前快指针的下下一个结点都非空**
+
+```js
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @return {ListNode}
+ */
+var middleNode = function(head) {
+    // 快慢指针
+    let slow = head, fast = head
+    while(fast !== null && fast.next !== null) {
+        // 慢指针走一步，快指针走两步
+        slow = slow.next
+        fast = fast.next.next
+    }
+    return slow
+};
+```
 
 
 
@@ -238,6 +490,67 @@ ListNode detectCycle(ListNode head) {
 
 2️⃣ 并且，这里的循环也只会改转向另一条链表一次，不会无限地转变
 
+```js
+// 2022-12-08 by FTT
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val) {
+ *     this.val = val;
+ *     this.next = null;
+ * }
+ */
+
+/**
+ * @param {ListNode} headA
+ * @param {ListNode} headB
+ * @return {ListNode}
+ */
+var getIntersectionNode = function(headA, headB) {
+    // // 先定义p1和p2两个游标
+    // let p1 = headA, p2 = headB
+    // // p1和p2相等的话 有两种情况 1 有交点，指向交点 2 无交点，都指向null
+    // while(p1 !== p2) {
+    //     // 当p1或p2指向null了，就改指向另一条链表
+    //     if(p1 === null) p1 = headB
+    //     else p1 = p1.next
+    //     if(p2 === null) p2 = headA
+    //     else p2 = p2.next
+    // }
+    // return p1
+
+
+    // 方法二：利用链表长度
+    // 先计算两个链表的长度
+    let lenA = 0, lenB = 0
+    for(let p1=headA; p1!==null; p1=p1.next) {
+        lenA++
+    }
+    for(let p2=headB; p2!==null; p2=p2.next) {
+        lenB++
+    }
+    // 初始化p1和p2
+    // 让长链表的指针向前走两条链表的差值，使两条链表到达null的距离是一样的
+    // 这里注意一点，走的是两条链表的长度差值，所以必不可能走到相交的地方或是走完的
+    let p1 = headA, p2 = headB
+    if(lenA < lenB) {
+        for(let i=0; i<lenB-lenA; i++) {
+            p2 = p2.next
+        }
+    } else {
+        for(let i=0; i<lenA-lenB; i++) {
+            p1 = p1.next
+        }
+    }
+    // 这里就是正常思路了，p1等于p2只会有两种情况
+    // 1 相交 2 都指向null
+    while(p1 !== p2) {
+        p1 = p1.next
+        p2 = p2.next
+    }
+    return p1;
+};
+```
+
 
 
 ### 8 反转链表
@@ -245,6 +558,44 @@ ListNode detectCycle(ListNode head) {
 #### 1）反转整个
 
 [206.反转链表](https://leetcode.cn/problems/reverse-linked-list/)
+
+```js
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @return {ListNode}
+ */
+// 太绝了这题 真的太绝了
+// var reverseList = function(head) {
+//     // 这里递归啊 当链表为空或者是只有一个节点时，就不用反转了，直接返回就行
+//     if(head === null || head.next === null) {
+//         return head
+//     }
+//     let last = reverseList(head.next)
+//     head.next.next = head
+//     head.next = null
+//     return last
+// };
+
+var reverseList = function(head) {
+    if(head === null || head.next === null) {
+        return head
+    }
+    
+    let tail = reverseList(head.next)
+    head.next.next = head
+    head.next = null
+    return tail
+}
+```
+
+
 
 #### 2）反转部分
 

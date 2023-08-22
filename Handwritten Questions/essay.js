@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-08-20 20:13:05
- * @LastEditTime: 2023-08-21 16:27:40
+ * @LastEditTime: 2023-08-22 23:02:43
  */
 // 想到啥就写点儿
 
@@ -127,3 +127,126 @@ const bindFunc2 = Person1.sayHi.myBind(Person2, 1, 2)
 
 // bindFunc2()
 
+// ----------------------------------------------------------------------
+
+// promise
+
+// Promise.resolve = function (value) {
+//   return new Promise((resolve, reject) => {
+//     // console.log(resolve, reject)
+//     if (value instanceof Promise) {
+//       return value.then(resolve, reject)
+//     } else {
+//       return resolve(value)
+//     }
+//   })
+// }
+
+// const promise1 = Promise.resolve(123)
+// console.log('promise1', promise1)
+
+// Promise.reject = function (reason) {
+//   return new Promise((resolve, reject) => {
+//     reject(reason)
+//   })
+// }
+
+// const promise2 = Promise.reject(123)
+// console.log('promise2', promise2)
+
+// ----------------------------------------------------------------------
+
+// Promise.prototype.catch = function (onRejected) {
+//   return this.then(null, onRejected)
+// }
+
+// Promise.prototype.finally = function (onFinally) {
+//   return this.then(onFinally, onFinally)
+// }
+
+// ----------------------------------------------------------------------
+
+const promise3 = new Promise((resolve, reject) => {
+  setTimeout(resolve, 1000, 'foo')
+})
+const promise4 = Promise.resolve(1213)
+const promise5 = 42
+
+Promise.all([promise3, promise4, promise5]).then((values) => {
+  console.log(values)
+})
+
+Promise.all = function (promises) {
+  let res = [], count = 0
+  return new Promise((resolve, reject) => {
+    if (promises.length === 0) {
+      resolve(fulfilled)
+    } else {
+      promises.forEach((promise, index) => {
+        Promise.resolve(promise).then(
+          value => {
+            count++
+            res[index] = value
+            if (count === promises.length) {
+              resolve(res)
+            }
+          },
+          reason => {
+            reject(reason)
+          }
+        )
+      })
+    }
+  })
+}
+
+Promise.allSettled = function (promises) {
+  let res = [], count = 0
+  return new Promise((resolve, reject) => {
+    promises.forEach((promise, index) => {
+      Promise.resolve(promise).then(
+        value => {
+          count++
+          res[index] = {
+            status: 'fulfilled',
+            value
+          }
+          if (count === promises.length) {
+            resolve(res)
+          }
+        },
+        reason => {
+          count++
+          res[index] = {
+            status: 'rejected',
+            reason
+          }
+          if (count === promises.length) {
+            reject(res)
+          }
+        }
+      )
+    })
+  })
+}
+
+Promise.race = function (promises) {
+  return new Promise((resolve, reject) => {
+    promises.forEach(promise => {
+      Promise.resolve(promise).then(
+        value => {
+          resolve(value)
+        },
+        reason => {
+          reject(reason)
+        }
+      )
+    })
+  })
+}
+
+Promise.race([promise4, promise5]).then((value) => {
+  console.log('222', value)
+})
+
+// 今天不在状态呀🤯 那就放松 调整调整呗
