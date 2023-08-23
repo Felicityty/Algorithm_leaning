@@ -1,12 +1,19 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-08-18 17:31:34
- * @LastEditTime: 2023-08-18 17:56:36
+ * @LastEditTime: 2023-08-23 14:56:33
  */
 
 // 手写node的util模块下的promisify
 // 这个写得差点儿意思 先这样吧
 
+// 1 没有promisify
+// const fs = require('fs')
+// fs.readFile('./Handwritten Questions/02-call.js', (err, buf) => {
+//   console.log(buf.toString('utf-8'))
+// })
+
+// 2 使用promisify
 // const fs = require('fs')
 // const util = require('util')
 
@@ -16,23 +23,25 @@
 //   console.log(data)
 // })
 
+// 3 手写promisify
 const fs = require('fs')
+const util = require('util')
 
-function promisify(fn) {
+util.promisify = function (fn) {
   return (...args) => {
     return new Promise((resolve, reject) => {
-      fn(...args, (err, res) => {
+      fn(...args, (err, buf) => {
         if (err) {
           reject(err)
           return
         }
-        resolve(res)
+        resolve(buf)
       })
     })
   }
 }
 
-const readFilePromise = promisify(fs.readFile)
-readFilePromise('./Handwritten Questions/02-call.js', 'utf-8').then(
-  value => console.log(value)
-)
+const readFilePromise = util.promisify(fs.readFile)
+readFilePromise('./Handwritten Questions/02-call.js', 'utf-8').then(value => {
+  console.log(value)
+})
