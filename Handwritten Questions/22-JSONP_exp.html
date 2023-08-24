@@ -1,0 +1,111 @@
+<!--
+ * @Author: Felicity💪
+ * @Date: 2023-08-24 16:40:12
+ * @LastEditTime: 2023-08-24 20:47:08
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+
+</body>
+
+</html>
+
+<script>
+  // (function (window, document) {
+  //   "use strict";
+  //   var jsonp = function (url, data, callback) {
+
+  //     // 1.将传入的data数据转化为url字符串形式
+  //     // {id:1,name:'jack'} => id=1&name=jack
+  //     var dataString = url.indexof('?') == -1 ? '?' : '&';
+  //     for (var key in data) {
+  //       dataString += key + '=' + data[key] + '&';
+  //     };
+
+  //     // 2 处理url中的回调函数
+  //     // cbFuncName回调函数的名字 ：my_json_cb_名字的前缀 + 随机数（把小数点去掉）
+  //     var cbFuncName = 'my_json_cb_' + Math.random().toString().replace('.', '');
+  //     dataString += 'callback=' + cbFuncName;
+
+  //     // 3.创建一个script标签并插入到页面中
+  //     var scriptEle = document.createElement('script');
+  //     scriptEle.src = url + dataString;
+
+  //     // 4.挂载回调函数
+  //     window[cbFuncName] = function (data) {
+  //       callback(data);
+  //       // 处理完回调函数的数据之后，删除jsonp的script标签
+  //       document.body.removeChild(scriptEle);
+  //     }
+
+  //     document.body.appendChild(scriptEle);
+  //   }
+
+  //   window.$jsonp = jsonp;
+
+  // })(window, document)
+
+  (function (global) {
+    var id = 0,
+      container = document.getElementsByTagName("head")[0];
+
+    function jsonp(options) {
+      if (!options || !options.url) return;
+
+      var scriptNode = document.createElement("script"),
+        data = options.data || {},
+        url = options.url,
+        callback = options.callback,
+        fnName = "jsonp" + id++;
+
+      // 添加回调函数
+      data["callback"] = fnName;
+
+      // 拼接url
+      var params = [];
+      for (var key in data) {
+        params.push(encodeURIComponent(key) + "=" + encodeURIComponent(data[key]));
+      }
+      url = url.indexOf("?") > 0 ? (url + "&") : (url + "?");
+      url += params.join("&");
+      scriptNode.src = url;
+
+      // 传递的是一个匿名的回调函数，要执行的话，暴露为一个全局方法
+      global[fnName] = function (ret) {
+        callback && callback(ret);
+        container.removeChild(scriptNode);
+        delete global[fnName];
+      }
+
+      // 出错处理
+      scriptNode.onerror = function () {
+        callback && callback({ error: "error" });
+        container.removeChild(scriptNode);
+        global[fnName] && delete global[fnName];
+      }
+
+      scriptNode.type = "text/javascript";
+      container.appendChild(scriptNode)
+    }
+
+    global.jsonp = jsonp;
+
+  })(this);
+
+  jsonp({
+    url: "www.example.com",
+    data: { id: 1 },
+    callback: function (ret) {
+      console.log(ret);
+    }
+  });
+
+</script>

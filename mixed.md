@@ -4704,3 +4704,202 @@ var middleNode = function(head) {
 };
 ```
 
+
+
+# 2023.8.24
+
+[141. 环形链表](https://leetcode.cn/problems/linked-list-cycle/) 【中等】【是否有环】
+
+给你一个链表的头节点 `head` ，判断链表中是否有环。
+
+如果链表中有某个节点，可以通过连续跟踪 `next` 指针再次到达，则链表中存在环。 为了表示给定链表中的环，评测系统内部使用整数 `pos` 来表示链表尾连接到链表中的位置（索引从 0 开始）。**注意：`pos` 不作为参数进行传递** 。仅仅是为了标识链表的实际情况。
+
+*如果链表中存在环* ，则返回 `true` 。 否则，返回 `false` 。
+
+```js
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val) {
+ *     this.val = val;
+ *     this.next = null;
+ * }
+ */
+
+/**
+ * @param {ListNode} head
+ * @return {boolean}
+ */
+var hasCycle = function(head) {
+    let slow = head, fast = head
+    while(fast !== null && fast.next !== null) {
+        slow = slow.next
+        fast = fast.next.next
+        if(slow === fast) {
+            return true
+        }
+    }
+    return false
+};
+```
+
+
+
+[142. 环形链表 II](https://leetcode.cn/problems/linked-list-cycle-ii/) 【中等】【找环起点】↩️
+
+给定一个链表的头节点  `head` ，返回链表开始入环的第一个节点。 *如果链表无环，则返回 `null`。*
+
+如果链表中有某个节点，可以通过连续跟踪 `next` 指针再次到达，则链表中存在环。 为了表示给定链表中的环，评测系统内部使用整数 `pos` 来表示链表尾连接到链表中的位置（**索引从 0 开始**）。如果 `pos` 是 `-1`，则在该链表中没有环。**注意：`pos` 不作为参数进行传递**，仅仅是为了标识链表的实际情况。
+
+**不允许修改** 链表。
+
+```js
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val) {
+ *     this.val = val;
+ *     this.next = null;
+ * }
+ */
+
+/**
+ * @param {ListNode} head
+ * @return {ListNode}
+ */
+var detectCycle = function(head) {
+    // 找链表起点嘛
+    let slow = head, fast = head
+    while(fast !== null && fast.next !== null) {
+        slow = slow.next
+        fast = fast.next.next
+        if(slow === fast) {
+            break
+        }
+    }
+    if(fast === null || fast.next === null) {
+        return null
+    }
+    slow = head
+    while(slow !== fast) {
+        slow = slow.next
+        fast = fast.next
+    }
+    return slow
+};
+```
+
+
+
+[160. 相交链表](https://leetcode.cn/problems/intersection-of-two-linked-lists/) 【简单】↩️
+
+给你两个单链表的头节点 `headA` 和 `headB` ，请你找出并返回两个单链表相交的起始节点。如果两个链表不存在相交节点，返回 `null` 。
+
+```js
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val) {
+ *     this.val = val;
+ *     this.next = null;
+ * }
+ */
+
+/**
+ * @param {ListNode} headA
+ * @param {ListNode} headB
+ * @return {ListNode}
+ */
+var getIntersectionNode = function(headA, headB) {
+    let p1 = headA, p2 = headB
+    while(p1 !== p2) {
+        if(p1 === null) {
+            p1 = headB
+        } else {
+            p1 = p1.next
+        }
+        if(p2 === null) {
+            p2 = headA
+        } else {
+            p2 = p2.next
+        }
+    }
+    return p1
+};
+```
+
+
+
+[206. 反转链表](https://leetcode.cn/problems/reverse-linked-list/) 【简单】
+
+给你单链表的头节点 `head` ，请你反转链表，并返回反转后的链表。
+
+```js
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @return {ListNode}
+ */
+var reverseList = function(head) {
+    // head为空 || head只有一个节点
+    if(head === null || head.next === null) {
+        return head
+    }
+    let last = reverseList(head.next)
+    head.next.next = head
+    head.next = null
+    return last
+};
+```
+
+神仙递归
+
+
+
+[92. 反转链表 II](https://leetcode.cn/problems/reverse-linked-list-ii/) 【中等】↩️
+
+给你单链表的头指针 `head` 和两个整数 `left` 和 `right` ，其中 `left <= right` 。请你反转从位置 `left` 到位置 `right` 的链表节点，返回 **反转后的链表** 。
+
+```js
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @param {number} left
+ * @param {number} right
+ * @return {ListNode}
+ */
+var reverseBetween = function(head, left, right) {
+    if(left === 1) {
+        return reverseN(head, right)
+    }
+    head.next = reverseBetween(head.next, left-1, right-1)
+    return head
+};
+let successor = null
+function reverseN(head, n) {
+    // 只有一个节点时
+    if(n === 1) {
+        // successor记录不用反转部分的开始节点
+        successor = head.next
+        return head
+    }
+    let last = reverseN(head.next, n-1)
+    head.next.next = head
+    head.next = successor
+    return last
+}
+```
+
+递归晕晕😵‍💫
+
+
+

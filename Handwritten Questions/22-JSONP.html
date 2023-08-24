@@ -13,18 +13,9 @@
 
 </html>
 
-<!-- 👉 先试试咋用 -->
-<!-- <script>
-  function callback(res) {
-    console.log('res', res)
-  }
-</script> -->
-<!-- 
-<script
-  src="https://photo.sina.cn/aj/v2/recomalbum?ch=1&sid=86058&aid=528511&cid=c&r=202308241707&weburl=http%3A%2F%2Fslide.news.sina.com.cn%2Fc%2Fslide_1_86058_528511.html&hd=1&callback=callback"></script> -->
-
-
 <script>
+  // 创建一个私有作用域
+  // 函数内部可以访问到全局的 window 对象和 document 对象，同时又不污染全局命名空间
   (function (window, document) {
     function jsonp(options) {
       let { url, data, callback } = options
@@ -36,10 +27,12 @@
       }
       url += url.indexOf('?') === -1 ? '?' : '&'
       url += params.join('&')
+      console.log('url1', url)
 
       // 2 处理回调函数
       let cbFuncName = 'jsonp' + Math.random().toString().replace('.', '')
       url += '&callback=' + cbFuncName
+      console.log('url2', url)
 
       // 3 创建script标签
       let scriptEle = document.createElement('script')
@@ -53,17 +46,18 @@
 
       document.body.appendChild(scriptEle)
 
-      console.log('url', url)
     }
+
     window.$jsonp = jsonp
-  })(window, document);
+  })(window, document)
 
   $jsonp({
     url: 'www.example.com',
-    data: { id: 1, name: 'fff' },
+    data: { id: 1, name: 'ttt' },
     callback: function (res) {
-      console.log(1)
       console.log('res', res)
     }
   })
+
+  // 当然通过这个随便的地址是拿不到东西的，但是可以看出来是发送了请求的
 </script>

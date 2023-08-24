@@ -420,6 +420,8 @@ var middleNode = function(head) {
 
 ### 6 判断链表是否包含环
 
+[141. 环形链表](https://leetcode.cn/problems/linked-list-cycle/) 
+
 还是用【快慢指针】，每当慢指针 slow 前进⼀步，快指针 fast 就前进两步
 **如果 fast 最终遇到空指针，说明链表中没有环；如果 fast 最终和 slow 相遇，那肯定是 fast 超过了slow ⼀圈，说明链表中含有环**
 
@@ -443,6 +445,12 @@ boolean hasCycle(ListNode head) {
 ```
 
 👇 计算环的起点
+
+[142. 环形链表 II](https://leetcode.cn/problems/linked-list-cycle-ii/) 
+
+这图画得不错诶
+
+![img](https://labuladong.github.io/algo/images/%E5%8F%8C%E6%8C%87%E9%92%88/2.jpeg)
 
 ```js
 ListNode detectCycle(ListNode head) {
@@ -559,6 +567,12 @@ var getIntersectionNode = function(headA, headB) {
 
 [206.反转链表](https://leetcode.cn/problems/reverse-linked-list/)
 
+两张神图 简直了
+
+![img](https://labuladong.github.io/algo/images/%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8/4.jpg)
+
+![img](https://labuladong.github.io/algo/images/%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8/5.jpg)
+
 ```js
 /**
  * Definition for singly-linked list.
@@ -572,27 +586,16 @@ var getIntersectionNode = function(headA, headB) {
  * @return {ListNode}
  */
 // 太绝了这题 真的太绝了
-// var reverseList = function(head) {
-//     // 这里递归啊 当链表为空或者是只有一个节点时，就不用反转了，直接返回就行
-//     if(head === null || head.next === null) {
-//         return head
-//     }
-//     let last = reverseList(head.next)
-//     head.next.next = head
-//     head.next = null
-//     return last
-// };
-
 var reverseList = function(head) {
+    // 这里递归啊 当链表为空或者是只有一个节点时，就不用反转了，直接返回就行
     if(head === null || head.next === null) {
         return head
     }
-    
-    let tail = reverseList(head.next)
+    let last = reverseList(head.next)
     head.next.next = head
     head.next = null
-    return tail
-}
+    return last
+};
 ```
 
 
