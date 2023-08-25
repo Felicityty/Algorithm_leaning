@@ -4744,7 +4744,7 @@ var hasCycle = function(head) {
 
 
 
-[142. 环形链表 II](https://leetcode.cn/problems/linked-list-cycle-ii/) 【中等】【找环起点】↩️
+[142. 环形链表 II](https://leetcode.cn/problems/linked-list-cycle-ii/) 【中等】【找环起点】✅
 
 给定一个链表的头节点  `head` ，返回链表开始入环的第一个节点。 *如果链表无环，则返回 `null`。*
 
@@ -4825,9 +4825,11 @@ var getIntersectionNode = function(headA, headB) {
 };
 ```
 
+是if-else的逻辑
 
 
-[206. 反转链表](https://leetcode.cn/problems/reverse-linked-list/) 【简单】
+
+[206. 反转链表](https://leetcode.cn/problems/reverse-linked-list/) 【简单】 ✅
 
 给你单链表的头节点 `head` ，请你反转链表，并返回反转后的链表。
 
@@ -4859,7 +4861,7 @@ var reverseList = function(head) {
 
 
 
-[92. 反转链表 II](https://leetcode.cn/problems/reverse-linked-list-ii/) 【中等】↩️
+[92. 反转链表 II](https://leetcode.cn/problems/reverse-linked-list-ii/) 【中等】✅↩️
 
 给你单链表的头指针 `head` 和两个整数 `left` 和 `right` ，其中 `left <= right` 。请你反转从位置 `left` 到位置 `right` 的链表节点，返回 **反转后的链表** 。
 
@@ -4899,7 +4901,71 @@ function reverseN(head, n) {
 }
 ```
 
-递归晕晕😵‍💫
 
 
+# 2023.8.25
+
+[26. 删除有序数组中的重复项](https://leetcode.cn/problems/remove-duplicates-from-sorted-array/) 【简单】✅
+
+给你一个 **升序排列** 的数组 `nums` ，请你**[ 原地](http://baike.baidu.com/item/原地算法)** 删除重复出现的元素，使每个元素 **只出现一次** ，返回删除后数组的新长度。元素的 **相对顺序** 应该保持 **一致** 。然后返回 `nums` 中唯一元素的个数。
+
+考虑 `nums` 的唯一元素的数量为 `k` ，你需要做以下事情确保你的题解可以被通过：
+
+- 更改数组 `nums` ，使 `nums` 的前 `k` 个元素包含唯一元素，并按照它们最初在 `nums` 中出现的顺序排列。`nums` 的其余元素与 `nums` 的大小不重要。
+- 返回 `k` 。
+
+```js
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var removeDuplicates = function(nums) {
+    // 说那么多 该原数组 返回新数组长度
+    let fast = 0, slow = 0
+    while(fast < nums.length) {
+        if(nums[fast] !== nums[slow]) {
+            nums[++slow] = nums[fast]
+        }
+        fast++
+    }
+    return slow+1
+};
+```
+
+
+
+[83. 删除排序链表中的重复元素](https://leetcode.cn/problems/remove-duplicates-from-sorted-list/) 【简单】✅
+
+给定一个已排序的链表的头 `head` ， *删除所有重复的元素，使每个元素只出现一次* 。返回 *已排序的链表* 。
+
+```js
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @return {ListNode}
+ */
+var deleteDuplicates = function(head) {
+    if(head === null) return head
+    let slow = head, fast = head
+    while(fast !== null) {
+        if(slow.val !== fast.val) {
+            slow.next = fast
+            slow = slow.next
+        }
+        fast = fast.next
+    }
+    slow.next = null
+    return head
+};
+```
+
+
+
+加油 小冯er～ 倒计时5天！
 

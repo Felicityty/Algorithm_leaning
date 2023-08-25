@@ -40,6 +40,7 @@
 
       // 4 挂载回调函数
       window[cbFuncName] = function (data) {
+        console.log('data', data)
         callback(data)
         document.body.removeChild(scriptEle)
       }
@@ -52,8 +53,10 @@
   })(window, document)
 
   $jsonp({
-    url: 'www.example.com',
-    data: { id: 1, name: 'ttt' },
+    // url: 'www.example.com',
+    // 用json-server起个服务试试 可以啊
+    url: 'http://localhost:3000/comments',
+    // data: { id: 1, name: 'ttt' },
     callback: function (res) {
       console.log('res', res)
     }

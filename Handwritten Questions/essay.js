@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-08-20 20:13:05
- * @LastEditTime: 2023-08-23 15:09:53
+ * @LastEditTime: 2023-08-24 21:42:01
  */
 // 想到啥就写点儿
 
@@ -497,4 +497,14 @@
 //   console.log(value)
 // })
 
-// 应该没啥问题了
+// 2023.8.24
+Array.prototype.myConcat = function () {
+  let arr = [...this]
+  arguments = [...arguments]
+  arguments.forEach(argument => {
+    Array.isArray(argument) ? argument.forEach(item => arr.push(item)) : arr.push(argument)
+  })
+  return arr
+}
+const newArr = [1, 2].myConcat([1, 2], [4, 5, 9], 7, 5, 6)
+console.log('newArr', newArr)
