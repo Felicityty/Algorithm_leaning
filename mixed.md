@@ -4967,5 +4967,315 @@ var deleteDuplicates = function(head) {
 
 
 
-加油 小冯er～ 倒计时5天！
+# 2023.8.26
+
+上滑动窗口❕
+
+[76. 最小覆盖子串](https://leetcode.cn/problems/minimum-window-substring/) 【困难】
+
+给你一个字符串 `s` 、一个字符串 `t` 。返回 `s` 中涵盖 `t` 所有字符的最小子串。如果 `s` 中不存在涵盖 `t` 所有字符的子串，则返回空字符串 `""` 。
+
+**注意：**
+
+- 对于 `t` 中重复字符，我们寻找的子字符串中该字符数量必须不少于 `t` 中该字符数量。
+- 如果 `s` 中存在这样的子串，我们保证它是唯一的答案。
+
+```js
+/**
+ * @param {string} s
+ * @param {string} t
+ * @return {string}
+ */
+var minWindow = function(s, t) {
+    // need 需要的， window 现在的滑动数组中有的
+    let need = new Map(), window = new Map()
+    let left = 0, right = 0, validNum = 0
+    let start = 0, len = Infinity
+    for(let c of t) {
+        need.set(c, (need.get(c) || 0) + 1)
+    }
+    while(right !== s.length) {
+        let c = s[right]
+        right++
+        if(need.has(c)) {
+            window.set(c, (window.get(c) || 0) + 1)
+            if(window.get(c) === need.get(c)) {
+                validNum++
+            }
+        }
+
+        while(validNum === need.size) {
+            if(right - left < len) {
+                start = left
+                len = right - left
+            }
+            let d = s[left]
+            left++
+            if(need.has(d)) {
+                if(window.get(d) === need.get(d)) {
+                    validNum--
+                }
+                window.set(d, window.get(d)-1)
+            }
+        }
+    }
+
+    return len === Infinity ? '' : s.slice(start, start+len)
+};
+```
+
+
+
+上二分查找❕
+
+[704. 二分查找](https://leetcode.cn/problems/binary-search/) 【简单】
+
+给定一个 `n` 个元素有序的（升序）整型数组 `nums` 和一个目标值 `target` ，写一个函数搜索 `nums` 中的 `target`，如果目标值存在返回下标，否则返回 `-1`。
+
+```js
+/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number}
+ */
+var search = function(nums, target) {
+    let left = 0, right = nums.length-1, mid = 0
+    while(left <= right) {
+        mid = left + Math.floor((right - left) / 2)
+        if(nums[mid] === target) {
+            return mid
+        } else if(nums[mid] > target) {
+            right = mid - 1
+        } else {
+            left = mid + 1
+        }
+    }
+    return -1
+};
+```
+
+
+
+[852. 山脉数组的峰顶索引](https://leetcode.cn/problems/peak-index-in-a-mountain-array/) 【简单】
+
+符合下列属性的数组 `arr` 称为 **山脉数组** ：
+
+- `arr.length >= 3`
+
+- 存在
+
+   
+
+  ```
+  i
+  ```
+
+  （
+
+  ```
+  0 < i < arr.length - 1
+  ```
+
+  ）使得：
+
+  - `arr[0] < arr[1] < ... arr[i-1] < arr[i] `
+  - `arr[i] > arr[i+1] > ... > arr[arr.length - 1]`
+
+给你由整数组成的山脉数组 `arr` ，返回满足 `arr[0] < arr[1] < ... arr[i - 1] < arr[i] > arr[i + 1] > ... > arr[arr.length - 1]` 的下标 `i` 。
+
+你必须设计并实现时间复杂度为 `O(log(n))` 的解决方案。
+
+```js
+/**
+ * @param {number[]} arr
+ * @return {number}
+ */
+var peakIndexInMountainArray = function(arr) {
+    let left = 0, right = arr.length-1, mid
+    while(left <= right) {
+        mid = left + Math.floor((right - left) / 2)
+        if(arr[mid] > arr[mid+1]) {
+            right = mid -1
+        } else {
+            left = mid + 1
+        }
+    }
+    return left
+};
+```
+
+今天主打一个回忆杀
+
+
+
+[875. 爱吃香蕉的珂珂](https://leetcode.cn/problems/koko-eating-bananas/) 【中等】
+
+珂珂喜欢吃香蕉。这里有 `n` 堆香蕉，第 `i` 堆中有 `piles[i]` 根香蕉。警卫已经离开了，将在 `h` 小时后回来。
+
+珂珂可以决定她吃香蕉的速度 `k` （单位：根/小时）。每个小时，她将会选择一堆香蕉，从中吃掉 `k` 根。如果这堆香蕉少于 `k` 根，她将吃掉这堆的所有香蕉，然后这一小时内不会再吃更多的香蕉。 
+
+珂珂喜欢慢慢吃，但仍然想在警卫回来前吃掉所有的香蕉。
+
+返回她可以在 `h` 小时内吃掉所有香蕉的最小速度 `k`（`k` 为整数）。
+
+```js
+/**
+ * @param {number[]} piles
+ * @param {number} h
+ * @return {number}
+ */
+var minEatingSpeed = function(piles, h) {
+    // 找一个左边界
+    let left = 1, right = piles.reduce((a, b) => a+b), mid
+    while(left <= right) {
+        mid = left + Math.floor((right - left) / 2)
+        if(getTime(piles, mid) <= h) {
+            right = mid - 1
+        } else {
+            left = mid + 1
+        }
+    }
+    return left
+};
+
+function getTime(piles, k) {
+    let hourNum = 0
+    for(let pile of piles) {
+        hourNum += Math.floor(pile / k)
+        if(pile % k > 0) {
+            hourNum++
+        }
+    }
+    return hourNum
+}
+```
+
+
+
+上括号❕
+
+[20. 有效的括号](https://leetcode.cn/problems/valid-parentheses/) 【简单】
+
+给定一个只包括 `'('`，`')'`，`'{'`，`'}'`，`'['`，`']'` 的字符串 `s` ，判断字符串是否有效。
+
+有效字符串需满足：
+
+1. 左括号必须用相同类型的右括号闭合。
+2. 左括号必须以正确的顺序闭合。
+3. 每个右括号都有一个对应的相同类型的左括号。
+
+```js
+/**
+ * @param {string} s
+ * @return {boolean}
+ */
+var isValid = function(s) {
+    // 这道题是不嵌套的
+    let map = new Map([
+        [')', '('],
+        [']', '['],
+        ['}', '{']
+    ])
+    let path = []
+    for(let c of s) {
+        if(map.has(c)) {
+            if(path.length === 0 || map.get(c) !== path[path.length-1]) return false
+            path.pop()
+        } else {
+            path.push(c)
+        }
+    }
+    return path.length === 0
+};
+```
+
+
+
+[921. 使括号有效的最少添加](https://leetcode.cn/problems/minimum-add-to-make-parentheses-valid/) 【中等】
+
+只有满足下面几点之一，括号字符串才是有效的：
+
+- 它是一个空字符串，或者
+- 它可以被写成 `AB` （`A` 与 `B` 连接）, 其中 `A` 和 `B` 都是有效字符串，或者
+- 它可以被写作 `(A)`，其中 `A` 是有效字符串。
+
+给定一个括号字符串 `s` ，在每一次操作中，你都可以在字符串的任何位置插入一个括号
+
+- 例如，如果 `s = "()))"` ，你可以插入一个开始括号为 `"(()))"` 或结束括号为 `"())))"` 。
+
+返回 *为使结果字符串 `s` 有效而必须添加的最少括号数*。
+
+```js
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var minAddToMakeValid = function(s) {
+    // 这题很坑 不能直接求差值
+    let res = 0, need = 0
+    for(let c of s) {
+        if(c === '(') {
+            need++
+        } else {
+            need--
+            if(need < 0) {
+                need = 0
+                res++
+            }
+        }
+    }
+    return res + need
+};
+```
+
+
+
+[1541. 平衡括号字符串的最少插入次数](https://leetcode.cn/problems/minimum-insertions-to-balance-a-parentheses-string/) 【中等】↩️
+
+给你一个括号字符串 `s` ，它只包含字符 `'('` 和 `')'` 。一个括号字符串被称为平衡的当它满足：
+
+- 任何左括号 `'('` 必须对应两个连续的右括号 `'))'` 。
+- 左括号 `'('` 必须在对应的连续两个右括号 `'))'` 之前。
+
+比方说 `"())"`， `"())(())))"` 和 `"(())())))"` 都是平衡的， `")()"`， `"()))"` 和 `"(()))"` 都是不平衡的。
+
+你可以在任意位置插入字符 '(' 和 ')' 使字符串平衡。
+
+请你返回让 `s` 平衡的最少插入次数。
+
+```js
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var minInsertions = function(s) {
+    let res = 0, need = 0
+    for(let c of s) {
+        if(c === '(') {
+            need += 2
+            if(need % 2 === 1) { // 坑
+                res++
+                need--
+            }
+        } else {
+            need--
+            if(need < 0) {
+                need = 1
+                res++
+            }
+        }
+    }
+    return res + need
+};
+```
+
+这题的坑在两个连续的），并且在（的左边
+
+
+
+倒计时5天！
+
+
+
+
 

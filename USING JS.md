@@ -687,6 +687,8 @@ var reverseN = function(head, n) {
 
 [27.移除元素](https://leetcode.cn/problems/remove-element/)
 
+这题是数组
+
 定义一个慢指针slow和一个快指针fast
 
 当fast小于数组长度
