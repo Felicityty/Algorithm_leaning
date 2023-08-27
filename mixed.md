@@ -5230,7 +5230,7 @@ var minAddToMakeValid = function(s) {
 
 
 
-[1541. 平衡括号字符串的最少插入次数](https://leetcode.cn/problems/minimum-insertions-to-balance-a-parentheses-string/) 【中等】↩️
+[1541. 平衡括号字符串的最少插入次数](https://leetcode.cn/problems/minimum-insertions-to-balance-a-parentheses-string/) 【中等】✅
 
 给你一个括号字符串 `s` ，它只包含字符 `'('` 和 `')'` 。一个括号字符串被称为平衡的当它满足：
 
@@ -5273,9 +5273,61 @@ var minInsertions = function(s) {
 
 
 
-倒计时5天！
+# 2023.8.27
+
+[14. 最长公共前缀](https://leetcode.cn/problems/longest-common-prefix/) 【简单】🆕
+
+编写一个函数来查找字符串数组中的最长公共前缀。
+
+如果不存在公共前缀，返回空字符串 `""`。
+
+```js
+/**
+ * @param {string[]} strs
+ * @return {string}
+ */
+var longestCommonPrefix = function(strs) {
+    let m = strs.length, n = strs[0].length
+    for(let i=0; i<n; i++) {
+        for(let j=1; j<m; j++) {
+            let pre = strs[j-1], cur = strs[j]
+            if(pre[i] !== cur[i] || i>=pre.length || i>=cur.length) {
+                return strs[j].substring(0, i)
+            }
+        }
+    }
+    return strs[0]
+};
+```
+
+有点i和j倒过来的感觉，真得仔细想想
 
 
+
+[1556. 千位分隔数](https://leetcode.cn/problems/thousand-separator/) 【简单】🆕
+
+给你一个整数 `n`，请你每隔三位添加点（即 "." 符号）作为千位分隔符，并将结果以字符串格式返回。
+
+```js
+/**
+ * @param {number} n
+ * @return {string}
+ */
+var thousandSeparator = function(n) {
+    let str = n.toString()
+    let res = []
+    for(let i=str.length; i>0; i-=3) {
+        res.unshift(str.substring(i-3, i))
+    }
+    return res.join('.')
+};
+```
+
+这方法真还挺不错的，借助来substring对于负数的处理
+
+
+
+倒计时3天！
 
 
 

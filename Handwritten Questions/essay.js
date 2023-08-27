@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-08-20 20:13:05
- * @LastEditTime: 2023-08-24 21:42:01
+ * @LastEditTime: 2023-08-27 13:31:51
  */
 // 想到啥就写点儿
 
@@ -498,13 +498,93 @@
 // })
 
 // 2023.8.24
-Array.prototype.myConcat = function () {
-  let arr = [...this]
-  arguments = [...arguments]
-  arguments.forEach(argument => {
-    Array.isArray(argument) ? argument.forEach(item => arr.push(item)) : arr.push(argument)
-  })
-  return arr
+// Array.prototype.myConcat = function () {
+//   let arr = [...this]
+//   arguments = [...arguments]
+//   arguments.forEach(argument => {
+//     Array.isArray(argument) ? argument.forEach(item => arr.push(item)) : arr.push(argument)
+//   })
+//   return arr
+// }
+// const newArr = [1, 2].myConcat([1, 2], [4, 5, 9], 7, 5, 6)
+// console.log('newArr', newArr)
+
+// ----------------------------------------------------------------------
+
+// 2023.8.26
+
+// jsonp
+// (function (window, document) {
+//   function jsonp(options) {
+//     const { url, data, callback } = options
+
+//     // url
+//     let params = []
+//     for (let key in data) {
+//       params.push(key + '=' + data[key])
+//     }
+//     url += url.indexOf('?') === -1 ? '?' : '&'
+//     url += params.join('&')
+
+//     // callback
+//     let cbName = 'jsonp' + Math.random().toString().replace('.', '')
+//     url += `&callback=${cbName}`
+
+//     // script
+//     let scriptEle = document.createElement('script')
+//     scriptEle.src = url
+
+//     // window挂载
+//     window[cbName] = function (data) {
+//       callback(data)
+//       document.body.removeChild(scriptEle)
+//     }
+
+//     document.body.appendChild(scriptEle)
+//   }
+
+//   window.$jsonp = jsonp
+
+// })(window, document)
+
+// $jsonp({
+//   url: 'www.example.com',
+//   data: { name: 'ttt' },
+//   callback: function (res) {
+//     console.log('res', res)
+//   }
+// })
+
+// 数组去重
+// let arr = [1, 3, 3, 2, 4, 4, 5, 3, 2, 5, 6]
+
+// let newArr = arr.reduce((pre, cur) => {
+//   if (!pre.includes(cur)) {
+//     pre.push(cur)
+//   }
+//   return pre
+// }, [])
+// console.log('newArr', newArr)
+
+// ----------------------------------------------------------------------
+
+// 2023.8.27
+
+// 手写new
+
+function _new(fn, ...args) {
+  // 基于fn的原型创建一个新对象
+  const obj = Object.create(fn.prototype)
+  // 通过this把对象和属性添加到新对象上，并获取函数的执行结果
+  const res = fn.apply(obj, args)
+  // 如果执行结果有返回值并且是一个对象，返回执行的结果，否则返回新创建的对象
+  return res instanceof Object ? res : obj
 }
-const newArr = [1, 2].myConcat([1, 2], [4, 5, 9], 7, 5, 6)
-console.log('newArr', newArr)
+
+function Person(a, b) {
+  this.a = a
+  this.b = b
+}
+
+const person = _new(Person, 'aa', 'bbb')
+console.log('person', person)
