@@ -5327,7 +5327,79 @@ var thousandSeparator = function(n) {
 
 
 
-倒计时3天！
+# 2023.8.28
+
+[144. 二叉树的前序遍历](https://leetcode.cn/problems/binary-tree-preorder-traversal/) 【简单】
+
+给你二叉树的根节点 `root` ，返回它节点值的 **前序** 遍历。
+
+```js
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {number[]}
+ */
+var preorderTraversal = function(root) {
+    let res = []
+    function dfs(node) {
+        if(node === null) return
+        res.push(node.val)
+        dfs(node.left)
+        dfs(node.right)
+    }
+    dfs(root)
+    return res
+};
+```
+
+
+
+[102. 二叉树的层序遍历](https://leetcode.cn/problems/binary-tree-level-order-traversal/) 【中等】
+
+给你二叉树的根节点 `root` ，返回其节点值的 **层序遍历** 。 （即逐层地，从左到右访问所有节点）。
+
+```js
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {number[][]}
+ */
+var levelOrder = function(root) {
+    let res = []
+    if(root === null) return res
+    let queue = [root]
+    while(queue.length) {
+        let len = queue.length
+        let level = []
+        while(len--) {
+            let cur = queue.shift()
+            level.push(cur.val)
+            cur.left && queue.push(cur.left)
+            cur.right && queue.push(cur.right)
+        }
+        res.push(level)
+    }
+    return res
+};
+```
+
+
+
+倒计时2天！
 
 
 
