@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-08-20 20:13:05
- * @LastEditTime: 2023-08-27 13:31:51
+ * @LastEditTime: 2023-08-30 01:47:09
  */
 // 想到啥就写点儿
 
@@ -572,19 +572,386 @@
 
 // 手写new
 
-function _new(fn, ...args) {
-  // 基于fn的原型创建一个新对象
-  const obj = Object.create(fn.prototype)
-  // 通过this把对象和属性添加到新对象上，并获取函数的执行结果
-  const res = fn.apply(obj, args)
-  // 如果执行结果有返回值并且是一个对象，返回执行的结果，否则返回新创建的对象
-  return res instanceof Object ? res : obj
-}
+// function _new(fn, ...args) {
+//   // 基于fn的原型创建一个新对象
+//   const obj = Object.create(fn.prototype)
+//   // 通过this把对象和属性添加到新对象上，并获取函数的执行结果
+//   const res = fn.apply(obj, args)
+//   // 如果执行结果有返回值并且是一个对象，返回执行的结果，否则返回新创建的对象
+//   return res instanceof Object ? res : obj
+// }
 
-function Person(a, b) {
-  this.a = a
-  this.b = b
-}
+// function Person(a, b) {
+//   this.a = a
+//   this.b = b
+// }
 
-const person = _new(Person, 'aa', 'bbb')
-console.log('person', person)
+// const person = _new(Person, 'aa', 'bbb')
+// console.log('person', person)
+
+// ----------------------------------------------------------------------
+
+// 2023.8.29 💪 review
+
+// 1 - call apply bind
+
+// const Person1 = {
+//   name: 'fff',
+//   sayHi() {
+//     console.log('sayHi', this.name)
+//   }
+// }
+
+// const Person2 = {
+//   name: 'ttt'
+// }
+
+// Person1.sayHi.call(Person2)
+
+// Function.prototype.myCall = function (context = window, ...args) {
+//   if (this === Function.prototype) {
+//     return undefined
+//   }
+//   let fn = Symbol()
+//   context[fn] = this
+//   let result = context[fn](...args)
+//   delete context[fn]
+//   return result
+// }
+
+// Person1.sayHi.myCall(Person2)
+
+// Person1.sayHi.apply(Person2)
+
+// Function.prototype.myApply = function (context = window, args = []) {
+//   if (this === Function.prototype) {
+//     return undefined
+//   }
+//   let fn = Symbol()
+//   context[fn] = this
+//   let result = context[fn](...args)
+//   delete context[fn]
+//   return result
+// }
+
+// Person1.sayHi.myApply(Person2)
+
+// Person1.sayHi.bind(Person2)()
+
+// Function.prototype.myBind = function (context = window, ...args) {
+//   if (this === Function.prototype) {
+//     throw new Error('error')
+//   }
+//   let _this = this
+//   return function F(...args2) {
+//     if (this instanceof F) {
+//       return new _this(...args, ...args2)
+//     } else {
+//       return _this.apply(context, args.concat(args2))
+//     }
+//   }
+// }
+
+// Person1.sayHi.myBind(Person2)()
+
+// 4 - flatten
+
+// const arr = [1, 2, [3, 4, [5, 6], [7, 8]]]
+
+// function flatten(arr, depth) {
+//   return arr.reduce((pre, cur) => {
+//     if (Array.isArray(cur) && depth > 1) {
+//       return pre.concat(flatten(cur, depth - 1))
+//     } else {
+//       return pre.concat(cur)
+//     }
+//   }, [])
+// }
+
+// console.log(flatten(arr, 1))
+
+// 5 - getKeyByValue
+
+// const subjectType = {
+//   'LB': '综合',
+//   'XW': '消委',
+//   'GA': '公安',
+//   'GT': '国土',
+//   'CG': '城管',
+//   'GJJ': '公积金',
+//   'ZH': '综合',
+// }
+
+// function getKeyByValue(map, value, compare = (a, b) => a === b) {
+//   return Object.keys(map).filter(key => compare(value, map[key]))
+// }
+
+// console.log(getKeyByValue(subjectType, '综合'))
+
+// 6 - 柯里化
+
+// function curry(fn, ...args) {
+//   if (args.length >= fn.length) {
+//     return fn(...args)
+//   } else {
+//     return function (...args2) {
+//       return curry(fn, ...args, ...args2)
+//     }
+//   }
+// }
+
+// function sum(a, b, c) {
+//   return a + b + c
+// }
+
+// let currySum = curry(sum)
+
+// console.log(currySum(1)(2)(3))
+
+// 7 - promise
+
+// const promise1 = Promise.resolve(123)
+// console.log('promise1', promise1)
+
+// Promise.myResolve = function (value) {
+//   return new Promise((resolve, reject) => {
+//     if (value instanceof Promise) {
+//       value.then(resolve, reject)
+//     } else {
+//       resolve(value)
+//     }
+//   })
+// }
+
+// const promise2 = Promise.myResolve(123)
+// console.log('promise2', promise2)
+
+// const promise3 = Promise.reject(1213)
+
+// Promise.prototype.catch = function (onRejected) {
+//   return this.then(null, onRejected)
+// }
+
+// Promise.prototype.finally = function (onFinally) {
+//   return this.then(onFinally, onFinally)
+// }
+
+// promise3.catch(reason => {
+//   console.log(reason)
+// })
+
+// promise3.finally(final => {
+//   console.log(final)
+// })
+
+// const promise1 = Promise.resolve(3)
+// const promise2 = 42
+// const promise3 = new Promise((resolve, reject) => {
+//   setTimeout(resolve, 1000, 'foo')
+// })
+
+// Promise.race([promise1, promise2, promise3]).then(values => {
+//   console.log(values)
+// })
+
+// Promise.myRace = function (promises) {
+//   return new Promise((resolve, reject) => {
+//     promises.forEach((promise) => {
+//       Promise.resolve(promise).then(
+//         value => {
+//           resolve(value)
+//         },
+//         reason => {
+//           reject(reason)
+//         }
+//       )
+//     })
+//   })
+// }
+
+// Promise.myRace([promise1, promise2, promise3]).then(values => {
+//   console.log(values)
+// })
+
+// // const promise4 = Promise.reject(3)
+
+// Promise.all([promise1, promise2, promise3]).then(values => {
+//   console.log(values)
+// })
+
+// Promise.myAll = function (promises) {
+//   let res = [], count = 0
+//   return new Promise((resolve, reject) => {
+//     promises.forEach((promise, index) => {
+//       Promise.resolve(promise).then(
+//         value => {
+//           count++
+//           res[index] = value
+//           if (count === promises.length) {
+//             resolve(res)
+//           }
+//         },
+//         reason => {
+//           reject(reason)
+//         }
+//       )
+//     })
+//   })
+// }
+
+// Promise.myAll([promise1, promise2, promise3]).then(values => {
+//   console.log(values)
+// })
+
+// Promise.allSettled([promise1, promise2, promise3]).then(values => {
+//   console.log(values)
+// })
+
+// Promise.myAllSettled = function (promises) {
+//   let res = [], count = 0
+//   return new Promise((resolve, reject) => {
+//     promises.forEach((promise, index) => {
+//       Promise.resolve(promise).then(
+//         value => {
+//           count++
+//           res[index] = {
+//             status: 'fulfilled',
+//             value
+//           }
+//           if (count === promises.length) {
+//             resolve(res)
+//           }
+//         },
+//         reason => {
+//           count++
+//           res[index] = {
+//             status: 'rejected',
+//             reason
+//           }
+//           if (count === promises.length) {
+//             resolve(res)
+//           }
+//         }
+//       )
+//     })
+//   })
+// }
+
+// Promise.myAllSettled([promise1, promise2, promise3]).then(values => {
+//   console.log(values)
+// })
+
+// 8 - promisify
+
+// const fs = require('fs')
+// fs.readFile('./Handwritten Questions/02-call.js', (err, buf) => {
+//   console.log(buf.toString('utf-8'))
+// })
+
+// const util = require('util')
+// const readFilePromise = util.promisify(fs.readFile)
+// readFilePromise('./Handwritten Questions/02-call.js', 'utf-8').then(value => {
+//   console.log(value)
+// })
+
+// util.myPromisify = function (fn) {
+//   return function (...args) {
+//     return new Promise((resolve, reject) => {
+//       fn(...args, (err, buf) => {
+//         if (err) {
+//           reject(err)
+//           return
+//         } else {
+//           resolve(buf)
+//         }
+//       })
+//     })
+//   }
+// }
+
+// const readFilePromise = util.myPromisify(fs.readFile)
+// readFilePromise('./Handwritten Questions/02-call.js', 'utf-8').then(value => {
+//   console.log(value)
+// })
+
+// 9 - map
+
+// Array.prototype.myMap = function (fn, thisArg) {
+//   let res = []
+//   if (fn instanceof Function === false) {
+//     throw new Error('function error')
+//   }
+//   if ([undefined, null].includes(this)) {
+//     throw new Error('this error')
+//   }
+//   let arr = Object(this)
+//   for (let i = 0; i < arr.length; i++) {
+//     res[i] = fn.call(thisArg, arr[i], i, arr)
+//   }
+//   return res
+// }
+
+// const array1 = [1, 4, 9, 16]
+
+// const map1 = array1.myMap((x) => x * 2)
+
+// console.log(map1)
+
+// 10 - sleep
+
+// async function sleep(delay) {
+//   await new Promise((resolve, reject) => {
+//     setTimeout(resolve, delay)
+//   })
+// }
+
+// sleep(1000).then(() => console.log(222))
+
+// 11 - concat
+
+// Array.prototype.myConcat = function () {
+//   let arr = [...this]
+//   arguments = [...arguments]
+//   arguments.forEach(argument => Array.isArray(argument) ? argument.forEach(item => arr.push(item)) : arr.push(argument))
+//   return arr
+// }
+
+// const newArr = [1, 2].myConcat([1, 2], [4, 5, 9], 7, 5, 6)
+// console.log('newArr', newArr)
+
+// 12 - “a=1&b=2“ 转换为 {a: 1, b: 2}
+
+// const str = 'a=1&b=2'
+
+// function formatToObject(str) {
+//   let obj = {}
+//   str.split('&').forEach(item => {
+//     const [key, value] = item.split('=')
+//     obj[key] = value
+//   })
+//   return obj
+// }
+// console.log('formatToObject', formatToObject(str))
+
+// 13 - new
+
+// function Person(a, b) {
+//   this.a = a
+//   this.b = b
+//   this.get = function () {
+//     console.log(`${this.a} + ${this.b}`)
+//   }
+// }
+
+// const alice = new Person('a', 'l')
+// alice.get()
+
+// function _new(fn, ...args) {
+//   const obj = Object.create(fn.prototype)
+//   const result = fn.apply(obj, args)
+//   return result instanceof Object ? result : obj
+// }
+
+// const bob = _new(Person, 'b', 'o')
+// bob.get()
+
