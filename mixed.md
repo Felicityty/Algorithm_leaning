@@ -5399,7 +5399,118 @@ var levelOrder = function(root) {
 
 
 
-倒计时2天！
+# 2023.9.1
+
+[496. 下一个更大元素 I](https://leetcode.cn/problems/next-greater-element-i/) 【简单】
+
+`nums1` 中数字 `x` 的 **下一个更大元素** 是指 `x` 在 `nums2` 中对应位置 **右侧** 的 **第一个** 比 `x` 大的元素。
+
+给你两个 **没有重复元素** 的数组 `nums1` 和 `nums2` ，下标从 **0** 开始计数，其中`nums1` 是 `nums2` 的子集。
+
+对于每个 `0 <= i < nums1.length` ，找出满足 `nums1[i] == nums2[j]` 的下标 `j` ，并且在 `nums2` 确定 `nums2[j]` 的 **下一个更大元素** 。如果不存在下一个更大元素，那么本次查询的答案是 `-1` 。
+
+返回一个长度为 `nums1.length` 的数组 `ans` 作为答案，满足 `ans[i]` 是如上所述的 **下一个更大元素** 。
+
+```js
+/**
+ * @param {number[]} nums1
+ * @param {number[]} nums2
+ * @return {number[]}
+ */
+var nextGreaterElement = function (nums1, nums2) {
+  let nums2Res = getNext(nums2)
+  console.log('nums2Res', nums2Res)
+  let map = new Map()
+  for (let i = 0; i < nums2.length; i++) {
+    map.set(nums2[i], nums2Res[i])
+  }
+  let res = new Array(nums1.length)
+  for (let i = 0; i < nums1.length; i++) {
+    res[i] = map.get(nums1[i])
+  }
+  return res
+};
+
+function getNext(arr) {
+  let res = [], stack = []
+  for (let i = arr.length - 1; i >= 0; i--) {
+    while (stack.length && stack[stack.length - 1] <= arr[i]) {
+      stack.pop()
+    }
+    res[i] = stack.length === 0 ? -1 : stack[stack.length - 1]
+    stack.push(arr[i])
+  }
+  return res
+}
+```
+
+单调栈还是得想想
+
+
+
+[116. 填充每个节点的下一个右侧节点指针](https://leetcode.cn/problems/populating-next-right-pointers-in-each-node/) 【中等】
+
+给定一个 **完美二叉树** ，其所有叶子节点都在同一层，每个父节点都有两个子节点。二叉树定义如下：
+
+```
+struct Node {
+  int val;
+  Node *left;
+  Node *right;
+  Node *next;
+}
+```
+
+填充它的每个 next 指针，让这个指针指向其下一个右侧节点。如果找不到下一个右侧节点，则将 next 指针设置为 `NULL`。
+
+初始状态下，所有 next 指针都被设置为 `NULL`。
+
+```js
+/**
+ * // Definition for a Node.
+ * function Node(val, left, right, next) {
+ *    this.val = val === undefined ? null : val;
+ *    this.left = left === undefined ? null : left;
+ *    this.right = right === undefined ? null : right;
+ *    this.next = next === undefined ? null : next;
+ * };
+ */
+
+/**
+ * @param {Node} root
+ * @return {Node}
+ */
+var connect = function(root) {
+    if(root === null) {
+        return null
+    }
+    let path = [root]
+    while(path.length) {
+        let len = path.length
+        let pre = null
+        for(let i=0; i<len; i++) {
+            let cur = path.shift()
+            if(pre !== null) {
+                pre.next = cur
+            }
+            pre = cur
+            if(cur.left !== null) {
+                path.push(cur.left)
+            }
+            if(cur.right !== null) {
+                path.push(cur.right)
+            }
+        }
+    }
+    return root
+};
+```
+
+哈哈想跟面试官说感谢遇见
+
+九月啦 重新开始呗 冲
+
+
 
 
 
