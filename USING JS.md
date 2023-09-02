@@ -1196,6 +1196,8 @@ var nextGreater = function (nums) {
 }
 ```
 
+只有每次来个特别高的人，才会把栈的元素清一遍
+
 
 
 #### 2、下一个更大元素
@@ -1205,6 +1207,40 @@ var nextGreater = function (nums) {
 我们的思路就是找出nums2的结果数组，然后把nums1的每个数找到nums2的对应下标，从而在得出的结果数组中找出对应的数，重新组成一个数组
 
 [496.下一个更大元素 I](https://leetcode.cn/problems/next-greater-element-i/)
+
+```js
+/**
+ * @param {number[]} nums1
+ * @param {number[]} nums2
+ * @return {number[]}
+ */
+var nextGreaterElement = function(nums1, nums2) {
+    // 有个条件很重要 nums1是nums2的子集 所以求的还是nums2
+    let stack = getNext(nums2)
+    let map = new Map()
+    let res = new Array(nums1.length)
+    for(let i=0; i<nums2.length; i++) {
+        map.set(nums2[i], stack[i])
+    }
+    for(i=0; i<nums1.length; i++) {
+        res[i] = map.get(nums1[i])
+    }
+    return res
+};
+
+function getNext(nums) {
+    let res = [], stack = []
+    for(let i=nums.length-1; i>=0; i--) {
+        // 高个来了会挡住后面的矮个 所以清一清
+        while(!!stack.length && stack[stack.length-1] <= nums[i]) {
+            stack.pop()
+        }
+        res[i] = !!stack.length ? stack[stack.length-1] : -1
+        stack.push(nums[i])
+    }
+    return res
+}
+```
 
 
 
@@ -1232,9 +1268,66 @@ var nextGreater = function (nums) {
 arr.slice(0, n)
 ```
 
+```js
+/**
+ * @param {number[]} nums
+ * @return {number[]}
+ */
+var nextGreaterElements = function(nums) {
+    // 思路很好想 but 在nums后面补一段不用去真的操作数组
+    let res= [], stack = []
+    let len = nums.length
+    for(let i=len*2-1; i>=0; i--) {
+        while(!!stack.length && stack[stack.length-1]<=nums[i%len]) {
+            stack.pop()
+        }
+        res[i] = !!stack.length ? stack[stack.length-1] : -1
+        stack.push(nums[i%len])
+    }
+    return res.slice(0, len)
+};
+```
+
 
 
 [316.去除重复字母](https://leetcode.cn/problems/remove-duplicate-letters/)
+
+```js
+/**
+ * @param {string} s
+ * @return {string}
+ */
+var removeDuplicateLetters = function(s) {
+     /*
+      计数器 count 感觉这里用map更好
+      第一次遍历 拿到每个元素出现的次数
+      第二次遍历
+      inMap 维护当前数组中是否有这个元素
+    */
+    let stack = []
+    let map = new Map(), inMap = new Map()
+    for (let i = 0; i < s.length; i++) {
+        map.set(s[i], map.has(s[i]) ? map.get(s[i]) + 1 : 1)
+    }
+    console.log('map', map)
+    for (let i = 0; i < s.length; i++) {
+        let c = s[i]
+        map.set(c, map.get(c) - 1)
+
+        if (inMap.get(c)) continue
+
+        while (!!stack.length && stack[stack.length - 1] > c) {
+        if (map.get(stack[stack.length - 1]) === 0) {
+            break
+        }
+        if (map.has(c)) inMap.set(stack.pop(), false)
+        }
+        inMap.set(c, true)
+        stack.push(c)
+    }
+    return stack.join('')
+};
+```
 
 
 

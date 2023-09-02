@@ -5401,7 +5401,7 @@ var levelOrder = function(root) {
 
 # 2023.9.1
 
-[496. 下一个更大元素 I](https://leetcode.cn/problems/next-greater-element-i/) 【简单】
+[496. 下一个更大元素 I](https://leetcode.cn/problems/next-greater-element-i/) 【简单】✅
 
 `nums1` 中数字 `x` 的 **下一个更大元素** 是指 `x` 在 `nums2` 中对应位置 **右侧** 的 **第一个** 比 `x` 大的元素。
 
@@ -5417,34 +5417,33 @@ var levelOrder = function(root) {
  * @param {number[]} nums2
  * @return {number[]}
  */
-var nextGreaterElement = function (nums1, nums2) {
-  let nums2Res = getNext(nums2)
-  console.log('nums2Res', nums2Res)
-  let map = new Map()
-  for (let i = 0; i < nums2.length; i++) {
-    map.set(nums2[i], nums2Res[i])
-  }
-  let res = new Array(nums1.length)
-  for (let i = 0; i < nums1.length; i++) {
-    res[i] = map.get(nums1[i])
-  }
-  return res
+var nextGreaterElement = function(nums1, nums2) {
+    // 有个条件很重要 nums1是nums2的子集 所以求的还是nums2
+    let stack = getNext(nums2)
+    let map = new Map()
+    let res = new Array(nums1.length)
+    for(let i=0; i<nums2.length; i++) {
+        map.set(nums2[i], stack[i])
+    }
+    for(i=0; i<nums1.length; i++) {
+        res[i] = map.get(nums1[i])
+    }
+    return res
 };
 
-function getNext(arr) {
-  let res = [], stack = []
-  for (let i = arr.length - 1; i >= 0; i--) {
-    while (stack.length && stack[stack.length - 1] <= arr[i]) {
-      stack.pop()
+function getNext(nums) {
+    let res = [], stack = []
+    for(let i=nums.length-1; i>=0; i--) {
+        // 高个来了会挡住后面的矮个 所以清一清
+        while(!!stack.length && stack[stack.length-1] <= nums[i]) {
+            stack.pop()
+        }
+        res[i] = !!stack.length ? stack[stack.length-1] : -1
+        stack.push(nums[i])
     }
-    res[i] = stack.length === 0 ? -1 : stack[stack.length - 1]
-    stack.push(arr[i])
-  }
-  return res
+    return res
 }
 ```
-
-单调栈还是得想想
 
 
 
@@ -5506,11 +5505,105 @@ var connect = function(root) {
 };
 ```
 
-哈哈想跟面试官说感谢遇见
-
-九月啦 重新开始呗 冲
 
 
+# 2023.9.2
+
+[739. 每日温度](https://leetcode.cn/problems/daily-temperatures/) 【中等】
+
+给定一个整数数组 `temperatures` ，表示每天的温度，返回一个数组 `answer` ，其中 `answer[i]` 是指对于第 `i` 天，下一个更高温度出现在几天后。如果气温在这之后都不会升高，请在该位置用 `0` 来代替。
+
+```js
+/**
+ * @param {number[]} temperatures
+ * @return {number[]}
+ */
+var dailyTemperatures = function(temperatures) {
+    // 单调栈储存下一个更大元素的下标
+    let res = [], stack = []
+    for(let i=temperatures.length-1; i>=0; i--) {
+        while(!!stack.length && temperatures[stack[stack.length-1]] <= temperatures[i]) {
+            stack.pop()
+        }
+        res[i] = !!stack.length ?  stack[stack.length-1]-i : 0
+        stack.push(i)
+    }
+    return res
+};
+```
+
+
+
+[503. 下一个更大元素 II](https://leetcode.cn/problems/next-greater-element-ii/) 【中等】
+
+给定一个循环数组 `nums` （ `nums[nums.length - 1]` 的下一个元素是 `nums[0]` ），返回 *`nums` 中每个元素的 **下一个更大元素*** 。
+
+数字 `x` 的 **下一个更大的元素** 是按数组遍历顺序，这个数字之后的第一个比它更大的数，这意味着你应该循环地搜索它的下一个更大的数。如果不存在，则输出 `-1` 。
+
+```js
+/**
+ * @param {number[]} nums
+ * @return {number[]}
+ */
+var nextGreaterElements = function(nums) {
+    // 思路很好想 but 在nums后面补一段不用去真的操作数组
+    let res= [], stack = []
+    let len = nums.length
+    for(let i=len*2-1; i>=0; i--) {
+        while(!!stack.length && stack[stack.length-1]<=nums[i%len]) {
+            stack.pop()
+        }
+        res[i] = !!stack.length ? stack[stack.length-1] : -1
+        stack.push(nums[i%len])
+    }
+    return res.slice(0, len)
+};
+```
+
+
+
+[316. 去除重复字母](https://leetcode.cn/problems/remove-duplicate-letters/) 【中等】↩️
+
+给你一个字符串 `s` ，请你去除字符串中重复的字母，使得每个字母只出现一次。需保证 **返回结果的字典序最小**（要求不能打乱其他字符的相对位置）。
+
+```js
+/**
+ * @param {string} s
+ * @return {string}
+ */
+var removeDuplicateLetters = function(s) {
+     /*
+      计数器 count 感觉这里用map更好
+      第一次遍历 拿到每个元素出现的次数
+      第二次遍历
+      inMap 维护当前数组中是否有这个元素
+    */
+    let stack = []
+    let map = new Map(), inMap = new Map()
+    for (let i = 0; i < s.length; i++) {
+        map.set(s[i], map.has(s[i]) ? map.get(s[i]) + 1 : 1)
+    }
+    console.log('map', map)
+    for (let i = 0; i < s.length; i++) {
+        let c = s[i]
+        map.set(c, map.get(c) - 1)
+
+        if (inMap.get(c)) continue
+
+        while (!!stack.length && stack[stack.length - 1] > c) {
+        if (map.get(stack[stack.length - 1]) === 0) {
+            break
+        }
+        if (map.has(c)) inMap.set(stack.pop(), false)
+        }
+        inMap.set(c, true)
+        stack.push(c)
+    }
+    return stack.join('')
+};
+```
+
+这题妥妥地困难吧😱
 
 
 
