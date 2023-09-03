@@ -1,4 +1,4 @@
-# leJS的刷题路
+# JS的刷题路
 
 # 学剑篇
 
@@ -47,6 +47,30 @@
 [1109.航班预订统计](https://leetcode.cn/problems/corporate-flight-bookings/)
 
 就是先定义一个差值数组，所有加的操作先在差值数组中进行，再利用这个差值数组通过第一项，继续推出后面的所有数
+
+```js
+/**
+ * @param {number[][]} bookings
+ * @param {number} n
+ * @return {number[]}
+ */
+var corpFlightBookings = function(bookings, n) {
+    // 上差分数组
+    let diff = new Array(n).fill(0)
+    for(let booking of bookings) {
+        diff[booking[0]-1] += booking[2]
+        if(booking[1] < n) {
+            diff[booking[1]] -= booking[2]
+        }
+    }
+    for(let i=1; i<n; i++) {
+        diff[i] += diff[i-1]
+    }
+    return diff
+};
+```
+
+
 
 [1094.拼车](https://leetcode.cn/problems/car-pooling/)
 

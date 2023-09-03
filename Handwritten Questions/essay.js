@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-08-20 20:13:05
- * @LastEditTime: 2023-08-30 01:47:09
+ * @LastEditTime: 2023-09-03 17:54:32
  */
 // 想到啥就写点儿
 
@@ -955,3 +955,21 @@
 // const bob = _new(Person, 'b', 'o')
 // bob.get()
 
+// ----------------------------------------------------------------------
+
+// 2023.9.3
+
+let initArr = [123, "webank", [1, 2, 3], "123", { a: 1 }, "tencent", 123, [1, 2, 3], { a: 2 }]
+function deal(arr) {
+  let map = new Map()
+  let newArr = []
+  for (let i = 0; i < arr.length; i++) {
+    let x = typeof arr[i] == 'object' ? arr[i].toString() : arr[i]
+    if (map.get(x)) continue    //map里存在了,不操作
+    map.set(x, 1)
+    newArr.push(arr[i])
+  }
+  return newArr
+}
+let newArr = deal(initArr)
+console.log(newArr)
