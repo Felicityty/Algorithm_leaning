@@ -2372,6 +2372,42 @@ var isPalindorme = function(str, left, right) {
 
 
 
+#### VS 最长回文字串
+
+[5. 最长回文子串](https://leetcode.cn/problems/longest-palindromic-substring/) 【中等】
+
+给你一个字符串 `s`，找到 `s` 中最长的回文子串。
+
+如果字符串的反序与原始字符串相同，则该字符串称为回文字符串。
+
+```js
+/**
+ * @param {string} s
+ * @return {string}
+ */
+var longestPalindrome = function(s) {
+    // 中心扩散
+    let res = ''
+    for(let i=0; i<s.length; i++) {
+        let s1 = getPalindrome(s, i, i)
+        let s2 = getPalindrome(s, i, i+1)
+        res = res.length>s1.length ? res : s1
+        res = res.length>s2.length ? res : s2
+    }
+    return res
+
+    function getPalindrome(s, l , r) {
+        while(l>=0 && r<s.length && s.charAt(l) === s.charAt(r)) {
+            l--
+            r++
+        }
+        return s.substring(l+1, r)
+    }
+};
+```
+
+
+
 ### 7、复原IP地址
 
 [93.复原IP地址](https://leetcode.cn/problems/restore-ip-addresses/)
@@ -4834,6 +4870,8 @@ var twoSum = function(nums, target) {
 ```
 
 map.get() 找不到 返回undefined
+
+这题不能用双指针的原因：返回的是下标，所以不能排序
 
 
 

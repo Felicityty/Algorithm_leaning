@@ -5607,3 +5607,276 @@ var removeDuplicateLetters = function(s) {
 
 
 
+# 2023.9.4
+
+[5. 最长回文子串](https://leetcode.cn/problems/longest-palindromic-substring/) 【中等】
+
+给你一个字符串 `s`，找到 `s` 中最长的回文子串。
+
+如果字符串的反序与原始字符串相同，则该字符串称为回文字符串。
+
+```js
+/**
+ * @param {string} s
+ * @return {string}
+ */
+var longestPalindrome = function(s) {
+    // 中心扩散
+    let res = ''
+    for(let i=0; i<s.length; i++) {
+        let s1 = getPalindrome(s, i, i)
+        let s2 = getPalindrome(s, i, i+1)
+        res = res.length>s1.length ? res : s1
+        res = res.length>s2.length ? res : s2
+    }
+    return res
+
+    function getPalindrome(s, l , r) {
+        while(l>=0 && r<s.length && s.charAt(l) === s.charAt(r)) {
+            l--
+            r++
+        }
+        return s.substring(l+1, r)
+    }
+};
+```
+
+
+
+# 2023.9.5
+
+[7. 整数反转](https://leetcode.cn/problems/reverse-integer/) 【中等】🆕
+
+给你一个 32 位的有符号整数 `x` ，返回将 `x` 中的数字部分反转后的结果。
+
+如果反转后整数超过 32 位的有符号整数的范围 `[−231, 231 − 1]` ，就返回 0。
+
+**假设环境不允许存储 64 位整数（有符号或无符号）。**
+
+```js
+/**
+ * @param {number} x
+ * @return {number}
+ */
+var reverse = function(x) {
+    let res = 0
+    while(x !== 0) {
+        const temp = x % 10
+        x = parseInt(x / 10)
+        res = res * 10 + temp
+        if(res < Math.pow(-2, 31) || res > Math.pow(2, 31)-1) {
+            return 0
+        }
+    }
+    return res
+};
+```
+
+parseInt 或 ~~ 浮点转整
+
+
+
+[35. 搜索插入位置](https://leetcode.cn/problems/search-insert-position/) 【简单】
+
+给定一个排序数组和一个目标值，在数组中找到目标值，并返回其索引。如果目标值不存在于数组中，返回它将会被按顺序插入的位置。
+
+请必须使用时间复杂度为 `O(log n)` 的算法。
+
+```js
+/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number}
+ */
+var searchInsert = function(nums, target) {
+    // 二分 寻找左边界
+    let left = 0, right = nums.length-1, mid
+    while(left <= right) {
+        mid = Math.floor((left + right) / 2)
+        if(nums[mid] >= target) {
+            right = mid - 1
+        } else {
+            left = mid + 1
+        }
+    }
+    return left
+};
+```
+
+
+
+[15. 三数之和](https://leetcode.cn/problems/3sum/) 【中等】🆕
+
+给你一个整数数组 `nums` ，判断是否存在三元组 `[nums[i], nums[j], nums[k]]` 满足 `i != j`、`i != k` 且 `j != k` ，同时还满足 `nums[i] + nums[j] + nums[k] == 0` 。请
+
+你返回所有和为 `0` 且不重复的三元组。
+
+**注意：**答案中不可以包含重复的三元组。
+
+```js
+/**
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+var threeSum = function(nums) {
+    let res = [], len = nums.length
+    nums.sort((a, b) => a - b)
+    for(let i=0; i<len-2; i++) {
+        let temp = nums[i]
+        let left = i+1, right = len-1
+        if(i>0 && nums[i] === nums[i-1]) continue
+        while(left < right) {
+            let sum = temp + nums[left] + nums[right]
+            if(sum === 0) {
+                res.push([temp, nums[left], nums[right]])
+                while(left<right && nums[left] === nums[left+1]) left++
+                while(left<right && nums[right] === nums[left-1]) right--
+                left++
+                right--
+            } else if(sum < 0) {
+                left++
+            } else {
+                right--
+            }
+        }
+    }
+    return res
+};
+```
+
+
+
+[1. 两数之和](https://leetcode.cn/problems/two-sum/) 【简单】🆕
+
+给定一个整数数组 `nums` 和一个整数目标值 `target`，请你在该数组中找出 **和为目标值** *`target`* 的那 **两个** 整数，并返回它们的数组下标。
+
+你可以假设每种输入只会对应一个答案。但是，数组中同一个元素在答案里不能重复出现。
+
+你可以按任意顺序返回答案。
+
+```js
+/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number[]}
+ */
+var twoSum = function(nums, target) {
+    let map = new Map()
+    for(let i=0; i<nums.length; i++) {
+        let curNum = nums[i], targetNum = target - curNum
+        if(map.has(targetNum)) {
+            return [map.get(targetNum), i]
+        } else {
+            map.set(nums[i], i)
+        }
+    }
+    return
+};
+```
+
+
+
+[整数拆分](https://www.nowcoder.com/exam/test/73187083/detail?pid=50570201&examPageSource=Company&testCallback=https%3A%2F%2Fwww.nowcoder.com%2Fexam%2Fcompany&testclass=%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91) 🆕
+
+a+b=n  && a*b%3=0 还挺巧妙
+
+```js
+const rl = require("readline").createInterface({ input: process.stdin });
+var iter = rl[Symbol.asyncIterator]();
+const readline = async () => (await iter.next()).value;
+
+void async function () {
+    // Write your code here
+    let n = await readline()
+    if(n % 3 === 0) {
+        console.log(n/3-1)
+    } else {
+        console.log(Math.floor(n/3)*2)
+    }
+}()
+```
+
+
+
+[因子计算](https://www.nowcoder.com/exam/test/73187083/detail?pid=50570201&examPageSource=Company&testCallback=https%3A%2F%2Fwww.nowcoder.com%2Fexam%2Fcompany&testclass=%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91) 🆕
+
+两个正整数*a*和*b*，求*a*∗*b*有哪些因子
+
+```js
+const rl = require("readline").createInterface({ input: process.stdin });
+var iter = rl[Symbol.asyncIterator]();
+const readline = async () => (await iter.next()).value;
+
+void async function () {
+    // Write your code here
+    let a, b
+    while(line = await readline()){
+        let tokens = line.split(' ');
+        a = parseInt(tokens[0]);
+        b = parseInt(tokens[1]);
+    }
+    function getNums(num) {
+        let res = []
+        for(i=1; i*i <= num; i++) {
+            if(num % i === 0) {
+                res.push(i)
+                res.push(num / i)
+            }
+        }
+        return res
+    }
+
+    let aArr = getNums(a)
+    let bArr = getNums(b)
+    let set = new Set()
+
+    for(let m of aArr) {
+        for(let n of bArr) {
+            set.add(m*n)
+        }
+    }
+
+    let res = Array.from(set)
+    res.sort((a,b) => a-b)
+    console.log(res.length)
+    console.log(res.join(' '))
+}()
+```
+
+
+
+[数组操作](https://www.nowcoder.com/exam/test/73187083/detail?pid=50570201&examPageSource=Company&testCallback=https%3A%2F%2Fwww.nowcoder.com%2Fexam%2Fcompany&testclass=%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91) 🆕
+
+```js
+const rl = require("readline").createInterface({ input: process.stdin });
+var iter = rl[Symbol.asyncIterator]();
+const readline = async () => (await iter.next()).value;
+
+void async function () {
+    // Write your code here
+    let [n, k] = (await readline()).split(' ').map(Number)
+    const nums = (await readline()).split(' ').map(Number)
+    let add = 0, sub = 0, sum = 0
+    while(k--) {
+        const [operation, x] = (await readline()).split(' ').map(Number)
+        if(operation === 1) {
+            add += x
+        } else {
+            if(x > add) {
+                add = 0
+                sub += x-add
+            } else {
+                add -= x
+            }
+        }
+    }
+    for(let i=0; i<n; i++) {
+        nums[i] = Math.max(nums[i] - sub, 0)
+        sum = (sum + add + nums[i]) % (Math.pow(10, 9)+7)
+    }
+    console.log(sum)
+}()
+```
+
+有点差分的感觉
+
