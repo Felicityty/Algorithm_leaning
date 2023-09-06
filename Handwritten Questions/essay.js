@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-08-20 20:13:05
- * @LastEditTime: 2023-09-03 17:54:32
+ * @LastEditTime: 2023-09-06 16:44:19
  */
 // 想到啥就写点儿
 
@@ -959,17 +959,78 @@
 
 // 2023.9.3
 
-let initArr = [123, "webank", [1, 2, 3], "123", { a: 1 }, "tencent", 123, [1, 2, 3], { a: 2 }]
-function deal(arr) {
-  let map = new Map()
-  let newArr = []
-  for (let i = 0; i < arr.length; i++) {
-    let x = typeof arr[i] == 'object' ? arr[i].toString() : arr[i]
-    if (map.get(x)) continue    //map里存在了,不操作
-    map.set(x, 1)
-    newArr.push(arr[i])
+// let initArr = [123, "webank", [1, 2, 3], "123", { a: 1 }, "tencent", 123, [1, 2, 3], { a: 2 }]
+// function deal(arr) {
+//   let map = new Map()
+//   let newArr = []
+//   for (let i = 0; i < arr.length; i++) {
+//     let x = typeof arr[i] == 'object' ? arr[i].toString() : arr[i]
+//     if (map.get(x)) continue    //map里存在了,不操作
+//     map.set(x, 1)
+//     newArr.push(arr[i])
+//   }
+//   return newArr
+// }
+// let newArr = deal(initArr)
+// console.log(newArr)
+
+// ----------------------------------------------------------------------
+
+// 2023.9.6
+
+const Person1 = {
+  name: 'aaaa',
+  sayHi: function () {
+    console.log('hey', this.name)
   }
-  return newArr
 }
-let newArr = deal(initArr)
-console.log(newArr)
+const Person2 = {
+  name: 'bbbb'
+}
+// Person1.sayHi.call(Person2)
+
+// Function.prototype.myCall = function (context = window, ...args) {
+//   if (this === Function.prototype) {
+//     return undefined
+//   }
+//   let fn = Symbol()
+//   context[fn] = this
+//   const res = context[fn](...args)
+//   delete context[fn]
+//   return res
+// }
+
+// Person1.sayHi.myCall(Person2)
+
+// Person1.sayHi.apply(Person2)
+
+// Function.prototype.myApply = function (context = window, args = []) {
+//   if (this === Function.prototype) {
+//     return undefined
+//   }
+//   let fn = Symbol()
+//   context[fn] = this
+//   const res = context[fn](...args)
+//   delete context[fn]
+//   return res
+// }
+
+// Person1.sayHi.myApply(Person2)
+
+// Person1.sayHi.bind(Person2)()
+
+// Function.prototype.myBind = function (context = window, ...args) {
+//   if (this === Function.prototype) {
+//     return undefined
+//   }
+//   let _this = this
+//   return function F(...args2) {
+//     if (_this instanceof F) {
+//       return new _this(...args, ...args2)
+//     } else {
+//       return _this.apply(context, args.concat(args2))
+//     }
+//   }
+// }
+
+// Person1.sayHi.myBind(Person2)()

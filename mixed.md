@@ -5880,3 +5880,131 @@ void async function () {
 
 有点差分的感觉
 
+
+
+# 2023.9.6
+
+[187. 重复的DNA序列](https://leetcode.cn/problems/repeated-dna-sequences/) 【中等】
+
+**DNA序列** 由一系列核苷酸组成，缩写为 `'A'`, `'C'`, `'G'` 和 `'T'`.。
+
+- 例如，`"ACGAATTCCG"` 是一个 **DNA序列** 。
+
+在研究 **DNA** 时，识别 DNA 中的重复序列非常有用。
+
+给定一个表示 **DNA序列** 的字符串 `s` ，返回所有在 DNA 分子中出现不止一次的 **长度为 `10`** 的序列(子字符串)。你可以按 **任意顺序** 返回答案。
+
+```js
+/**
+ * @param {string} s
+ * @return {string[]}
+ */
+var findRepeatedDnaSequences = function(s) {
+    let res = new Set(), set = new Set()
+    let len = s.length
+    for(let i=0; i<=len-10; i++) {
+        let cur = s.slice(i, i+10)
+        if(set.has(cur)) {
+            res.add(cur)
+        } else {
+            set.add(cur)
+        }
+    }
+    return Array.from(res)
+};
+```
+
+
+
+[165. 比较版本号](https://leetcode.cn/problems/compare-version-numbers/) 【中等】
+
+给你两个版本号 `version1` 和 `version2` ，请你比较它们。
+
+版本号由一个或多个修订号组成，各修订号由一个 `'.'` 连接。每个修订号由 **多位数字** 组成，可能包含 **前导零** 。每个版本号至少包含一个字符。修订号从左到右编号，下标从 0 开始，最左边的修订号下标为 0 ，下一个修订号下标为 1 ，以此类推。例如，`2.5.33` 和 `0.1` 都是有效的版本号。
+
+比较版本号时，请按从左到右的顺序依次比较它们的修订号。比较修订号时，只需比较 **忽略任何前导零后的整数值** 。也就是说，修订号 `1` 和修订号 `001` **相等** 。如果版本号没有指定某个下标处的修订号，则该修订号视为 `0` 。例如，版本 `1.0` 小于版本 `1.1` ，因为它们下标为 `0` 的修订号相同，而下标为 `1` 的修订号分别为 `0` 和 `1` ，`0 < 1` 。
+
+返回规则如下：
+
+- 如果 `*version1* > *version2*` 返回 `1`，
+- 如果 `*version1* < *version2*` 返回 `-1`，
+- 除此之外返回 `0`。
+
+```js
+/**
+ * @param {string} version1
+ * @param {string} version2
+ * @return {number}
+ */
+var compareVersion = function(version1, version2) {
+    let arr1 = version1.split('.').map(Number)
+    let arr2 = version2.split('.').map(Number)
+    let m = arr1.length, n = arr2.length
+    let i = 0, j = 0
+    while(i<m && j<n) {
+        if(arr1[i] === arr2[j]) {
+            i++
+            j++
+        } else if(arr1[i] < arr2[j]) {
+            return -1
+        } else {
+            return 1
+        }
+    }
+    while(i<m) {
+        if(arr1[i] > 0) {
+            return 1
+        } else {
+            i++
+        }
+    }
+    while(j<n) {
+        if(arr2[j] > 0) {
+            return -1
+        } else {
+            j++
+        }
+    }
+    return 0
+};
+```
+
+
+
+[698. 划分为k个相等的子集](https://leetcode.cn/problems/partition-to-k-equal-sum-subsets/) 【中等】
+
+给定一个整数数组 `nums` 和一个正整数 `k`，找出是否有可能把这个数组分成 `k` 个非空子集，其总和都相等。
+
+```js
+var canPartitionKSubsets = function (nums, k) {
+  if (k > nums.length) return false
+  nums.sort((a, b) => b - a)
+  console.log(nums)
+  let sum = nums.reduce((a, b) => a + b)
+  if (sum % k !== 0) {
+    return false
+  }
+  let target = sum / k
+  let buckets = new Array(k).fill(0)
+  function backTracking(startIndex, buckets) {
+    if (startIndex === nums.length) {
+      for (let bucket of buckets) {
+        return bucket === target ? true : false
+      }
+    }
+    for (let i = 0; i < k; i++) {
+      if (buckets[i] + nums[startIndex] > target) continue
+      buckets[i] += nums[startIndex]
+      if (backTracking(startIndex + 1, buckets)) return true
+      buckets[i] -= nums[startIndex]
+    }
+    return false
+  }
+  return backTracking(0, buckets)
+};
+```
+
+回溯 梦回大二下🥹
+
+
+
