@@ -6008,3 +6008,91 @@ var canPartitionKSubsets = function (nums, k) {
 
 
 
+# 2023.9.7
+
+[面试题 02.05. 链表求和](https://leetcode.cn/problems/sum-lists-lcci/) 【中等】
+
+给定两个用链表表示的整数，每个节点包含一个数位。
+
+这些数位是反向存放的，也就是个位排在链表首部。
+
+编写函数对这两个整数求和，并用链表形式返回结果。
+
+```js
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val) {
+ *     this.val = val;
+ *     this.next = null;
+ * }
+ */
+/**
+ * @param {ListNode} l1
+ * @param {ListNode} l2
+ * @return {ListNode}
+ */
+var addTwoNumbers = function(l1, l2) {
+    let dummy = new ListNode(-1), p = dummy
+    let rest = 0
+    while(l1 || l2) {
+        const n1 = l1 ? l1.val : 0
+        const n2 = l2 ? l2.val : 0
+        const sum = n1 + n2 + rest
+        if(!dummy.next) {
+            dummy.next = new ListNode(sum % 10)
+            p = dummy.next
+        } else {
+            p.next = new ListNode(sum % 10)
+            p = p.next
+        }
+        rest = Math.floor(sum / 10)
+        if(l1) l1 = l1.next
+        if(l2) l2 = l2.next
+    }
+    if(rest > 0) {
+        p.next = new ListNode(rest)
+    }
+    return dummy.next
+};
+```
+
+
+
+[47. 全排列 II](https://leetcode.cn/problems/permutations-ii/) 【中等】
+
+给定一个可包含重复数字的序列 `nums` ，***按任意顺序*** 返回所有不重复的全排列。
+
+```js
+/**
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+var permuteUnique = function(nums) {
+    // 回溯 used
+    let res = [], path = []
+    nums.sort((a, b) => a - b)
+    function backTracking(used) {
+        if(path.length === nums.length) {
+            res.push([...path])
+        }
+        for(let i=0; i<nums.length; i++) {
+            if(used[i] || i>0 && nums[i]===nums[i-1] && !used[i-1]) continue
+            path.push(nums[i])
+            used[i] = true
+            backTracking(used)
+            path.pop()
+            used[i] = false
+        }
+    }
+    backTracking([])
+    return res
+};
+```
+
+会好的叭 加油宝💪
+
+
+
+# 2023.9.8
+
+[236. 二叉树的最近公共祖先](https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/)

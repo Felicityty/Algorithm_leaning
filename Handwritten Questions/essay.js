@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-08-20 20:13:05
- * @LastEditTime: 2023-09-06 16:44:19
+ * @LastEditTime: 2023-09-07 23:28:45
  */
 // 想到啥就写点儿
 
@@ -978,15 +978,15 @@
 
 // 2023.9.6
 
-const Person1 = {
-  name: 'aaaa',
-  sayHi: function () {
-    console.log('hey', this.name)
-  }
-}
-const Person2 = {
-  name: 'bbbb'
-}
+// const Person1 = {
+//   name: 'aaaa',
+//   sayHi: function () {
+//     console.log('hey', this.name)
+//   }
+// }
+// const Person2 = {
+//   name: 'bbbb'
+// }
 // Person1.sayHi.call(Person2)
 
 // Function.prototype.myCall = function (context = window, ...args) {
@@ -1034,3 +1034,34 @@ const Person2 = {
 // }
 
 // Person1.sayHi.myBind(Person2)()
+
+// ----------------------------------------------------------------------
+
+// 2023.9.7
+
+// function flatten1(nums) {
+//   return nums.reduce((pre, cur) => {
+//     if (Array.isArray(cur)) {
+//       return pre.concat(flatten1(cur))
+//     } else {
+//       return pre.concat(cur)
+//     }
+//   }, [])
+// }
+
+// function flatten2(nums, depth) {
+//   return nums.reduce((pre, cur) => {
+//     if (Array.isArray(cur) && depth > 1) {
+//       return pre.concat(flatten2(cur, depth - 1))
+//     } else {
+//       return pre.concat(cur)
+//     }
+//   }, [])
+// }
+
+// const arr = [1, 2, [3, 4], [5, 6, [7, 8]]]
+// const flatArr1 = flatten1(arr)
+// console.log(flatArr1)
+
+// const flatArr2 = flatten2(arr, 1)
+// console.log(flatArr2)

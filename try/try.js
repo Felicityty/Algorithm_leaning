@@ -1,8 +1,10 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-09-05 14:11:51
- * @LastEditTime: 2023-09-05 17:54:11
+ * @LastEditTime: 2023-09-07 23:22:42
  */
+
+// 2023.9.5
 
 // console.log(-19 % 10)
 
@@ -31,32 +33,49 @@
 // var iter = rl[Symbol.asyncIterator]();
 // const readline = async () => (await iter.next()).value;
 
-var __readline = require('readline-sync')
-__readline.setDefaultOptions({ prompt: '' })
-var read_line = __readline.prompt
+// var __readline = require('readline-sync')
+// __readline.setDefaultOptions({ prompt: '' })
+// var read_line = __readline.prompt
 
 
-void async function () {
-  // Write your code here
-  let [n, k] = read_line().split(' ').map(Number)
-  const nums = read_line().split(' ').map(Number)
-  let add = 0, sub = 0, sum = 0
-  while (k--) {
-    const [operation, x] = read_line().split(' ').map(Number)
-    if (operation === 1) {
-      add += x
-    } else {
-      if (x > add) {
-        add = 0
-        sub += x - add
-      } else {
-        add -= x
-      }
-    }
-  }
-  for (let i = 0; i < n; i++) {
-    nums[i] = Math.max(nums[i] - sub, 0)
-    sum = (sum + add + nums[i]) % (Math.pow(10, 9) + 7)
-  }
-  console.log(sum)
-}()
+// void async function () {
+//   // Write your code here
+//   let [n, k] = read_line().split(' ').map(Number)
+//   const nums = read_line().split(' ').map(Number)
+//   let add = 0, sub = 0, sum = 0
+//   while (k--) {
+//     const [operation, x] = read_line().split(' ').map(Number)
+//     if (operation === 1) {
+//       add += x
+//     } else {
+//       if (x > add) {
+//         add = 0
+//         sub += x - add
+//       } else {
+//         add -= x
+//       }
+//     }
+//   }
+//   for (let i = 0; i < n; i++) {
+//     nums[i] = Math.max(nums[i] - sub, 0)
+//     sum = (sum + add + nums[i]) % (Math.pow(10, 9) + 7)
+//   }
+//   console.log(sum)
+// }()
+
+// ----------------------------------------------------------------------
+
+// 2023.9.7
+
+const n = 6
+const nums = [1, 1, 4, 5, 1, 4]
+let sum = nums.reduce((a, b) => a + b);
+for (let i = 1; i < n; i++) {
+  sum = Math.max(
+    sum,
+    sum - nums[i - 1] - nums[i] + nums[i - 1] * nums[i]
+  );
+}
+console.log(sum);
+
+
