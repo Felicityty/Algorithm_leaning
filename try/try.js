@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-09-05 14:11:51
- * @LastEditTime: 2023-09-07 23:22:42
+ * @LastEditTime: 2023-09-08 22:50:05
  */
 
 // 2023.9.5
@@ -67,15 +67,34 @@
 
 // 2023.9.7
 
-const n = 6
-const nums = [1, 1, 4, 5, 1, 4]
-let sum = nums.reduce((a, b) => a + b);
-for (let i = 1; i < n; i++) {
-  sum = Math.max(
-    sum,
-    sum - nums[i - 1] - nums[i] + nums[i - 1] * nums[i]
-  );
+// const n = 6
+// const nums = [1, 1, 4, 5, 1, 4]
+// let sum = nums.reduce((a, b) => a + b);
+// for (let i = 1; i < n; i++) {
+//   sum = Math.max(
+//     sum,
+//     sum - nums[i - 1] - nums[i] + nums[i - 1] * nums[i]
+//   );
+// }
+// console.log(sum);
+
+
+// ----------------------------------------------------------------------
+
+// 2023.9.8
+
+const x = 123, k = 2
+// const x = 80407, k = 4
+
+let len = x.toString().length
+let y = Math.floor(x / Math.pow(10, len - k))
+console.log(y)
+let res = 0
+while (y) {
+  res = res * 10 + y % 10
+  y = ~~(y / 10)
 }
-console.log(sum);
+console.log(res)
 
-
+res = res * Math.pow(10, len - k) + x % Math.pow(10, len - k)
+console.log(res)
