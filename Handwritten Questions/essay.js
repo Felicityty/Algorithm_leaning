@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-08-20 20:13:05
- * @LastEditTime: 2023-09-07 23:28:45
+ * @LastEditTime: 2023-09-09 21:11:47
  */
 // 想到啥就写点儿
 
@@ -1065,3 +1065,66 @@
 
 // const flatArr2 = flatten2(arr, 1)
 // console.log(flatArr2)
+
+// ----------------------------------------------------------------------
+
+// 2023.9.9
+
+// function debounce(fn, delay) {
+//   let timer = null
+//   return function (...args) {
+//     if (timer !== null) {
+//       clearTimeout(timer)
+//     }
+//     timer = setTimeout(() => {
+//       fn.apply(this, args)
+//     }, delay)
+//   }
+// }
+
+// function throttle(fn, delay) {
+//   let timer = null
+//   return function (...args) {
+//     if (timer === null) {
+//       timer = setTimeout(() => {
+//         fn.apply(this, args)
+//         timer = null
+//       }, delay)
+//     }
+//   }
+// }
+
+// const subjectType = {
+//   'LB': '劳保',
+//   'XW': '消委',
+//   'GA': '公安',
+//   'GT': '国土',
+//   'CG': '城管',
+//   'GJJ': '公积金',
+//   'ZH': '综合',
+// }
+
+// function getKeyByValue(obj, value) {
+//   return Object.keys(obj).filter(key => obj[key] === value)
+// }
+
+// console.log(getKeyByValue(subjectType, '综合'))
+
+// curry
+function curry(fn, ...args) {
+  if (args.length >= fn.length) {
+    return fn.apply(this, args)
+  } else {
+    return function (...args2) {
+      return curry.apply(this, [fn, ...args, ...args2])
+    }
+  }
+}
+
+function sum(a, b, c) {
+  return a + b + c
+}
+
+let currySum = curry(sum)
+
+console.log(currySum(1)(2, 3))
