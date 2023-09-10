@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-09-05 14:11:51
- * @LastEditTime: 2023-09-08 22:50:05
+ * @LastEditTime: 2023-09-10 23:22:34
  */
 
 // 2023.9.5
@@ -83,18 +83,49 @@
 
 // 2023.9.8
 
-const x = 123, k = 2
-// const x = 80407, k = 4
+// const x = 123, k = 2
+// // const x = 80407, k = 4
 
-let len = x.toString().length
-let y = Math.floor(x / Math.pow(10, len - k))
-console.log(y)
-let res = 0
-while (y) {
-  res = res * 10 + y % 10
-  y = ~~(y / 10)
+// let len = x.toString().length
+// let y = Math.floor(x / Math.pow(10, len - k))
+// console.log(y)
+// let res = 0
+// while (y) {
+//   res = res * 10 + y % 10
+//   y = ~~(y / 10)
+// }
+// console.log(res)
+
+// res = res * Math.pow(10, len - k) + x % Math.pow(10, len - k)
+// console.log(res)
+
+
+// ----------------------------------------------------------------------
+
+// 2023.9.10
+
+const n = 5, k = 2
+// const arr = [4, 3, 1, 3, 2]
+// [2, 1, -1, 1, 0]
+const arr = [1, 3, 2, 4, 1]
+// [-1, 1, 0, 2, -1]
+let sum = 0, res = -1
+let sumMp = new Map()
+sumMp.set(0, 0)
+console.log(sumMp)
+
+for (let i = 0; i < n; i++) {
+  sum += arr[i] - k;
+  console.log('i', i, 'sum', sum)
+
+  if (sumMp.has(sum)) {
+    res = Math.max(res, i + 1 - sumMp.get(sum));
+  } else {
+    sumMp.set(sum, i + 1);
+  }
+  console.log('res', res)
+  console.log(sumMp)
+  console.log('-------------------')
 }
-console.log(res)
 
-res = res * Math.pow(10, len - k) + x % Math.pow(10, len - k)
-console.log(res)
+console.log(res);

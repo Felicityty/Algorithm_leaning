@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-08-20 20:13:05
- * @LastEditTime: 2023-09-09 21:11:47
+ * @LastEditTime: 2023-09-10 23:47:02
  */
 // 想到啥就写点儿
 
@@ -1111,20 +1111,55 @@
 // console.log(getKeyByValue(subjectType, '综合'))
 
 // curry
-function curry(fn, ...args) {
-  if (args.length >= fn.length) {
-    return fn.apply(this, args)
-  } else {
-    return function (...args2) {
-      return curry.apply(this, [fn, ...args, ...args2])
+// function curry(fn, ...args) {
+//   if (args.length >= fn.length) {
+//     return fn.apply(this, args)
+//   } else {
+//     return function (...args2) {
+//       return curry.apply(this, [fn, ...args, ...args2])
+//     }
+//   }
+// }
+
+// function sum(a, b, c) {
+//   return a + b + c
+// }
+
+// let currySum = curry(sum)
+
+// console.log(currySum(1)(2, 3))
+
+Promise.all = function (promises) {
+  let res = [], count = 0
+  return new Promise((resolve, reject) => {
+    if (promises.length === 0) {
+      resolve(fulfilled)
+    } else {
+      promises.forEach((promise, index) => {
+        Promise.resolve(promise).then(
+          value => {
+            res[index] = value
+            count++
+            if (count === promises.length) {
+              resolve(res)
+            }
+          },
+          reason => {
+            reject(reason)
+          }
+        )
+      })
     }
-  }
+  })
 }
 
-function sum(a, b, c) {
-  return a + b + c
-}
+const promise1 = Promise.resolve(3)
+const promise2 = 42
+const promise3 = new Promise((resolve, reject) => {
+  setTimeout(resolve, 1000, 'foo')
+})
 
-let currySum = curry(sum)
+Promise.all([promise1, promise2, promise3]).then((values) => {
+  console.log(values)
+})
 
-console.log(currySum(1)(2, 3))

@@ -6230,3 +6230,37 @@ var insertIntoBST = function(root, val) {
 
 
 
+# 2023.9.10
+
+[平均数为k的最长连续子数组](https://www.nowcoder.com/exam/test/73454432/detail?pid=52205528&examPageSource=Company&testCallback=https%3A%2F%2Fwww.nowcoder.com%2Fexam%2Fcompany&testclass=%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91) ↩️
+
+给定*n*个正整数组成的数组，求平均数正好等于 *k* 的最长连续子数组的长度。
+
+```js
+const rl = require("readline").createInterface({ input: process.stdin });
+var iter = rl[Symbol.asyncIterator]();
+const readline = async () => (await iter.next()).value;
+
+void (async function () {
+    // Write your code here
+    const [n, k] = (await readline()).split(" ");
+    const arr = (await readline()).split(" ").map(Number);
+    let res = -1, sum = 0
+    let sumMap = new Map()
+    sumMap.set(0, 0)
+    for(let i=0; i<n; i++) {
+        sum += arr[i] - k
+        if(sumMap.has(sum)) {
+            res = Math.max(res, i+1-sumMap.get(sum))
+        } else {
+            sumMap.set(sum, i+1)
+        }
+    }
+    console.log(res)
+})();
+```
+
+这题有点东西诶
+
+感恩所有老师！❤️
+
