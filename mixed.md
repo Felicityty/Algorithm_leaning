@@ -6232,7 +6232,7 @@ var insertIntoBST = function(root, val) {
 
 # 2023.9.10
 
-[平均数为k的最长连续子数组](https://www.nowcoder.com/exam/test/73454432/detail?pid=52205528&examPageSource=Company&testCallback=https%3A%2F%2Fwww.nowcoder.com%2Fexam%2Fcompany&testclass=%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91) ↩️
+[平均数为k的最长连续子数组](https://www.nowcoder.com/exam/test/73454432/detail?pid=52205528&examPageSource=Company&testCallback=https%3A%2F%2Fwww.nowcoder.com%2Fexam%2Fcompany&testclass=%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91) ✅
 
 给定*n*个正整数组成的数组，求平均数正好等于 *k* 的最长连续子数组的长度。
 
@@ -6262,5 +6262,32 @@ void (async function () {
 
 这题有点东西诶
 
-感恩所有老师！❤️
+
+
+# 2023.9.11
+
+[64. 最小路径和](https://leetcode.cn/problems/minimum-path-sum/) 【中等】
+
+给定一个包含非负整数的 `*m* x *n*` 网格 `grid` ，请找出一条从左上角到右下角的路径，使得路径上的数字总和为最小。
+
+**说明：**每次只能向下或者向右移动一步。
+
+```js
+/**
+ * @param {number[][]} grid
+ * @return {number}
+ */
+var minPathSum = function(grid) {
+    const m = grid.length, n = grid[0].length
+    for(let i=0; i<m; i++) {
+        for(let j=0; j<n; j++) {
+            if(i===0 && j===0) continue
+            else if(i===0) grid[i][j] += grid[i][j-1]
+            else if(j===0) grid[i][j] += grid[i-1][j]
+            else grid[i][j] += Math.min(grid[i-1][j], grid[i][j-1])
+        }
+    }
+    return grid[m-1][n-1]
+};
+```
 

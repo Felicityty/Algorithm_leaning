@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-08-20 20:13:05
- * @LastEditTime: 2023-09-10 23:47:02
+ * @LastEditTime: 2023-09-11 14:34:32
  */
 // 想到啥就写点儿
 
@@ -1129,37 +1129,116 @@
 
 // console.log(currySum(1)(2, 3))
 
-Promise.all = function (promises) {
-  let res = [], count = 0
-  return new Promise((resolve, reject) => {
-    if (promises.length === 0) {
-      resolve(fulfilled)
-    } else {
-      promises.forEach((promise, index) => {
-        Promise.resolve(promise).then(
-          value => {
-            res[index] = value
-            count++
-            if (count === promises.length) {
-              resolve(res)
-            }
-          },
-          reason => {
-            reject(reason)
-          }
-        )
-      })
+// Promise.all = function (promises) {
+//   let res = [], count = 0
+//   return new Promise((resolve, reject) => {
+//     if (promises.length === 0) {
+//       resolve(fulfilled)
+//     } else {
+//       promises.forEach((promise, index) => {
+//         Promise.resolve(promise).then(
+//           value => {
+//             res[index] = value
+//             count++
+//             if (count === promises.length) {
+//               resolve(res)
+//             }
+//           },
+//           reason => {
+//             reject(reason)
+//           }
+//         )
+//       })
+//     }
+//   })
+// }
+
+// const promise1 = Promise.resolve(3)
+// const promise2 = 42
+// const promise3 = new Promise((resolve, reject) => {
+//   setTimeout(resolve, 1000, 'foo')
+// })
+
+// Promise.all([promise1, promise2, promise3]).then((values) => {
+//   console.log(values)
+// })
+
+// Promise.allSettled = function (promises) {
+//   let res = [], count = 0
+//   return new Promise((resolve, reject) => {
+//     promises.forEach((promise, index) => {
+//       Promise.resolve(promise).then(
+//         value => {
+//           res[index] = {
+//             status: 'fulfilled',
+//             value
+//           }
+//           count++
+//           if (count === promises.length) {
+//             resolve(res)
+//           }
+//         },
+//         reason => {
+//           res[index] = {
+//             status: 'rejected',
+//             reason
+//           }
+//           count++
+//           if (count === promises.length) {
+//             reject(res)
+//           }
+//         }
+//       )
+//     })
+//   })
+// }
+
+// Promise.allSettled([promise1, promise2, promise3]).then((values) => {
+//   console.log(values)
+// })
+
+// Promise.race = function (promises) {
+//   return new Promise((resolve, reject) => {
+//     promises.forEach(promise => {
+//       Promise.resolve(promise).then(
+//         value => {
+//           resolve(value)
+//         },
+//         reason => {
+//           reject(reason)
+//         }
+//       )
+//     })
+//   })
+// }
+
+// Promise.race([promise1, promise2, promise3]).then((values) => {
+//   console.log(values)
+// })
+
+// 快排
+
+const arr = [3, 4, 2, 5, 1, 2]
+
+function quickSort(nums, left, right) {
+  if (left >= right) {
+    return
+  }
+  let l = left, temp = nums[l], r = right
+  while (l < r) {
+    while (l < r && nums[r] >= temp) {
+      r--
     }
-  })
+    nums[l] = nums[r]
+    while (l < r && nums[l] < temp) {
+      l++
+    }
+    nums[r] = nums[l]
+  }
+  nums[l] = temp
+  quickSort(nums, left, l - 1)
+  quickSort(nums, l + 1, right)
+  return nums
 }
 
-const promise1 = Promise.resolve(3)
-const promise2 = 42
-const promise3 = new Promise((resolve, reject) => {
-  setTimeout(resolve, 1000, 'foo')
-})
-
-Promise.all([promise1, promise2, promise3]).then((values) => {
-  console.log(values)
-})
-
+console.log(quickSort(arr, 0, 5))
