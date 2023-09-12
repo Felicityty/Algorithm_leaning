@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-09-05 14:11:51
- * @LastEditTime: 2023-09-10 23:22:34
+ * @LastEditTime: 2023-09-12 15:53:22
  */
 
 // 2023.9.5
@@ -104,28 +104,44 @@
 
 // 2023.9.10
 
-const n = 5, k = 2
-// const arr = [4, 3, 1, 3, 2]
-// [2, 1, -1, 1, 0]
-const arr = [1, 3, 2, 4, 1]
-// [-1, 1, 0, 2, -1]
-let sum = 0, res = -1
-let sumMp = new Map()
-sumMp.set(0, 0)
-console.log(sumMp)
+// const n = 5, k = 2
+// // const arr = [4, 3, 1, 3, 2]
+// // [2, 1, -1, 1, 0]
+// const arr = [1, 3, 2, 4, 1]
+// // [-1, 1, 0, 2, -1]
+// let sum = 0, res = -1
+// let sumMp = new Map()
+// sumMp.set(0, 0)
+// console.log(sumMp)
 
-for (let i = 0; i < n; i++) {
-  sum += arr[i] - k;
-  console.log('i', i, 'sum', sum)
+// for (let i = 0; i < n; i++) {
+//   sum += arr[i] - k;
+//   console.log('i', i, 'sum', sum)
 
-  if (sumMp.has(sum)) {
-    res = Math.max(res, i + 1 - sumMp.get(sum));
-  } else {
-    sumMp.set(sum, i + 1);
-  }
-  console.log('res', res)
-  console.log(sumMp)
-  console.log('-------------------')
+//   if (sumMp.has(sum)) {
+//     res = Math.max(res, i + 1 - sumMp.get(sum));
+//   } else {
+//     sumMp.set(sum, i + 1);
+//   }
+//   console.log('res', res)
+//   console.log(sumMp)
+//   console.log('-------------------')
+// }
+
+// console.log(res);
+
+// ----------------------------------------------------------------------
+
+// 2023.9.12
+
+a() // 2
+var a = 3
+
+function a() {
+  console.log('2')
 }
 
-console.log(res);
+console.log('1', a) // 1 3
+
+// 函数提升优先级高于变量提升，且不会被同名变量声明时覆盖，但是会被变量赋值后覆盖
+
