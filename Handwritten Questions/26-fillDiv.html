@@ -1,0 +1,76 @@
+<!--
+ * @Author: Felicity💪
+ * @Date: 2023-09-13 20:53:53
+ * @LastEditTime: 2023-09-13 21:01:28
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    /* 1 */
+    /* .parentDiv {
+      height: 400px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .childDiv1 {
+      height: 200px;
+      background-color: aquamarine;
+    }
+
+    .childDiv2 {
+      flex: 1;
+      background-color: burlywood;
+    } */
+
+    /* 2 */
+    /* .parentDiv {
+      height: 400px;
+      position: relative;
+    }
+
+    .childDiv1 {
+      height: 200px;
+      background-color: aquamarine;
+    }
+
+    .childDiv2 {
+      position: absolute;
+      top: 200px;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background-color: burlywood;
+    } */
+
+    /* 3 */
+    .parentDiv {
+      height: 400px;
+      position: relative;
+    }
+
+    .childDiv1 {
+      height: 200px;
+      background-color: aquamarine;
+    }
+
+    .childDiv2 {
+      height: calc(100% - 200px);
+      background-color: burlywood;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="parentDiv">
+    <div class="childDiv1"></div>
+    <div class="childDiv2"></div>
+  </div>
+</body>
+
+</html>
