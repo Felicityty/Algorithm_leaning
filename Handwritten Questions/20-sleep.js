@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-08-21 15:17:52
- * @LastEditTime: 2023-08-31 11:17:04
+ * @LastEditTime: 2023-09-14 13:47:38
  */
 
 // 手写延迟函数执行 sleep 函数
@@ -22,3 +22,10 @@ async function sleep2(delay) {
 }
 
 sleep2(1000).then(() => console.log(222))
+
+async function sleepFunc(delay) {
+  return await new Promise((resolve) => setTimeout(resolve, delay))
+}
+sleepFunc(1000).then(() => { console.log(111) })
+
+// 3 new Date().getTime()

@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-08-17 15:13:57
- * @LastEditTime: 2023-08-17 15:33:42
+ * @LastEditTime: 2023-09-14 12:28:05
  */
 const Person = {
   name: 'ffff',
@@ -36,7 +36,7 @@ Function.prototype.myApply = function (context = window, args = []) {
   }
   let fn = Symbol()
   context[fn] = this
-  const result = context[fn](args)
+  const result = context[fn](...args)
   delete context[fn]
   return result
 }

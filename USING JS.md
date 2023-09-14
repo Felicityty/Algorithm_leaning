@@ -338,7 +338,7 @@ var mergeKLists = function(lists) {
 
 2022.12.6
 
-### 4 单链表的倒数第 k 个节点
+### 4 删除单链表的倒数第 k 个节点
 
 [19.删除链表的倒数第N个结点](https://leetcode.cn/problems/remove-nth-node-from-end-of-list/)
 
