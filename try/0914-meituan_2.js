@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-09-14 23:28:02
- * @LastEditTime: 2023-09-14 23:46:49
+ * @LastEditTime: 2023-09-15 22:40:46
  */
 
 // 2 假设有以下数据结构
@@ -61,20 +61,32 @@ const students = [
   { "group": 7, "class": "t", "school": "B", "grade": "3rd" }
 ]
 
-const divideN = (list, keys) => {
-  keys.forEach(k => divide(list, k))
-}
-
 const divide = (list, key) => {
-  list.reduce((memo, item) => {
-    if (!memo[key]) {
-      memo[key] = [item];
-      return memo
+  return list.reduce((memo, item) => {
+    const keyValue = item[key]
+    if (!memo[keyValue]) {
+      memo[keyValue] = [item]
+    } else {
+      memo[keyValue].push(item)
     }
-
-    memo[key].push(item)
+    return memo
   }, {})
 }
 
-// 其实就是一个树形处理诶🥹 待我思考思考 这个确实接触得少
-// 但面试官真的太好了
+const divideN = (list, keys) => {
+  if (keys.length === 0) {
+    return list
+  }
+  const [key, ...restKeys] = keys
+  const divided = divide(list, key)
+  for (let groupKey in divided) {
+    divided[groupKey] = divideN(divided[groupKey], restKeys)
+  }
+  return divided
+}
+
+const result = divideN(students, ['school', 'grade'])
+console.log('result', result)
+
+// 好吧 以前没思考过 当时那点儿时间确实写不出来
+// 但是 下次要说一说自己的思路！
