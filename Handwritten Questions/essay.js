@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-08-20 20:13:05
- * @LastEditTime: 2023-09-11 14:34:32
+ * @LastEditTime: 2023-09-18 23:58:24
  */
 // 想到啥就写点儿
 
@@ -1218,27 +1218,93 @@
 
 // 快排
 
-const arr = [3, 4, 2, 5, 1, 2]
+// const arr = [3, 4, 2, 5, 1, 2]
 
-function quickSort(nums, left, right) {
-  if (left >= right) {
-    return
-  }
-  let l = left, temp = nums[l], r = right
-  while (l < r) {
-    while (l < r && nums[r] >= temp) {
-      r--
-    }
-    nums[l] = nums[r]
-    while (l < r && nums[l] < temp) {
-      l++
-    }
-    nums[r] = nums[l]
-  }
-  nums[l] = temp
-  quickSort(nums, left, l - 1)
-  quickSort(nums, l + 1, right)
-  return nums
+// function quickSort(nums, left, right) {
+//   if (left >= right) {
+//     return
+//   }
+//   let l = left, temp = nums[l], r = right
+//   while (l < r) {
+//     while (l < r && nums[r] >= temp) {
+//       r--
+//     }
+//     nums[l] = nums[r]
+//     while (l < r && nums[l] < temp) {
+//       l++
+//     }
+//     nums[r] = nums[l]
+//   }
+//   nums[l] = temp
+//   quickSort(nums, left, l - 1)
+//   quickSort(nums, l + 1, right)
+//   return nums
+// }
+
+// console.log(quickSort(arr, 0, 5))
+
+
+// ----------------------------------------------------------------------
+
+// 2023.9.18
+
+// extends
+
+// es5
+// function A(name) {
+//   this.name = name
+// }
+// A.prototype.getName = function () {
+//   console.log(this.name)
+// }
+
+// function B(name, age) {
+//   A.call(this, name)
+//   this.age = age
+// }
+// B.prototype = Object.create(A.prototype)
+// B.prototype.constructor = B
+// B.prototype.getAge = function () {
+//   console.log(this.age)
+// }
+// let b = new B('fff', 18)
+// b.getName()
+// b.getAge()
+
+// es6
+
+// class A {
+//   constructor(name) {
+//     this.name = name
+//   }
+//   getName() {
+//     console.log(this.name)
+//   }
+// }
+// class B extends A {
+//   constructor(name, age) {
+//     super(name)
+//     this.age = age
+//   }
+//   getAge() {
+//     console.log(this.age)
+//   }
+// }
+// let b = new B('ttt', 20)
+// b.getName()
+// b.getAge()
+
+const sleep = function (delay, i) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => resolve(i), delay)
+  })
 }
 
-console.log(quickSort(arr, 0, 5))
+const start = async function () {
+  for (let i = 0; i < 10; i++) {
+    let res = await sleep(1000, i)
+    console.log(res)
+  }
+}
+
+start()
