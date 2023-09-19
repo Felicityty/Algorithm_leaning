@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-08-20 20:13:05
- * @LastEditTime: 2023-09-18 23:58:24
+ * @LastEditTime: 2023-09-19 02:09:47
  */
 // 想到啥就写点儿
 
@@ -1294,17 +1294,117 @@
 // b.getName()
 // b.getAge()
 
-const sleep = function (delay, i) {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => resolve(i), delay)
-  })
-}
+// const sleep = function (delay, i) {
+//   return new Promise((resolve, reject) => {
+//     setTimeout(() => resolve(i), delay)
+//   })
+// }
 
-const start = async function () {
-  for (let i = 0; i < 10; i++) {
-    let res = await sleep(1000, i)
-    console.log(res)
-  }
-}
+// const start = async function () {
+//   for (let i = 0; i < 10; i++) {
+//     let res = await sleep(1000, i)
+//     console.log(res)
+//   }
+// }
 
-start()
+// start()
+
+// function deepClone(target) {
+//   if (Object.prototype.toString.call(target).slice(8, -1) !== 'Object' &&
+//     Object.prototype.toString.call(target).slice(8, -1) !== 'Array') {
+//     return target
+//   }
+//   const res = Array.isArray(target) ? [] : {}
+//   Object.keys(target).forEach(key => res[key] = (target[key] instanceof Object || target[key] instanceof Array) ? deepClone(target[key]) : target[key])
+//   return res
+// }
+
+// const a = {
+//   b: 1,
+//   c: 2,
+//   d: {
+//     e: 3
+//   }
+// }
+
+// console.log(deepClone(a))
+
+// class EventEmitter {
+//   constructor() {
+//     this._events = {}
+//   }
+
+//   // 订阅
+//   on(eventName, cb) {
+//     // 事件中心存在的订阅者添加订阅时，触发这个钩子
+//     if (this._events[eventName]) {
+//       if (eventName !== 'newListener') {
+//         this.emit('newListener', eventName)
+//       }
+//     }
+//     const cbs = this._events[eventName] || []
+//     cbs.push(cb)
+//     this._events[eventName] = cbs
+//   }
+
+//   // 发布
+//   emit(eventName, ...args) {
+//     const cbs = this._events[eventName] || []
+//     cbs.forEach(cb => cb(...args))
+//   }
+
+//   // 取消订阅
+//   off(eventName, cb) {
+//     const cbs = this._events[eventName] || []
+//     const newCbs = cbs.filter(item => item !== cb && item.initialCb !== cb)
+//     this._events[eventName] = newCbs
+//   }
+
+//   // once
+//   once(eventName, cb) {
+//     const one = (...args) => {
+//       cb(...args)
+//       this.off(eventName, one)
+//     }
+//     one.initialCb = cb
+//     this.on(eventName, one)
+//   }
+// }
+
+// const events = new EventEmitter()
+
+// events.on('newListener', function (eventName) {
+//   console.log('eventName', eventName)
+// })
+
+// events.on('hey', function () {
+//   console.log('hey1')
+// })
+// let cb = function () {
+//   console.log('hey2')
+// }
+// events.on('hey', cb)
+// events.emit('hey')
+
+// console.log('--------')
+
+// events.off('hey', cb)
+// events.emit('hey')
+
+// console.log('--------')
+
+// function once() {
+//   console.log("once")
+// }
+// events.once("hey", once)
+
+// console.log('events', events)
+
+// events.emit("hey")
+
+// console.log('events', events)
+
+
+for (var i = 0; i < 3; i++) {
+  setTimeout(() => console.log(i), 1000)
+}

@@ -1,11 +1,12 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-09-16 23:38:10
- * @LastEditTime: 2023-09-17 02:13:42
+ * @LastEditTime: 2023-09-19 21:34:37
  */
 
-// 手写发布订阅感觉还是挺多的诶
+// 手写发布订阅 + once函数
 
+// 发布订阅
 class EventEmitter {
   constructor() {
     this._events = {}
@@ -44,7 +45,8 @@ class EventEmitter {
   // 取消订阅
   off(eventName, callback) {
     const callbacks = this._events[eventName] || []
-    const newCallbacks = callbacks.filter(fn => fn != callback && fn.initialCallback != callback /* 用于once的取消订阅 */)
+    const newCallbacks = callbacks.filter(
+      fn => fn != callback && fn.initialCallback != callback /* 在once执行前取消订阅 */)
     this._events[eventName] = newCallbacks
   }
 }
@@ -75,3 +77,27 @@ events.off("hello", once)
 events.emit("hello")
 events.emit("hello")
 
+// ----------------------------------
+
+// https://blog.51cto.com/u_15524894/5057278
+
+// once
+// 需求：要求传入函数只能执行一次。且第二次及以后再调用时，仍会返回第一次执行的值
+const addOnce = once(function (a, b) {
+  return a + b
+})
+
+console.log(addOnce(1, 2))       // 3
+console.log(addOnce(1, 2999))    // 依旧是 3
+
+function once(fn) {
+  let res
+  return function (...args) {
+    if (!fn) return res
+    res = fn(...args)
+    fn = undefined  // 第二次调用就把这里改掉了
+    return res
+  }
+}
+
+// 👉为啥用闭包：返回了一个绑定作用域的新函数，fn和res都是私有变量
