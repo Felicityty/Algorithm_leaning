@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-09-05 14:11:51
- * @LastEditTime: 2023-09-12 15:53:22
+ * @LastEditTime: 2023-09-20 00:53:54
  */
 
 // 2023.9.5
@@ -134,14 +134,43 @@
 
 // 2023.9.12
 
-a() // 2
-var a = 3
+// a() // 2
+// var a = 3
 
-function a() {
-  console.log('2')
+// function a() {
+//   console.log('2')
+// }
+
+// console.log('1', a) // 1 3
+
+// // 函数提升优先级高于变量提升，且不会被同名变量声明时覆盖，但是会被变量赋值后覆盖
+
+
+// ----------------------------------------------------------------------
+
+// 2023.9.20
+
+function isInterleave(s1, s2, s3) {
+  // write your code here
+  let len3 = s3.length,
+    len1 = s1.length,
+    len2 = s2.length;
+  if (len3 == 0 && len1 == 0 && len2 == 0)
+    return true;
+  if (len3 != len1 + len2)
+    return false;
+  if (len1 == 0 || len2 == 0)
+    return len1 == 0 ? s3 === s2 : s3 === s1;
+
+  let dp = new Array(len2 + 1).fill(true)
+  for (let i = 1; i <= len1; i++) {
+    for (let j = 1; j <= len2; j++) {
+      dp[j] = (dp[j] && (s1[i - 1] == s3[i + j - 1])) || (dp[j - 1] && (s2[j - 1] == s3[i + j - 1]))
+      console.log(j, dp[j], dp)
+    }
+  }
+  return dp[len2]
 }
 
-console.log('1', a) // 1 3
-
-// 函数提升优先级高于变量提升，且不会被同名变量声明时覆盖，但是会被变量赋值后覆盖
-
+// console.log(isInterleave("aabcc", "dbbca", "aadbbbaccc"))
+console.log(isInterleave("aabcc", "dbbca", "aadbbcbcac"))

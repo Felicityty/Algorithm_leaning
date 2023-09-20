@@ -6327,5 +6327,58 @@ var buildTree = function(preorder, inorder) {
 
 
 
+# 2023.9.20
+
+[384. 打乱数组](https://leetcode.cn/problems/shuffle-an-array/) 【中等】
+
+给你一个整数数组 `nums` ，设计算法来打乱一个没有重复元素的数组。打乱后，数组的所有排列应该是 **等可能** 的。
+
+实现 `Solution` class:
+
+- `Solution(int[] nums)` 使用整数数组 `nums` 初始化对象
+- `int[] reset()` 重设数组到它的初始状态并返回
+- `int[] shuffle()` 返回数组随机打乱后的结果
+
+```js
+/**
+ * @param {number[]} nums
+ */
+var Solution = function(nums) {
+    this.nums = nums
+    this.orgin = Array.from(nums)
+};
+
+/**
+ * @return {number[]}
+ */
+Solution.prototype.reset = function() {
+    this.nums = Array.from(this.orgin)
+    return this.nums
+};
+
+/**
+ * @return {number[]}
+ */
+Solution.prototype.shuffle = function() {
+    // 核心在于每种情况的数组的概率相同
+    let shuffled = Array.from(this.nums)
+    for(let i=0; i<this.nums.length; i++) {
+        const idx = Math.floor(Math.random() * (this.nums.length-i)) + i
+        const tmp = shuffled[idx]
+        shuffled[idx] = shuffled[i]
+        shuffled[i] = tmp
+    }
+    this.nums = shuffled
+    return this.nums
+};
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * var obj = new Solution(nums)
+ * var param_1 = obj.reset()
+ * var param_2 = obj.shuffle()
+ */
+```
+
 
 
