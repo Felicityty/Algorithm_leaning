@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-09-05 14:11:51
- * @LastEditTime: 2023-09-20 00:53:54
+ * @LastEditTime: 2023-09-21 23:43:22
  */
 
 // 2023.9.5
@@ -152,21 +152,17 @@
 
 function isInterleave(s1, s2, s3) {
   // write your code here
-  let len3 = s3.length,
-    len1 = s1.length,
-    len2 = s2.length;
-  if (len3 == 0 && len1 == 0 && len2 == 0)
-    return true;
-  if (len3 != len1 + len2)
-    return false;
-  if (len1 == 0 || len2 == 0)
-    return len1 == 0 ? s3 === s2 : s3 === s1;
-
+  let len1 = s1.length, len2 = s2.length, len3 = s3.length
+  if (len3 !== len1 + len2) {
+    return false
+  }
+  if (len1 === 0 || len2 === 0) {
+    return len1 === 0 ? s2 === s3 : s1 === s3
+  }
   let dp = new Array(len2 + 1).fill(true)
   for (let i = 1; i <= len1; i++) {
     for (let j = 1; j <= len2; j++) {
-      dp[j] = (dp[j] && (s1[i - 1] == s3[i + j - 1])) || (dp[j - 1] && (s2[j - 1] == s3[i + j - 1]))
-      console.log(j, dp[j], dp)
+      dp[j] = (dp[j] && (s1[i - 1] === s3[i + j - 1])) || (dp[i - 1] && (s2[j - 1] === s3[i + j - 1]))
     }
   }
   return dp[len2]

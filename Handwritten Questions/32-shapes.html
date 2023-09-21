@@ -1,0 +1,67 @@
+<!--
+ * @Author: Felicity💪
+ * @Date: 2023-09-21 23:45:08
+ * @LastEditTime: 2023-09-21 23:57:20
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .triangle1 {
+      width: 0;
+      height: 0;
+      border: 100px solid transparent;
+      border-bottom-color: red;
+    }
+
+    .triangle2 {
+      width: 0;
+      height: 0;
+      border: 100px solid transparent;
+      /* 反着来的，这里width变大，三角形变高 */
+      border-bottom-width: 200px;
+      border-bottom-color: red;
+    }
+
+    .triangle3 {
+      width: 0;
+      height: 0;
+      border: 100px solid transparent;
+      border-bottom-width: 50px;
+      border-bottom-color: red;
+    }
+
+    .trapezoid {
+      /* width、 height 和 border数值一样就行 */
+      width: 100px;
+      height: 100px;
+      border: 100px solid transparent;
+      border-bottom-color: red;
+    }
+
+    .sector {
+      width: 0;
+      height: 0;
+      border: 100px solid transparent;
+      border-bottom-color: red;
+      /* 加个radius就行了 */
+      border-radius: 100px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="triangle1"></div>
+  <div class="triangle2"></div>
+  <div class="triangle3"></div>
+  <div>--------------------------------------</div>
+  <div class="trapezoid"></div>
+  <div>--------------------------------------</div>
+  <div class="sector"></div>
+</body>
+
+</html>
