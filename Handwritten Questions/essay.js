@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-08-20 20:13:05
- * @LastEditTime: 2023-09-19 02:09:47
+ * @LastEditTime: 2023-09-23 22:47:55
  */
 // 想到啥就写点儿
 
@@ -1405,6 +1405,61 @@
 // console.log('events', events)
 
 
-for (var i = 0; i < 3; i++) {
-  setTimeout(() => console.log(i), 1000)
+// for (var i = 0; i < 3; i++) {
+//   setTimeout(() => console.log(i), 1000)
+// }
+
+
+// ----------------------------------------------------------------------
+
+// 2023.9.23
+
+const students = [
+  { "group": 8, "class": "y", "school": "B", "grade": "2nd" },
+  { "group": 7, "class": "r", "school": "A", "grade": "3rd" },
+  { "group": 2, "class": "f", "school": "B", "grade": "2nd" },
+  { "group": 8, "class": "w", "school": "B", "grade": "3rd" },
+  { "group": 8, "class": "o", "school": "B", "grade": "2nd" },
+  { "group": 2, "class": "c", "school": "B", "grade": "2nd" },
+  { "group": 4, "class": "v", "school": "C", "grade": "2nd" },
+  { "group": 7, "class": "s", "school": "B", "grade": "2nd" },
+  { "group": 10, "class": "q", "school": "B", "grade": "2nd" },
+  { "group": 6, "class": "b", "school": "B", "grade": "2nd" },
+  { "group": 6, "class": "r", "school": "B", "grade": "2nd" },
+  { "group": 10, "class": "d", "school": "A", "grade": "2nd" },
+  { "group": 2, "class": "u", "school": "A", "grade": "3rd" },
+  { "group": 2, "class": "t", "school": "A", "grade": "1st" },
+  { "group": 2, "class": "r", "school": "C", "grade": "2nd" },
+  { "group": 2, "class": "x", "school": "B", "grade": "2nd" },
+  { "group": 3, "class": "r", "school": "A", "grade": "2nd" },
+  { "group": 7, "class": "h", "school": "A", "grade": "2nd" },
+  { "group": 2, "class": "b", "school": "B", "grade": "1st" },
+  { "group": 7, "class": "t", "school": "B", "grade": "3rd" }
+]
+
+const divide = (list, key) => {
+  return list.reduce((pre, cur) => {
+    const keyValue = cur[key]
+    if (!pre[keyValue]) {
+      pre[keyValue] = [cur]
+    } else {
+      pre[keyValue].push(cur)
+    }
+    return pre
+  }, {})
 }
+
+const divideN = (list, keys) => {
+  if (keys.length === 0) {
+    return list
+  }
+  const [key, ...restKeys] = keys
+  const divided = divide(list, key)
+  for (let groupKey in divided) {
+    divided[groupKey] = divideN(divided[groupKey], restKeys)
+  }
+  return divided
+}
+
+const res = divideN(students, ['school', 'grade'])
+console.log('res', res)
