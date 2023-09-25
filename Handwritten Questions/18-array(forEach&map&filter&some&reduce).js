@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-08-20 15:50:36
- * @LastEditTime: 2023-09-24 23:53:13
+ * @LastEditTime: 2023-09-25 23:37:23
  */
 
 // 手写数组方法 forEach 和 map
@@ -142,7 +142,7 @@ Array.prototype.myReduce = function (fn, initialValue) {
     initialValue = arr[0]
   }
   for (; i < arr.length; i++) {
-    initialValue = fn.call(initialValue, arr[i], i, arr)
+    initialValue = fn(initialValue, arr[i], i, arr)
   }
   return initialValue
 }
