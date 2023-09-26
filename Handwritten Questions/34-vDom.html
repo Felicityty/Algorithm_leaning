@@ -1,0 +1,70 @@
+<!--
+ * @Author: Felicity💪
+ * @Date: 2023-09-26 23:13:42
+ * @LastEditTime: 2023-09-26 23:54:25
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app"></div>
+</body>
+
+</html>
+
+<script>
+  const vDom = {
+    tag: 'DIV',
+    attrs: {
+      id: 'app'
+    },
+    children: [
+      {
+        tag: 'SPAN',
+        children: [
+          { tag: 'A', children: [111] }
+        ]
+      },
+      {
+        tag: 'SPAN',
+        children: [
+          { tag: 'A', children: [222] },
+          { tag: 'A', children: [333, 444] }
+        ]
+      }
+    ]
+  }
+
+  function _render(vnode) {
+    // 如果是数字类型转化为字符串
+    if (typeof vnode === "number") {
+      vnode = String(vnode)
+    }
+    // 字符串类型直接就是文本节点
+    if (typeof vnode === "string") {
+      return document.createTextNode(vnode)
+    }
+    // 普通DOM
+    const dom = document.createElement(vnode.tag)
+    if (vnode.attrs) {
+      // 遍历属性
+      Object.keys(vnode.attrs).forEach((key) => {
+        const value = vnode.attrs[key]
+        dom.setAttribute(key, value)
+      })
+    }
+    // 子数组进行递归操作
+    vnode.children.forEach((child) => dom.appendChild(_render(child)))
+    return dom
+  }
+
+  const rootEl = document.getElementById("app")
+  rootEl.appendChild(_render(vDom))
+
+</script>
