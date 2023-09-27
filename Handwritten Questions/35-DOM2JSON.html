@@ -1,0 +1,65 @@
+<!--
+ * @Author: Felicity💪
+ * @Date: 2023-09-27 23:10:05
+ * @LastEditTime: 2023-09-27 23:52:27
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>手写DOM2JSON</title>
+  <!-- https://www.nowcoder.com/practice/0340a0c6d11d4aadba0aef86e6ae723f -->
+</head>
+
+<body>
+  <div id="jsContainer">
+    <ul class="js-test" id="jsParent">
+      <li data-index="0">1</li>
+      <li data-index="1">2</li>
+    </ul>
+    <span style="font-weight: bold;">3</span>
+    4
+  </div>
+</body>
+
+</html>
+
+<script>
+  function dom2json() {
+    const jsContainer = document.getElementById('jsContainer')
+    var res = createObj(jsContainer)
+    console.log(res)
+    return res
+  }
+  function createObj(element) {
+    //创建空对象
+    const obj = {}
+    //获取标签名称
+    obj.tag = element.tagName.toLowerCase()
+    //获取属性
+    var attribute = {}
+    Array.from(element.attributes).forEach(attr => {
+      var name = attr.name
+      var value = attr.value
+      attribute[name] = value
+    })
+    obj.attributes = attribute
+    //获取子节点
+    var children = []
+    Array.from(element.childNodes).forEach(node => {
+      if (node.nodeType === 1) // element
+        children.push(createObj(node))
+      else if (node.nodeType === 3) { // 文本节点
+        var content = node.textContent.trim()
+        if (content !== "") {
+          children.push({ tag: 'text', content: content })
+        }
+      }
+    })
+    obj.children = children
+    return obj
+  }
+  dom2json()
+</script>
