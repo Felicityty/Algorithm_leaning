@@ -1,31 +1,34 @@
 <!--
  * @Author: Felicity💪
  * @Date: 2023-08-29 22:42:13
- * @LastEditTime: 2023-08-29 23:06:49
+ * @LastEditTime: 2023-09-29 16:10:46
 -->
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>LazyLoad</title>
   <style>
     img {
       display: block;
-      height: 500px;
       width: 500px;
+      height: 500px;
     }
   </style>
 </head>
 
 <body>
   <div>
-    <img src="lazyLoadPics/loading.gif" data-src="lazyLoadPics/banner1.png" alt="">
-    <img src="lazyLoadPics/loading.gif" data-src="lazyLoadPics/banner2.png" alt="">
-    <img src="lazyLoadPics/loading.gif" data-src="lazyLoadPics/banner3.png" alt="">
-    <img src="lazyLoadPics/loading.gif" data-src="lazyLoadPics/banner4.png" alt="">
-    <img src="lazyLoadPics/loading.gif" data-src="lazyLoadPics/banner5.png" alt="">
+    <div>
+      <img src="lazyLoadPics/loading.gif" data-src="lazyLoadPics/banner1.png" alt="">
+      <img src="lazyLoadPics/loading.gif" data-src="lazyLoadPics/banner2.png" alt="">
+      <img src="lazyLoadPics/loading.gif" data-src="lazyLoadPics/banner3.png" alt="">
+      <img src="lazyLoadPics/loading.gif" data-src="lazyLoadPics/banner4.png" alt="">
+      <img src="lazyLoadPics/loading.gif" data-src="lazyLoadPics/banner5.png" alt="">
+    </div>
   </div>
 </body>
 
@@ -34,23 +37,21 @@
 <script>
   let index = 0
   function lazyLoad() {
-    let imgs = document.getElementsByTagName('img')
-    let innerHeight = window.innerHeight || document.documentElement.clientHeight // 视口高度
-    let scrollTop = document.documentElement.scrollTop
+    const imgs = document.getElementsByTagName('img')
+    console.log(imgs)
+    // 视口高度
+    const innerHeight = window.innerHeight || document.documentElement.clientHeight
+    const scrollTop = document.documentElement.scrollTop
     for (let i = index; i < imgs.length; i++) {
       if (imgs[i].offsetTop < innerHeight + scrollTop) {
-        if (imgs[i].getAttribute('src') === 'lazyLoadPics/loading.gif') {
+        if (imgs[i].getAttribute('src') === "lazyLoadPics/loading.gif") {
           imgs[i].src = imgs[i].getAttribute('data-src')
         }
         index = i + 1
       }
     }
   }
-
   lazyLoad()
-
-  window.addEventListener('scroll', throttle(lazyLoad, 1000))
-
   function throttle(fn, delay) {
     let timer = null
     return function (...args) {
@@ -62,4 +63,5 @@
       }
     }
   }
+  window.onscroll = throttle(lazyLoad, 1000)
 </script>

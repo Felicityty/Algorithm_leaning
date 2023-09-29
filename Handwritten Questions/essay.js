@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-08-20 20:13:05
- * @LastEditTime: 2023-09-23 22:47:55
+ * @LastEditTime: 2023-09-30 00:23:58
  */
 // 想到啥就写点儿
 
@@ -1414,52 +1414,160 @@
 
 // 2023.9.23
 
-const students = [
-  { "group": 8, "class": "y", "school": "B", "grade": "2nd" },
-  { "group": 7, "class": "r", "school": "A", "grade": "3rd" },
-  { "group": 2, "class": "f", "school": "B", "grade": "2nd" },
-  { "group": 8, "class": "w", "school": "B", "grade": "3rd" },
-  { "group": 8, "class": "o", "school": "B", "grade": "2nd" },
-  { "group": 2, "class": "c", "school": "B", "grade": "2nd" },
-  { "group": 4, "class": "v", "school": "C", "grade": "2nd" },
-  { "group": 7, "class": "s", "school": "B", "grade": "2nd" },
-  { "group": 10, "class": "q", "school": "B", "grade": "2nd" },
-  { "group": 6, "class": "b", "school": "B", "grade": "2nd" },
-  { "group": 6, "class": "r", "school": "B", "grade": "2nd" },
-  { "group": 10, "class": "d", "school": "A", "grade": "2nd" },
-  { "group": 2, "class": "u", "school": "A", "grade": "3rd" },
-  { "group": 2, "class": "t", "school": "A", "grade": "1st" },
-  { "group": 2, "class": "r", "school": "C", "grade": "2nd" },
-  { "group": 2, "class": "x", "school": "B", "grade": "2nd" },
-  { "group": 3, "class": "r", "school": "A", "grade": "2nd" },
-  { "group": 7, "class": "h", "school": "A", "grade": "2nd" },
-  { "group": 2, "class": "b", "school": "B", "grade": "1st" },
-  { "group": 7, "class": "t", "school": "B", "grade": "3rd" }
-]
+// const students = [
+//   { "group": 8, "class": "y", "school": "B", "grade": "2nd" },
+//   { "group": 7, "class": "r", "school": "A", "grade": "3rd" },
+//   { "group": 2, "class": "f", "school": "B", "grade": "2nd" },
+//   { "group": 8, "class": "w", "school": "B", "grade": "3rd" },
+//   { "group": 8, "class": "o", "school": "B", "grade": "2nd" },
+//   { "group": 2, "class": "c", "school": "B", "grade": "2nd" },
+//   { "group": 4, "class": "v", "school": "C", "grade": "2nd" },
+//   { "group": 7, "class": "s", "school": "B", "grade": "2nd" },
+//   { "group": 10, "class": "q", "school": "B", "grade": "2nd" },
+//   { "group": 6, "class": "b", "school": "B", "grade": "2nd" },
+//   { "group": 6, "class": "r", "school": "B", "grade": "2nd" },
+//   { "group": 10, "class": "d", "school": "A", "grade": "2nd" },
+//   { "group": 2, "class": "u", "school": "A", "grade": "3rd" },
+//   { "group": 2, "class": "t", "school": "A", "grade": "1st" },
+//   { "group": 2, "class": "r", "school": "C", "grade": "2nd" },
+//   { "group": 2, "class": "x", "school": "B", "grade": "2nd" },
+//   { "group": 3, "class": "r", "school": "A", "grade": "2nd" },
+//   { "group": 7, "class": "h", "school": "A", "grade": "2nd" },
+//   { "group": 2, "class": "b", "school": "B", "grade": "1st" },
+//   { "group": 7, "class": "t", "school": "B", "grade": "3rd" }
+// ]
 
-const divide = (list, key) => {
-  return list.reduce((pre, cur) => {
-    const keyValue = cur[key]
-    if (!pre[keyValue]) {
-      pre[keyValue] = [cur]
+// const divide = (list, key) => {
+//   return list.reduce((pre, cur) => {
+//     const keyValue = cur[key]
+//     if (!pre[keyValue]) {
+//       pre[keyValue] = [cur]
+//     } else {
+//       pre[keyValue].push(cur)
+//     }
+//     return pre
+//   }, {})
+// }
+
+// const divideN = (list, keys) => {
+//   if (keys.length === 0) {
+//     return list
+//   }
+//   const [key, ...restKeys] = keys
+//   const divided = divide(list, key)
+//   for (let groupKey in divided) {
+//     divided[groupKey] = divideN(divided[groupKey], restKeys)
+//   }
+//   return divided
+// }
+
+// const res = divideN(students, ['school', 'grade'])
+// console.log('res', res)
+
+
+// ----------------------------------------------------------------------
+
+// 2023.9.29
+
+// 01-call、apply、bind、Symbol
+
+// // call ✅
+// const Person1 = {
+//   name: '1111',
+//   sayName() {
+//     console.log(`my name is ${this.name}`)
+//   }
+// }
+
+// const Person2 = {
+//   name: '2222'
+// }
+
+// Person1.sayName()
+// Person1.sayName.call(Person2)
+
+// Function.prototype.myCall = function (context = window, ...args) {
+//   if (this === Function.prototype) {
+//     return undefined
+//   }
+//   const fn = Symbol()
+//   context[fn] = this
+//   const res = context[fn](...args)
+//   delete context[fn]
+//   return res
+// }
+
+// Person1.sayName.myCall(Person2)
+
+// // symbol ✅
+// function mySymbol(obj) {
+//   let unique = (Math.random() + new Date().getTime()).toString(32).slice(0, 8)
+//   if (obj.hasOwnProperty(unique)) {
+//     return mySymbol(obj)
+//   }
+//   return unique
+// }
+
+// // apply ✅
+
+// Person1.sayName.apply(Person2)
+
+// Function.prototype.myApply = function (context = window, args = []) {
+//   if (this === Function.prototype) {
+//     return undefined
+//   }
+//   const fn = Symbol()
+//   context[fn] = this
+//   const res = context[fn](...args)
+//   delete context[fn]
+//   return res
+// }
+
+// Person1.sayName.myApply(Person2)
+
+// // bind ✅
+
+// Person1.sayName.bind(Person2)()
+
+// Function.prototype.myBind = function (context = window, ...args) {
+//   if (this === Function.prototype) {
+//     return undefined
+//   }
+//   const _this = this
+//   return function F(...args2) {
+//     if (_this instanceof F) {
+//       return new _this(...args, ...args2)
+//     } else {
+//       return _this.apply(context, args.concat(args2))
+//     }
+//   }
+// }
+
+// Person1.sayName.myBind(Person2)()
+
+// 03 - flat
+const arr = [1, 2, [3, 4], [5, 6, [7, 8]]]
+
+function flat(arr) {
+  return arr.reduce((pre, cur) => {
+    if (Array.isArray(cur)) {
+      return pre.concat(flat(cur))
     } else {
-      pre[keyValue].push(cur)
+      return pre.concat(cur)
     }
-    return pre
-  }, {})
+  }, [])
 }
 
-const divideN = (list, keys) => {
-  if (keys.length === 0) {
-    return list
-  }
-  const [key, ...restKeys] = keys
-  const divided = divide(list, key)
-  for (let groupKey in divided) {
-    divided[groupKey] = divideN(divided[groupKey], restKeys)
-  }
-  return divided
+console.log(flat(arr))
+
+function flatten(arr, depth) {
+  return arr.reduce((pre, cur) => {
+    if (Array.isArray(cur) && depth > 1) {
+      return pre.concat(flatten(cur, depth - 1))
+    } else {
+      return pre.concat(cur)
+    }
+  }, [])
 }
 
-const res = divideN(students, ['school', 'grade'])
-console.log('res', res)
+console.log(flatten(arr, 1))

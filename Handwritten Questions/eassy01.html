@@ -1,58 +1,63 @@
 <!--
  * @Author: Felicity💪
  * @Date: 2023-08-29 22:22:20
- * @LastEditTime: 2023-08-29 22:41:15
+ * @LastEditTime: 2023-09-29 15:47:36
 -->
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>debounce / throttle</title>
   <style>
-    /* body {
+    body {
       height: 2000px;
-    } */
+    }
   </style>
 </head>
 
 <body>
-  <!-- <input type="text"> -->
-  <!-- <script>
-    // let inp = document.querySelector('input')
-    // console.log(inp)
-    // function debounce(fn, delay) {
-    //   let timer = null
-    //   return function (...args) {
-    //     if (timer) {
-    //       clearTimeout(timer)
-    //     }
-    //     timer = setTimeout(() => {
-    //       fn.apply(this, args)
-    //     }, delay)
-    //   }
-    // }
-    // inp.oninput = debounce(function () {
-    //   console.log(this.value)
-    // }, 1000)
-
-    // function throttle(fn, delay) {
-    //   let timer = null
-    //   return function (...args) {
-    //     if (timer === null) {
-    //       timer = setTimeout(() => {
-    //         fn.apply(this, args)
-    //         timer = null
-    //       }, delay)
-    //     }
-    //   }
-    // }
-
-    // window.onscroll = throttle(function () {
-    //   console.log(11)
-    // }, 1000)
-  </script> -->
+  <input type="text">
 </body>
 
 </html>
+
+<script>
+  // debounce ✅
+  function debounce(fn, delay) {
+    let timer = null
+    return function (...args) {
+      if (timer !== null) {
+        clearTimeout(timer)
+      }
+      timer = setTimeout(() => {
+        fn.apply(this, args)
+      }, delay)
+    }
+  }
+
+  const inp = document.querySelector('input')
+  inp.oninput = debounce(function () {
+    console.log(this.value)
+  }, 1000)
+
+  // throttle ✅
+  function throttle(fn, delay) {
+    let timer = null
+    return function (...args) {
+      if (timer === null) {
+        timer = setTimeout(() => {
+          fn.apply(this, args)
+          timer = null
+        }, delay)
+      }
+    }
+  }
+
+  window.onscroll = throttle(function () {
+    console.log(1111)
+  }, 1000)
+
+</script>
