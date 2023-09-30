@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-08-20 20:13:05
- * @LastEditTime: 2023-09-30 00:23:58
+ * @LastEditTime: 2023-09-30 23:52:24
  */
 // 想到啥就写点儿
 
@@ -1545,29 +1545,54 @@
 
 // Person1.sayName.myBind(Person2)()
 
-// 03 - flat
-const arr = [1, 2, [3, 4], [5, 6, [7, 8]]]
+// // 03 - flat
+// const arr = [1, 2, [3, 4], [5, 6, [7, 8]]]
 
-function flat(arr) {
-  return arr.reduce((pre, cur) => {
-    if (Array.isArray(cur)) {
-      return pre.concat(flat(cur))
-    } else {
-      return pre.concat(cur)
-    }
-  }, [])
+// function flat(arr) {
+//   return arr.reduce((pre, cur) => {
+//     if (Array.isArray(cur)) {
+//       return pre.concat(flat(cur))
+//     } else {
+//       return pre.concat(cur)
+//     }
+//   }, [])
+// }
+
+// console.log(flat(arr))
+
+// function flatten(arr, depth) {
+//   return arr.reduce((pre, cur) => {
+//     if (Array.isArray(cur) && depth > 1) {
+//       return pre.concat(flatten(cur, depth - 1))
+//     } else {
+//       return pre.concat(cur)
+//     }
+//   }, [])
+// }
+
+// console.log(flatten(arr, 1))
+
+
+// ----------------------------------------------------------------------
+
+// 2023.9.30
+
+// getKeyByValue
+
+function getKeyByValue(obj, value) {
+  return Object.keys(obj).filter(key => obj[key] === value)
 }
 
-console.log(flat(arr))
-
-function flatten(arr, depth) {
-  return arr.reduce((pre, cur) => {
-    if (Array.isArray(cur) && depth > 1) {
-      return pre.concat(flatten(cur, depth - 1))
-    } else {
-      return pre.concat(cur)
-    }
-  }, [])
+const subjectType = {
+  'LB': '劳保',
+  'XW': '消委',
+  'GA': '公安',
+  'GT': '国土',
+  'CG': '城管',
+  'GJJ': '公积金',
+  'ZH': '综合',
 }
 
-console.log(flatten(arr, 1))
+console.log(getKeyByValue(subjectType, '综合'))
+
+// 九月拜拜👋 坚持✊再坚持一个月叭
