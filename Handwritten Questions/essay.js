@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-08-20 20:13:05
- * @LastEditTime: 2023-09-30 23:52:24
+ * @LastEditTime: 2023-10-01 23:58:44
  */
 // 想到啥就写点儿
 
@@ -1577,22 +1577,119 @@
 
 // 2023.9.30
 
-// getKeyByValue
+// 04 - getKeyByValue
 
-function getKeyByValue(obj, value) {
-  return Object.keys(obj).filter(key => obj[key] === value)
+// function getKeyByValue(obj, value) {
+//   return Object.keys(obj).filter(key => obj[key] === value)
+// }
+
+// const subjectType = {
+//   'LB': '劳保',
+//   'XW': '消委',
+//   'GA': '公安',
+//   'GT': '国土',
+//   'CG': '城管',
+//   'GJJ': '公积金',
+//   'ZH': '综合',
+// }
+
+// console.log(getKeyByValue(subjectType, '综合'))
+
+
+// ----------------------------------------------------------------------
+
+// 2023.10.01
+
+// 05 - curry
+
+// function curry(fn, ...args) {
+//   if (args.length >= fn.length) {
+//     // return fn(...args)
+//     return fn.apply(this, args)
+//   } else {
+//     return (...args2) => {
+//       // return curry(fn, ...args, ...args2)
+//       return curry.apply(this, [fn, ...args, ...args2])
+//     }
+//   }
+// }
+
+// function sum(a, b, c) {
+//   return a + b + c
+// }
+
+// let currySum = curry(sum)
+// console.log(currySum(1, 2, 3))
+
+// 06 - resolve & reject
+
+// const p1 = Promise.resolve(1)
+// console.log('p1', p1)
+
+// Promise.myResolve = function (value) {
+//   return new Promise((resolve, reject) => {
+//     if (value instanceof Promise) {
+//       return value.then(resolve, reject)
+//     } else {
+//       return resolve(value)
+//     }
+//   })
+// }
+
+// Promise.myReject = function (value) {
+//   return new Promise((resolve, reject) => {
+//     return reject(value)
+//   })
+// }
+
+// 07 - catch & finally
+
+// const promise1 = new Promise((resolve, reject) => {
+//   throw new Error('Uh-oh!')
+// })
+
+// promise1.catch((error) => {
+//   console.error(error)
+// })
+
+// Promise.prototype.myCatch = function (onRejected) {
+//   return this.then(null, onRejected)
+// }
+
+// Promise.prototype.myFinally = function (onFinally) {
+//   return this.then(onFinally, onFinally)
+// }
+
+// 08 - all & allSettled & race
+
+const p1 = Promise.resolve(123)
+const p2 = 456
+const p3 = new Promise((resolve, reject) => {
+  setTimeout(resolve, 1000, '789')
+})
+
+Promise.myAll = function (promises) {
+  let res = [], count = 0
+  return new Promise((resolve, reject) => {
+    promises.forEach((promise, index) => {
+      Promise.resolve(promise).then(
+        value => {
+          res[index] = value
+          count++
+          if (count === promises.length) {
+            resolve(res)
+          }
+        },
+        reason => {
+          reject(reason)
+        }
+      )
+    })
+  })
 }
 
-const subjectType = {
-  'LB': '劳保',
-  'XW': '消委',
-  'GA': '公安',
-  'GT': '国土',
-  'CG': '城管',
-  'GJJ': '公积金',
-  'ZH': '综合',
-}
+Promise.myAll([p1, p2, p3]).then((values) => {
+  console.log(values)
+})
 
-console.log(getKeyByValue(subjectType, '综合'))
-
-// 九月拜拜👋 坚持✊再坚持一个月叭
+// 主打一个重复 有点儿紧张🥹
