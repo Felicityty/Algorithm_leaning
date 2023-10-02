@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-08-20 20:13:05
- * @LastEditTime: 2023-10-02 23:03:44
+ * @LastEditTime: 2023-10-03 01:15:04
  */
 // 想到啥就写点儿
 
@@ -1788,26 +1788,163 @@ const { start } = require("repl")
 // })
 
 // 3 手写promisify
-const fs = require('fs')
-const util = require('util')
+// const fs = require('fs')
+// const util = require('util')
 
-util.myPromisify = function (fn) {
-  return (...args) => {
-    return new Promise((resolve, reject) => {
-      fn(...args, (err, buf) => {
-        if (err) {
-          reject(err)
-          return
-        }
-        resolve(buf)
-      })
-    })
+// util.myPromisify = function (fn) {
+//   return (...args) => {
+//     return new Promise((resolve, reject) => {
+//       fn(...args, (err, buf) => {
+//         if (err) {
+//           reject(err)
+//           return
+//         }
+//         resolve(buf)
+//       })
+//     })
+//   }
+// }
+
+// const readFilePromisify = util.myPromisify(fs.readFile)
+// readFilePromisify('./Handwritten Questions/02-call.js', 'utf-8').then(data => {
+//   console.log(data)
+// })
+
+// ----------------------------------------------------------------------
+
+// 2023.10.03
+
+// 10 - traffic light
+// function red() {
+//   console.log('red')
+// }
+// function green() {
+//   console.log('green')
+// }
+// function yellow() {
+//   console.log('yellow')
+// }
+// function light(fn, delay) {
+//   return new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//       fn()
+//       resolve()
+//     }, delay)
+//   })
+// }
+
+// function toggleLight() {
+//   light(green, 1000).then(() => {
+//     return light(red, 3000)
+//   }).then(() => {
+//     return light(yellow, 2000)
+//   }).then(() => {
+//     toggleLight()
+//   })
+// }
+
+// toggleLight()
+
+// 11 - forEach & map
+
+const person = {
+  name: 'Alice',
+  greet: function () {
+    console.log(`Hello, I'm ${this.name}`)
+  }
+};
+
+const friends = ['Bob', 'Charlie', 'David']
+friends.forEach(person.greet, person)
+
+Array.prototype.myForEach = function (fn, thisArg) {
+  if (typeof fn !== 'function') {
+    throw new Error(`${fn}不是函数`)
+  }
+  if ([undefined, null].includes(this)) {
+    throw new Error('this是undefined或null')
+  }
+  let arr = Object(this)
+  for (let i = 0; i < arr.length; i++) {
+    fn.call(thisArg, arr[i], i, arr)
   }
 }
 
-const readFilePromisify = util.myPromisify(fs.readFile)
-readFilePromisify('./Handwritten Questions/02-call.js', 'utf-8').then(data => {
-  console.log(data)
-})
+friends.myForEach(person.greet, person)
 
-// 🙏
+Array.prototype.myMap = function (fn, thisArg) {
+  let res = []
+  if (typeof fn !== 'function') {
+    throw new Error(`${fn}不是函数`)
+  }
+  if ([undefined, null].includes(this)) {
+    throw new Error('this是undefined或null')
+  }
+  let arr = Object(this)
+  for (let i = 0; i < arr.length; i++) {
+    fn.call(thisArg, arr[i], i, arr)
+  }
+  return res
+}
+
+// 11 - filter & some & reduce
+
+Array.prototype.myFilter = function (fn, thisArg) {
+  let res = []
+  if (typeof fn !== 'function') {
+    throw new Error(`${fn}不是函数`)
+  }
+  if ([undefined, null].includes(this)) {
+    throw new Error('this是undefined或null')
+  }
+  let arr = Object(this)
+  for (let i = 0; i < arr.length; i++) {
+    if (fn.call(thisArg, arr[i], i, arr)) {
+      res.push(arr[i])
+    }
+  }
+  return res
+}
+
+const words = ['spray', 'limit', 'elite', 'exuberant', 'destruction', 'present']
+const result = words.myFilter((word) => word.length > 6)
+console.log(result)
+
+Array.prototype.mySome = function (fn, thisArg) {
+  if (typeof fn !== 'function') {
+    throw new Error(`${fn}不是函数`)
+  }
+  if ([undefined, null].includes(this)) {
+    throw new Error('this是undefined或null')
+  }
+  let arr = Object(this)
+  for (let i = 0; i < arr.length; i++) {
+    if (fn.call(thisArg, arr[i], i, arr)) {
+      return true
+    }
+  }
+  return false
+}
+
+const arr = [1, 2, 3, 4, 5]
+console.log(arr.mySome(ele => ele % 2 === 0))
+
+Array.prototype.myReduce = function (fn, initialValue) {
+  if (typeof fn !== 'function') {
+    throw new Error(`${fn}不是函数`)
+  }
+  let i = 0
+  let arr = Object(this)
+  if ([undefined, null].includes(initialValue)) {
+    initialValue = arr[0]
+    i = 1
+  }
+  for (; i < arr.length; i++) {
+    initialValue = fn(initialValue, arr[i], i, arr)
+  }
+  return initialValue
+}
+
+const nums = [1, 2, 3, 4, 5, 6]
+console.log('reduce1:', nums.myReduce((a, b) => a + b))
+console.log('reduce2:', nums.myReduce((a, b) => a + b, ''))

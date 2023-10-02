@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-08-20 15:50:36
- * @LastEditTime: 2023-09-25 23:37:23
+ * @LastEditTime: 2023-10-03 01:16:28
  */
 
 // 手写数组方法 forEach 和 map
@@ -29,6 +29,7 @@ friends.forEach(person.greet) // 输出：Hello, I'm undefined
 
 // 使用thisArg参数将this指向person对象
 friends.forEach(person.greet, person) // 输出：Hello, I'm Alice
+// 如果要输出friends数组中的值，改成参数的传入
 
 // -----------------------------------------
 
@@ -142,6 +143,7 @@ Array.prototype.myReduce = function (fn, initialValue) {
     initialValue = arr[0]
   }
   for (; i < arr.length; i++) {
+    // 这里没有call❗️
     initialValue = fn(initialValue, arr[i], i, arr)
   }
   return initialValue
