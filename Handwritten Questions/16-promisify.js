@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-08-18 17:31:34
- * @LastEditTime: 2023-08-23 14:56:33
+ * @LastEditTime: 2023-10-02 22:35:05
  */
 
 // 手写node的util模块下的promisify
@@ -9,8 +9,8 @@
 
 // 1 没有promisify
 // const fs = require('fs')
-// fs.readFile('./Handwritten Questions/02-call.js', (err, buf) => {
-//   console.log(buf.toString('utf-8'))
+// fs.readFile('./Handwritten Questions/02-call.js', 'utf-8', (err, buf) => {
+//   console.log('buf', buf)
 // })
 
 // 2 使用promisify

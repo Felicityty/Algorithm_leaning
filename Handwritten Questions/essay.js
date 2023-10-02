@@ -1,9 +1,12 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-08-20 20:13:05
- * @LastEditTime: 2023-10-01 23:58:44
+ * @LastEditTime: 2023-10-02 23:03:44
  */
 // 想到啥就写点儿
+
+const { run } = require("node:test")
+const { start } = require("repl")
 
 // 2023.8.20
 // 手写Symbol ✅
@@ -1662,34 +1665,149 @@
 
 // 08 - all & allSettled & race
 
-const p1 = Promise.resolve(123)
-const p2 = 456
-const p3 = new Promise((resolve, reject) => {
-  setTimeout(resolve, 1000, '789')
-})
+// const p1 = Promise.resolve(123)
+// const p2 = 456
+// const p3 = new Promise((resolve, reject) => {
+//   setTimeout(resolve, 1000, '789')
+// })
 
-Promise.myAll = function (promises) {
-  let res = [], count = 0
-  return new Promise((resolve, reject) => {
-    promises.forEach((promise, index) => {
-      Promise.resolve(promise).then(
-        value => {
-          res[index] = value
-          count++
-          if (count === promises.length) {
-            resolve(res)
-          }
-        },
-        reason => {
-          reject(reason)
+// Promise.myAll = function (promises) {
+//   let res = [], count = 0
+//   return new Promise((resolve, reject) => {
+//     promises.forEach((promise, index) => {
+//       Promise.resolve(promise).then(
+//         value => {
+//           res[index] = value
+//           count++
+//           if (count === promises.length) {
+//             resolve(res)
+//           }
+//         },
+//         reason => {
+//           reject(reason)
+//         }
+//       )
+//     })
+//   })
+// }
+
+// Promise.myAll([p1, p2, p3]).then((values) => {
+//   console.log(values)
+// })
+
+
+// ----------------------------------------------------------------------
+
+// 2023.10.02
+
+// allSettled
+
+// const p1 = Promise.resolve(123)
+// const p2 = 456
+// const p3 = new Promise((resolve, reject) => {
+//   setTimeout(resolve, 1000, '789')
+// })
+
+// // 永远不会失败 res的每一项有状态和结果
+// Promise.myAllSettled = function (promises) {
+//   let res = [], count = 0
+//   return new Promise((resolve, reject) => {
+//     promises.forEach((promise, index) => {
+//       Promise.resolve(promise).then(
+//         value => {
+//           res[index] = {
+//             status: 'fulfilled',
+//             value
+//           }
+//           count++
+//           if (promises.length === count) {
+//             resolve(res)
+//           }
+//         },
+//         reason => {
+//           res[index] = {
+//             status: 'rejected',
+//             reason
+//           }
+//           count++
+//           if (promises.length === count) {
+//             resolve(res)
+//           }
+//         }
+//       )
+//     })
+//   })
+// }
+
+// Promise.myAllSettled([p1, p2, p3]).then(res => {
+//   console.log(res)
+// })
+
+// race
+
+// const p1 = Promise.resolve(123)
+// const p2 = 456
+// const p3 = new Promise((resolve, reject) => {
+//   setTimeout(resolve, 1000, '789')
+// })
+
+// Promise.myRace = function (promises) {
+//   return new Promise((resolve, reject) => {
+//     promises.forEach(promise => {
+//       Promise.resolve(promise).then(
+//         value => {
+//           resolve(value)
+//         },
+//         reason => {
+//           reject(reason)
+//         }
+//       )
+//     })
+//   })
+// }
+
+// Promise.myRace([p1, p2, p3]).then(res => {
+//   console.log(res)
+// })
+
+// 09 - promisify
+
+// 1 不使用promisify
+// const fs = require('fs')
+// fs.readFile('./Handwritten Questions/02-call.js', 'utf-8', (err, buf) => {
+//   console.log('buf', buf)
+// })
+
+// 2 使用promisify
+// const fs = require('fs')
+// const util = require('util')
+
+// const readFilePromisify = util.promisify(fs.readFile)
+// readFilePromisify('./Handwritten Questions/02-call.js', 'utf-8').then(data => {
+//   console.log(data)
+// })
+
+// 3 手写promisify
+const fs = require('fs')
+const util = require('util')
+
+util.myPromisify = function (fn) {
+  return (...args) => {
+    return new Promise((resolve, reject) => {
+      fn(...args, (err, buf) => {
+        if (err) {
+          reject(err)
+          return
         }
-      )
+        resolve(buf)
+      })
     })
-  })
+  }
 }
 
-Promise.myAll([p1, p2, p3]).then((values) => {
-  console.log(values)
+const readFilePromisify = util.myPromisify(fs.readFile)
+readFilePromisify('./Handwritten Questions/02-call.js', 'utf-8').then(data => {
+  console.log(data)
 })
 
-// 主打一个重复 有点儿紧张🥹
+// 🙏
