@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-08-20 20:13:05
- * @LastEditTime: 2023-10-03 01:15:04
+ * @LastEditTime: 2023-10-04 23:58:46
  */
 // 想到啥就写点儿
 
@@ -1847,104 +1847,182 @@ const { start } = require("repl")
 
 // 11 - forEach & map
 
-const person = {
-  name: 'Alice',
-  greet: function () {
-    console.log(`Hello, I'm ${this.name}`)
-  }
-};
+// const person = {
+//   name: 'Alice',
+//   greet: function () {
+//     console.log(`Hello, I'm ${this.name}`)
+//   }
+// };
 
-const friends = ['Bob', 'Charlie', 'David']
-friends.forEach(person.greet, person)
+// const friends = ['Bob', 'Charlie', 'David']
+// friends.forEach(person.greet, person)
 
-Array.prototype.myForEach = function (fn, thisArg) {
-  if (typeof fn !== 'function') {
-    throw new Error(`${fn}不是函数`)
+// Array.prototype.myForEach = function (fn, thisArg) {
+//   if (typeof fn !== 'function') {
+//     throw new Error(`${fn}不是函数`)
+//   }
+//   if ([undefined, null].includes(this)) {
+//     throw new Error('this是undefined或null')
+//   }
+//   let arr = Object(this)
+//   for (let i = 0; i < arr.length; i++) {
+//     fn.call(thisArg, arr[i], i, arr)
+//   }
+// }
+
+// friends.myForEach(person.greet, person)
+
+// Array.prototype.myMap = function (fn, thisArg) {
+//   let res = []
+//   if (typeof fn !== 'function') {
+//     throw new Error(`${fn}不是函数`)
+//   }
+//   if ([undefined, null].includes(this)) {
+//     throw new Error('this是undefined或null')
+//   }
+//   let arr = Object(this)
+//   for (let i = 0; i < arr.length; i++) {
+//     fn.call(thisArg, arr[i], i, arr)
+//   }
+//   return res
+// }
+
+// 12 - filter & some & reduce
+
+// Array.prototype.myFilter = function (fn, thisArg) {
+//   let res = []
+//   if (typeof fn !== 'function') {
+//     throw new Error(`${fn}不是函数`)
+//   }
+//   if ([undefined, null].includes(this)) {
+//     throw new Error('this是undefined或null')
+//   }
+//   let arr = Object(this)
+//   for (let i = 0; i < arr.length; i++) {
+//     if (fn.call(thisArg, arr[i], i, arr)) {
+//       res.push(arr[i])
+//     }
+//   }
+//   return res
+// }
+
+// const words = ['spray', 'limit', 'elite', 'exuberant', 'destruction', 'present']
+// const result = words.myFilter((word) => word.length > 6)
+// console.log(result)
+
+// Array.prototype.mySome = function (fn, thisArg) {
+//   if (typeof fn !== 'function') {
+//     throw new Error(`${fn}不是函数`)
+//   }
+//   if ([undefined, null].includes(this)) {
+//     throw new Error('this是undefined或null')
+//   }
+//   let arr = Object(this)
+//   for (let i = 0; i < arr.length; i++) {
+//     if (fn.call(thisArg, arr[i], i, arr)) {
+//       return true
+//     }
+//   }
+//   return false
+// }
+
+// const arr = [1, 2, 3, 4, 5]
+// console.log(arr.mySome(ele => ele % 2 === 0))
+
+// Array.prototype.myReduce = function (fn, initialValue) {
+//   if (typeof fn !== 'function') {
+//     throw new Error(`${fn}不是函数`)
+//   }
+//   let i = 0
+//   let arr = Object(this)
+//   if ([undefined, null].includes(initialValue)) {
+//     initialValue = arr[0]
+//     i = 1
+//   }
+//   for (; i < arr.length; i++) {
+//     initialValue = fn(initialValue, arr[i], i, arr)
+//   }
+//   return initialValue
+// }
+
+// const nums = [1, 2, 3, 4, 5, 6]
+// console.log('reduce1:', nums.myReduce((a, b) => a + b))
+// console.log('reduce2:', nums.myReduce((a, b) => a + b, ''))
+
+// 13 - sort
+// 稳定 冒泡 基数 归并 插入
+const arr = [3, 4, 2, 5, 1, 2]
+
+// 冒泡
+function bubbleSort(arr) {
+  for (let i = 0; i < arr.length - 1; i++) {
+    let flag = true
+    for (let j = arr.length - 1; j > i; j--) {
+      if (arr[j - 1] > arr[j]) {
+        [arr[j - 1], arr[j]] = [arr[j], arr[j - 1]]
+        flag = false
+      }
+    }
+    if (flag) break
   }
-  if ([undefined, null].includes(this)) {
-    throw new Error('this是undefined或null')
+  return arr
+}
+console.log('bubbleSort', bubbleSort(arr))
+
+// 选择
+function selectionSort(arr) {
+  for (let i = 0; i < arr.length - 1; i++) {
+    let minIndex = i
+    for (let j = i + 1; j < arr.length; j++) {
+      if (arr[j] < arr[i]) {
+        minIndex = j
+      }
+    }
+    [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]]
   }
-  let arr = Object(this)
-  for (let i = 0; i < arr.length; i++) {
-    fn.call(thisArg, arr[i], i, arr)
-  }
+  return arr
 }
 
-friends.myForEach(person.greet, person)
+console.log('selectionSort', selectionSort(arr))
 
-Array.prototype.myMap = function (fn, thisArg) {
-  let res = []
-  if (typeof fn !== 'function') {
-    throw new Error(`${fn}不是函数`)
-  }
-  if ([undefined, null].includes(this)) {
-    throw new Error('this是undefined或null')
-  }
-  let arr = Object(this)
-  for (let i = 0; i < arr.length; i++) {
-    fn.call(thisArg, arr[i], i, arr)
-  }
-  return res
-}
-
-// 11 - filter & some & reduce
-
-Array.prototype.myFilter = function (fn, thisArg) {
-  let res = []
-  if (typeof fn !== 'function') {
-    throw new Error(`${fn}不是函数`)
-  }
-  if ([undefined, null].includes(this)) {
-    throw new Error('this是undefined或null')
-  }
-  let arr = Object(this)
-  for (let i = 0; i < arr.length; i++) {
-    if (fn.call(thisArg, arr[i], i, arr)) {
-      res.push(arr[i])
+// 插入
+function insertionSort(arr) {
+  for (let i = 1; i < arr.length; i++) {
+    let target = i
+    for (let j = i - 1; j >= 0; j--) {
+      if (arr[j] > arr[target]) {
+        [arr[j], arr[target]] = [arr[target], arr[j]]
+        target = j
+      } else {
+        break
+      }
     }
   }
-  return res
+  return arr
 }
 
-const words = ['spray', 'limit', 'elite', 'exuberant', 'destruction', 'present']
-const result = words.myFilter((word) => word.length > 6)
-console.log(result)
+console.log('insertionSort', insertionSort(arr))
 
-Array.prototype.mySome = function (fn, thisArg) {
-  if (typeof fn !== 'function') {
-    throw new Error(`${fn}不是函数`)
+// 快排
+function quickSort(arr, left, right) {
+  if (right <= left) {
+    return
   }
-  if ([undefined, null].includes(this)) {
-    throw new Error('this是undefined或null')
-  }
-  let arr = Object(this)
-  for (let i = 0; i < arr.length; i++) {
-    if (fn.call(thisArg, arr[i], i, arr)) {
-      return true
+  let l = left, r = right, target = arr[l]
+  while (l < r) {
+    while (l < r && arr[r] >= arr[target]) {
+      r--
     }
+    arr[l] = arr[r]
+    while (l < r && arr[l] < arr[target]) {
+      l++
+    }
+    arr[r] = arr[l]
   }
-  return false
+  arr[l] = target
+  quickSort(arr, left, l - 1)
+  quickSort(arr, l + 1, right)
+  return arr
 }
 
-const arr = [1, 2, 3, 4, 5]
-console.log(arr.mySome(ele => ele % 2 === 0))
-
-Array.prototype.myReduce = function (fn, initialValue) {
-  if (typeof fn !== 'function') {
-    throw new Error(`${fn}不是函数`)
-  }
-  let i = 0
-  let arr = Object(this)
-  if ([undefined, null].includes(initialValue)) {
-    initialValue = arr[0]
-    i = 1
-  }
-  for (; i < arr.length; i++) {
-    initialValue = fn(initialValue, arr[i], i, arr)
-  }
-  return initialValue
-}
-
-const nums = [1, 2, 3, 4, 5, 6]
-console.log('reduce1:', nums.myReduce((a, b) => a + b))
-console.log('reduce2:', nums.myReduce((a, b) => a + b, ''))
+console.log('quickSort', quickSort(arr, 0, 5))
