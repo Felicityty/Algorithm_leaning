@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-08-20 20:13:05
- * @LastEditTime: 2023-10-04 23:58:46
+ * @LastEditTime: 2023-10-05 17:53:53
  */
 // 想到啥就写点儿
 
@@ -1951,78 +1951,157 @@ const { start } = require("repl")
 
 // 13 - sort
 // 稳定 冒泡 基数 归并 插入
-const arr = [3, 4, 2, 5, 1, 2]
+// const arr = [3, 4, 2, 5, 1, 2]
 
-// 冒泡
-function bubbleSort(arr) {
-  for (let i = 0; i < arr.length - 1; i++) {
-    let flag = true
-    for (let j = arr.length - 1; j > i; j--) {
-      if (arr[j - 1] > arr[j]) {
-        [arr[j - 1], arr[j]] = [arr[j], arr[j - 1]]
-        flag = false
-      }
-    }
-    if (flag) break
-  }
-  return arr
-}
-console.log('bubbleSort', bubbleSort(arr))
+// // 冒泡
+// function bubbleSort(arr) {
+//   for (let i = 0; i < arr.length - 1; i++) {
+//     let flag = true
+//     for (let j = arr.length - 1; j > i; j--) {
+//       if (arr[j - 1] > arr[j]) {
+//         [arr[j - 1], arr[j]] = [arr[j], arr[j - 1]]
+//         flag = false
+//       }
+//     }
+//     if (flag) break
+//   }
+//   return arr
+// }
+// console.log('bubbleSort', bubbleSort(arr))
 
-// 选择
-function selectionSort(arr) {
-  for (let i = 0; i < arr.length - 1; i++) {
-    let minIndex = i
-    for (let j = i + 1; j < arr.length; j++) {
-      if (arr[j] < arr[i]) {
-        minIndex = j
-      }
-    }
-    [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]]
-  }
-  return arr
-}
+// // 选择
+// function selectionSort(arr) {
+//   for (let i = 0; i < arr.length - 1; i++) {
+//     let minIndex = i
+//     for (let j = i + 1; j < arr.length; j++) {
+//       if (arr[j] < arr[i]) {
+//         minIndex = j
+//       }
+//     }
+//     [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]]
+//   }
+//   return arr
+// }
 
-console.log('selectionSort', selectionSort(arr))
+// console.log('selectionSort', selectionSort(arr))
 
-// 插入
-function insertionSort(arr) {
-  for (let i = 1; i < arr.length; i++) {
-    let target = i
-    for (let j = i - 1; j >= 0; j--) {
-      if (arr[j] > arr[target]) {
-        [arr[j], arr[target]] = [arr[target], arr[j]]
-        target = j
-      } else {
-        break
-      }
-    }
-  }
-  return arr
-}
+// // 插入
+// function insertionSort(arr) {
+//   for (let i = 1; i < arr.length; i++) {
+//     let target = i
+//     for (let j = i - 1; j >= 0; j--) {
+//       if (arr[target] < arr[j]) {
+//         [arr[target], arr[j]] = [arr[j], arr[target]]
+//         target = j
+//       } else {
+//         break
+//       }
+//     }
+//   }
+//   return arr
+// }
 
-console.log('insertionSort', insertionSort(arr))
+// console.log('insertionSort', insertionSort(arr))
 
-// 快排
-function quickSort(arr, left, right) {
-  if (right <= left) {
-    return
-  }
-  let l = left, r = right, target = arr[l]
-  while (l < r) {
-    while (l < r && arr[r] >= arr[target]) {
-      r--
-    }
-    arr[l] = arr[r]
-    while (l < r && arr[l] < arr[target]) {
-      l++
-    }
-    arr[r] = arr[l]
-  }
-  arr[l] = target
-  quickSort(arr, left, l - 1)
-  quickSort(arr, l + 1, right)
-  return arr
-}
+// // 快排
+// function quickSort(arr, left, right) {
+//   if (right <= left) {
+//     return
+//   }
+//   let l = left, r = right, target = arr[l]
+//   while (l < r) {
+//     while (l < r && arr[r] >= target) {
+//       r--
+//     }
+//     arr[l] = arr[r]
+//     while (l < r && arr[l] < target) {
+//       l++
+//     }
+//     arr[r] = arr[l]
+//   }
+//   arr[l] = target
+//   quickSort(arr, left, l - 1)
+//   quickSort(arr, l + 1, right)
+//   return arr
+// }
 
-console.log('quickSort', quickSort(arr, 0, 5))
+// console.log('quickSort', quickSort(arr, 0, 5))
+
+// // 堆排序
+// function heapSort(arr) {
+//   createHeap(arr)
+//   for (let i = arr.length - 1; i >= 0; i--) {
+//     [arr[0], arr[i]] = [arr[i], arr[0]]
+//     adjustFunc(arr, 0, i)
+//   }
+//   return arr
+// }
+
+// function createHeap(arr) {
+//   let startIndex = Math.floor(arr.length / 2) - 1
+//   for (let i = startIndex; i >= 0; i--) {
+//     adjustFunc(arr, i, arr.length)
+//   }
+// }
+
+// function adjustFunc(arr, targetIndex, len) {
+//   for (let i = targetIndex * 2 + 1; i < len; i = i * 2 + 1) {
+//     if (i + 1 < len && arr[i] < arr[i + 1]) {
+//       i++
+//     }
+//     if (arr[i] > arr[targetIndex]) {
+//       [arr[i], arr[targetIndex]] = [arr[targetIndex], arr[i]]
+//       targetIndex = i
+//     } else {
+//       break
+//     }
+//   }
+// }
+
+// console.log('heapSort', heapSort(arr))
+
+// 14 - sleep
+
+// function sleepFunc(delay) {
+//   return new Promise((resolve, reject) => setTimeout(resolve, delay))
+// }
+
+// async function runFunc() {
+//   console.log(1)
+//   await sleepFunc(2000)
+//   console.log(2)
+// }
+
+// // function runFunc() {
+// //   console.log(1)
+// //   sleepFunc(2000).then(() => {
+// //     console.log(2)
+// //   })
+// // }
+
+// runFunc()
+
+// 15 - concat
+// Array.prototype.myConcat = function () {
+//   let arr = [...this]
+//   arguments = [...arguments]
+//   arguments.forEach(argument => Array.isArray(argument) ? argument.forEach(item => arr.push(item)) : arr.push(argument))
+//   return arr
+// }
+// console.log([1, 2].myConcat([4, 5], [6, [7, 8]]))
+
+// 17 - str2Obj
+// function str2Obj(str) {
+//   let obj = {}
+//   str.split('&').forEach(item => {
+//     const [key, value] = item.split('=')
+//     obj[key] = value
+//   })
+//   return obj
+// }
+
+// const str = 'a=1&b=2&c=3'
+// console.log('str2Obj', str2Obj(str))
+
+// const transformedString = str.replace(/([^=&]+)=([^&]+)/g, '$1:$2').replace(/&/g, ',')
+// console.log(transformedString)

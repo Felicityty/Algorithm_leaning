@@ -1,8 +1,10 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-08-23 15:41:35
- * @LastEditTime: 2023-08-30 01:31:09
+ * @LastEditTime: 2023-10-05 17:37:43
  */
+
+// 只要转换一层
 Array.prototype.myConcat = function () {
   let arr = [...this]
   arguments = [...arguments] // 类数组转换为数组

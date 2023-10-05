@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-08-22 15:49:13
- * @LastEditTime: 2023-08-22 16:56:49
+ * @LastEditTime: 2023-10-05 16:56:56
  */
 
 // 还能干啥捏 学习的尽头就是重复 重复 碎碎念 碎碎念
@@ -89,6 +89,7 @@ console.log('quickSort', quickSort(arr, 0, 5))
 // 创建大顶堆 交换元素 调整成大顶堆
 function heapSort(arr) {
   createHeap(arr)
+  // 堆顶元素一定是最大的 把它和未排序的最后一个元素换
   for (let i = arr.length - 1; i >= 0; i--) {
     [arr[0], arr[i]] = [arr[i], arr[0]]
     adjustFunc(arr, 0, i)
