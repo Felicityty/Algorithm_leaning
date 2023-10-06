@@ -1,29 +1,36 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-09-14 02:34:07
- * @LastEditTime: 2023-09-14 12:14:13
+ * @LastEditTime: 2023-10-06 23:55:02
  */
 
 // 递归
+// 考虑数组 + 解决循环引用
 
-function deepClone(target) {
-  if (Object.prototype.toString.call(target).slice(8, -1) !== 'Object' &&
-    Object.prototype.toString.call(target).slice(8, -1) !== 'Array') {
+function deepClone(target, map = new Map()) {
+  if (typeof target === 'object') {
+    let newTarget = Array.isArray(target) ? [] : {}
+    if (map.get(target)) {
+      return map.get(target)
+    }
+    map.set(target, newTarget)
+    for (let key in target) {
+      newTarget[key] = deepClone(target[key], map)
+    }
+    return newTarget
+  } else {
     return target
   }
-  const newTarget = Array.isArray(target) ? [] : {}
-  Object.keys(target).forEach(key => newTarget[key] = (target[key] instanceof Object || target[key] instanceof Array) ? deepClone(target[key]) : target[key])
-  return newTarget
 }
 
-const a = {
-  b: 1,
-  c: 2,
-  d: {
-    e: 3
-  }
-}
+const target = {
+  field1: 1,
+  field2: undefined,
+  field3: {
+    child: 'child'
+  },
+  field4: [2, 4, 8]
+};
+target.target = target;
 
-const b = [1, 2, 3, 4]
-
-console.log(deepClone(b))
+console.log(deepClone(target))

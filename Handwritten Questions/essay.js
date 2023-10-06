@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-08-20 20:13:05
- * @LastEditTime: 2023-10-05 17:53:53
+ * @LastEditTime: 2023-10-06 23:54:46
  */
 // 想到啥就写点儿
 
@@ -2105,3 +2105,112 @@ const { start } = require("repl")
 
 // const transformedString = str.replace(/([^=&]+)=([^&]+)/g, '$1:$2').replace(/&/g, ',')
 // console.log(transformedString)
+
+// 18 - jsonp
+// (function (window, document) {
+//   function jsonp(options) {
+//     let { url, data, callback } = options
+
+//     // 1 转化url
+//     let params = []
+//     for (let key in data) {
+//       params.push(key + '=' + data[key])
+//     }
+//     url += url.indexOf('?') === -1 ? '?' : '&'
+//     url += params.join('&')
+
+//     // 2 处理回调函数
+//     let cbFuncName = 'jsonp' + Math.random().toString().replace('.', '')
+//     url += '&callback' + cbFuncName
+
+//     // 3 创建script标签
+//     let scriptEle = document.createElement('script')
+//     scriptEle.url = url
+
+//     // 4 挂载回调函数
+//     window[cbFuncName] = function (data) {
+//       callback(data)
+//       document.body.removeChild(scriptEle)
+//     }
+//     document.body.appendElement(scriptEle)
+//   }
+//   $jsonp = jsonp
+// })(window, document)
+// $jsonp({
+//   url: 'http://localhost:3000/comments',
+//   data: { id: 1, name: 'ttt' },
+//   callback: function (res) {
+//     console.log('res', res)
+//   }
+// })
+
+// 19 - new
+
+// function _new(fn, ...args) {
+//   const obj = Object.create(fn.prototype)
+//   const res = fn.apply(obj, args)
+//   return res instanceof Object ? res : obj
+// }
+
+// function Person(a, b) {
+//   this.a = a
+//   this.b = b
+// }
+// Person.prototype.getAB = function () {
+//   return `${this.a} ${this.b}`
+// }
+
+// const hhh = _new(Person, '1', '2')
+// console.log('hhh', hhh.getAB())
+
+// 20 - timer
+
+// function countDown() {
+//   let timer = null
+//   const startTime = new Date('2023-10-06 18:00:00')
+//   const curTime = new Date()
+//   let startDiff = parseInt((startTime.getTime() - curTime.getTime()) / 1000)
+//   let day = parseInt(startDiff / (60 * 60 * 24))
+//   let hour = parseInt(startDiff / (60 * 60) % 24)
+//   let minute = parseInt(startDiff / 60 % 60)
+//   let second = parseInt(startDiff % 60)
+//   if (startDiff >= 0) {
+//     console.log('rest', day, hour, minute, second)
+//     setTimeout(countDown, 1000)
+//   } else {
+//     console.log('ended')
+//     clearTimeout(timer)
+//   }
+// }
+
+// countDown()
+
+// 21 - deepClone
+
+function deepClone(target, map = new Map()) {
+  if (typeof target === 'object') {
+    let newTarget = Array.isArray(target) ? [] : {}
+    if (map.get(target)) {
+      return map.get(target)
+    }
+    map.set(target, newTarget)
+    for (let key in target) {
+      newTarget[key] = deepClone(target[key], map)
+    }
+    return newTarget
+  } else {
+    return target
+  }
+}
+
+const target = {
+  field1: 1,
+  field2: undefined,
+  field3: {
+    child: 'child'
+  },
+  field4: [2, 4, 8]
+};
+target.target = target;
+
+console.log(deepClone(target))
