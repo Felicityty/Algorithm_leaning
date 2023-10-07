@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-08-20 20:13:05
- * @LastEditTime: 2023-10-06 23:54:46
+ * @LastEditTime: 2023-10-07 01:09:09
  */
 // 想到啥就写点儿
 
@@ -2187,30 +2187,30 @@ const { start } = require("repl")
 
 // 21 - deepClone
 
-function deepClone(target, map = new Map()) {
-  if (typeof target === 'object') {
-    let newTarget = Array.isArray(target) ? [] : {}
-    if (map.get(target)) {
-      return map.get(target)
-    }
-    map.set(target, newTarget)
-    for (let key in target) {
-      newTarget[key] = deepClone(target[key], map)
-    }
-    return newTarget
-  } else {
-    return target
-  }
-}
+// function deepClone(target, map = new Map()) {
+//   if (typeof target === 'object') {
+//     let newTarget = Array.isArray(target) ? [] : {}
+//     if (map.get(target)) {
+//       return target
+//     }
+//     map.set(target, newTarget)
+//     for (let key in target) {
+//       newTarget[key] = deepClone(target[key], map)
+//     }
+//     return newTarget
+//   } else {
+//     return target
+//   }
+// }
 
-const target = {
-  field1: 1,
-  field2: undefined,
-  field3: {
-    child: 'child'
-  },
-  field4: [2, 4, 8]
-};
-target.target = target;
+// const target = {
+//   field1: 1,
+//   field2: undefined,
+//   field3: {
+//     child: 'child'
+//   },
+//   field4: [2, 4, 8]
+// };
+// target.target = target;
 
-console.log(deepClone(target))
+// console.log(deepClone(target))

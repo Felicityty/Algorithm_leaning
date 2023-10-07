@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-09-14 02:34:07
- * @LastEditTime: 2023-10-06 23:55:02
+ * @LastEditTime: 2023-10-07 01:06:46
  */
 
 // 递归
@@ -15,6 +15,7 @@ function deepClone(target, map = new Map()) {
     }
     map.set(target, newTarget)
     for (let key in target) {
+      // 这里也会改变map中的value
       newTarget[key] = deepClone(target[key], map)
     }
     return newTarget
