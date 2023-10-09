@@ -1,0 +1,44 @@
+<!--
+ * @Author: Felicity💪
+ * @Date: 2023-10-09 22:08:26
+ * @LastEditTime: 2023-10-09 22:24:33
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <p>1</p>
+  <p>2</p>
+  <p>3</p>
+  <p>4</p>
+  <div>div1</div>
+  <div>div2</div>
+  <div>div3</div>
+  <div>div4</div>
+  <div>div5</div>
+</body>
+
+</html>
+
+<script>
+  let htmlCollections = document.getElementsByTagName('*')
+  console.log('htmlCollections', htmlCollections)
+
+  let tags = Array.from(htmlCollections)
+  console.log('tags', tags)
+
+  let tagObj = tags.reduce((pre, cur) => {
+    pre[cur.tagName] = pre[cur.tagName] ? pre[cur.tagName] + 1 : 1
+    return pre
+  }, {})
+  console.log('tagObj', tagObj)
+
+  let keyArr = Object.keys(tagObj).sort((a, b) => tagObj[b] - tagObj[a])
+  console.log(keyArr.slice(0, 3))
+</script>

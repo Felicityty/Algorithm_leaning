@@ -1692,6 +1692,38 @@ var levelOrder = function(root) {
 
 [102.二叉树的层序遍历](https://leetcode.cn/problems/binary-tree-level-order-traversal/)
 
+```js
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {number[][]}
+ */
+var levelOrder = function(root) {
+    let res = []
+    if(root === null) return res
+    let queue = [root]
+    while(queue.length) {
+        let len = queue.length
+        let level = []
+        while(len--) {
+            let cur = queue.shift()
+            level.push(cur.val)
+            cur.left && queue.push(cur.left)
+            cur.right && queue.push(cur.right)
+        }
+        res.push([...level])
+    }
+    return res
+};
+```
+
 [107.二叉树的层序遍历 II](https://leetcode.cn/problems/binary-tree-level-order-traversal-ii/)
 
 直接把上一题的push改成unshift就行了，可以省掉reverse操作
@@ -1747,6 +1779,36 @@ var rightSideView = function(root) {
 
 三种方法O~  其他到具体再看，层次遍历拿捏的
 
+```js
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {number}
+ */
+var maxDepth = function(root) {
+    let depth = 0
+    if(root === null) return 0
+    let queue =[root]
+    while(queue.length) {
+        let len = queue.length
+        while(len--) {
+            let cur = queue.shift()
+            cur.left && queue.push(cur.left)
+            cur.right && queue.push(cur.right)
+        }
+        depth++
+    }
+    return depth
+};
+```
+
 [111.二叉树的最小深度](https://leetcode.cn/problems/minimum-depth-of-binary-tree/)
 
 的确只要在意层次就行了，跟上一题也差不多的，稍微改一改
@@ -1765,6 +1827,36 @@ var rightSideView = function(root) {
 
 层次和迭代 -> 多写一个结点互换的函数
 
+```js
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {TreeNode}
+ */
+var invertTree = function(root) {
+    function invertNode(root, left, right) {
+        root.left = right
+        root.right = left
+    }
+    if(root === null) return root
+    let queue = [root]
+    while(queue.length) {
+        let cur = queue.pop()
+        invertNode(cur, cur.left, cur.right)
+        cur.left && queue.push(cur.left)
+        cur.right && queue.push(cur.right)
+    }
+    return root
+};
+```
+
 
 
 ### 5、对称二叉树
@@ -1776,6 +1868,39 @@ var rightSideView = function(root) {
 递归：在递归函数里，先把跳出递归的条件写了，如果都不满足，就继续进行递归
 
 迭代（队列&栈）：思想完全一样的，只是借助了一下栈或队列的性质，同样，也是把判断条件写了，否则就push栈或队列中去
+
+```js
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {boolean}
+ */
+var isSymmetric = function(root) {
+    if(root === null) return true
+    let queue = [root.left, root.right]
+    while(queue.length) {
+        let leftNode = queue.shift()
+        let rightNode = queue.shift()
+        if(leftNode === null && rightNode === null) {
+            continue
+        } else if(leftNode === null || rightNode === null || rightNode.val !== leftNode.val) {
+            return false
+        }
+        queue.push(leftNode.left)
+        queue.push(rightNode.right)
+        queue.push(leftNode.right)
+        queue.push(rightNode.left)
+    }
+    return true
+};
+```
 
 
 
@@ -2101,6 +2226,29 @@ void backtracking(startIndex, (sum)) {
 然后用一个for控制横向，递归来控制纵向，横向的一种情况纵向递归完，就pop之后换另外一种情况
 
 ![77.组合1](USING JS.assets/20201123195242899.png)
+
+```js
+/**
+ * @param {number} n
+ * @param {number} k
+ * @return {number[][]}
+ */
+var combine = function(n, k) {
+    let res = [], path = []
+    function backTracking(startIndex) {
+        if(path.length === k) {
+            res.push([...path])
+        }
+        for(let i=startIndex; i<=n; i++) {
+            path.push(i)
+            backTracking(i+1)
+            path.pop()
+        }
+    }
+    backTracking(1)
+    return res
+};
+```
 
 **剪枝条件：**
 
@@ -4867,6 +5015,41 @@ Solution.prototype.shuffle = function() {
  * var param_1 = obj.reset()
  * var param_2 = obj.shuffle()
  */
+```
+
+
+
+### 2、大数相加
+
+[415. 字符串相加](https://leetcode.cn/problems/add-strings/)
+
+给定两个字符串形式的非负整数 `num1` 和`num2` ，计算它们的和并同样以字符串形式返回。
+
+你不能使用任何內建的用于处理大整数的库（比如 `BigInteger`）， 也不能直接将输入的字符串转换为整数形式。
+
+```js
+/**
+ * @param {string} num1
+ * @param {string} num2
+ * @return {string}
+ */
+var addStrings = function(num1, num2) {
+    num1 = num1.split('').reverse()
+    num2 = num2.split('').reverse()
+    let res = ''
+    let carry = 0
+    for(let i=0; i<Math.max(num1.length, num2.length); i++) {
+        let x = num1[i] ? parseInt(num1[i]) : 0
+        let y = num2[i] ? parseInt(num2[i]) : 0
+        let sum = x + y + carry
+        carry = sum >= 10 ? 1 : 0
+        res += sum % 10
+    }
+    if(carry) {
+        res += carry
+    }
+    return res.split('').reverse().join('')
+};
 ```
 
 
