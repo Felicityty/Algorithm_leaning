@@ -520,7 +520,7 @@ ListNode detectCycle(ListNode head) {
 
 - 当两个链表无交点时，最后会同时指向null终止循环
 
-2️⃣ 并且，这里的循环也只会改转向另一条链表一次，不会无限地转变
+2️⃣ 并且，这里的循环也只会改转向另一条链表一次，不会无限地转变（如果两个链表不相交，最后也会因为两个指针都指向null跳出循环）
 
 ```js
 // 2022-12-08 by FTT
@@ -4920,6 +4920,28 @@ var countSubstrings = function(s) {
 好吧，偷偷看题解了🥴
 
 有点难想，抓住dp数组的定义叭
+
+👉 中心扩展
+
+```js
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var countSubstrings = function(s) {
+    const len = s.length
+    let ans = 0
+    for(let i=0; i<2*len-1; i++) {
+        let l = i/2, r = i/2+i%2
+        while(l>=0 && r<len && s.charAt(l)=== s.charAt(r)) {
+            l--
+            r++
+            ans++
+        }
+    }
+    return ans
+};
+```
 
 
 
