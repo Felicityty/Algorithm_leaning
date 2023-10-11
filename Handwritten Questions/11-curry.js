@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-08-16 16:45:25
- * @LastEditTime: 2023-10-01 23:22:41
+ * @LastEditTime: 2023-10-11 17:13:41
  */
 
 // 柯里化是一种将使用多个参数的一个函数转换成一系列使用一个参数的函数的技术。
@@ -24,7 +24,7 @@ function curry(fn, ...args) {
   if (args.length >= fn.length) {
     return fn.apply(this, args)
   } else {
-    return (...args2) => curry.apply(this, [fn, ...args, ...args2])
+    return (...args2) => curry(fn, ...args, ...args2)
   }
 }
 
@@ -34,12 +34,9 @@ function currying(fn, ...args) {
     // 收集结束 执行原函数
     // 原来Function都能用上length啊
     // console.log('args', args)
-    return fn(...args) // 这里一定得展开❗️
+    return fn.apply(this, args)
   } else {
-    return (...args2) => {
-      // console.log('args2', args2)
-      return currying(fn, ...args, ...args2)
-    }
+    return (...args2) => curry(fn, ...args, ...args2)
   }
 }
 

@@ -1,12 +1,9 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-08-20 20:13:05
- * @LastEditTime: 2023-10-07 01:09:09
+ * @LastEditTime: 2023-10-11 23:16:46
  */
 // 想到啥就写点儿
-
-const { run } = require("node:test")
-const { start } = require("repl")
 
 // 2023.8.20
 // 手写Symbol ✅
@@ -2214,3 +2211,267 @@ const { start } = require("repl")
 // target.target = target;
 
 // console.log(deepClone(target))
+
+// ----------------------------------------------------------------------
+
+// 2023.10.11
+
+// Function.prototype.myBind = function (context = window, ...args) {
+//   if (this === Function.prototype) {
+//     return new Error('eeee')
+//   }
+//   const _this = this
+//   return function F(...args2) {
+//     if (_this instanceof F) {
+//       return new _this(...args, ...args2)
+//     }
+//     return _this.apply(context, args.concat(args2))
+//   }
+// }
+
+// function debounce(fn, delay) {
+//   let timer = null
+//   return function (...args) {
+//     if (timer !== null) {
+//       clearTimeout(timer)
+//     }
+//     timer = setTimeout(() => {
+//       fn.apply(this, args)
+//     }, delay)
+//   }
+// }
+
+// function throttle(fn, delay) {
+//   let timer = null
+//   return function (...args) {
+//     if (timer === null) {
+//       timer = setTimeout(() => {
+//         fn.apply(this, args)
+//         timer = null
+//       }, delay)
+//     }
+//   }
+// }
+
+// let index = 0
+// function lazyLoad() {
+//   let imgs = document.getElementsByTagName('img')
+//   let innerHeight = window.innerHeight || document.documentElement.clientHeight
+//   let scrollTop = document.documentElement.scrollTop
+//   for (let i = index; i < imgs.length; i++) {
+//     // if(imgs[i].getBoundingClientRect().top < innerHeight)
+//     if (imgs[i].offsetTop < innerHeight + scrollTop) {
+//       if (imgs[i].getAttribute('src') === 'dssdsds') {
+//         imgs[i].src = imgs[i].getAttribute('data-src')
+//       }
+//       index = i+1
+//     }
+//   }
+// }
+
+// lazyLoad()
+
+// window.addEventListener('scroll', throttle(lazyLoad, 1000))
+
+// function throttle(fn, delay) {
+
+// }
+
+// const arr = [1, 2, [3, 4], [11, 13], [5, 6, [7, 8]]]
+
+// function flat(arr) {
+//   return arr.reduce((pre, cur) => {
+//     if (Array.isArray(cur)) {
+//       return pre.concat(flat(cur))
+//     } else {
+//       return pre.concat(cur)
+//     }
+//   }, [])
+// }
+
+// const subjectType = {
+//   'LB': '劳保',
+//   'XW': '消委',
+//   'GA': '公安',
+//   'GT': '国土',
+//   'CG': '城管',
+//   'GJJ': '公积金',
+//   'ZH': '综合',
+// }
+
+// function getKeyByValue(obj, value) {
+//   return Object.keys(obj).filter(key => obj[key] === value)
+// }
+
+// function curry(fn, ...args) {
+//   if (args.length >= fn.length) {
+//     return fn.apply(this, args)
+//   } else {
+//     return (...args2) => curry(fn, ...args, ...args2)
+//   }
+// }
+
+// function sum(a, b, c) {
+//   return a + b + c
+// }
+// let curryingSum = curry(sum)
+// console.log('res1', curryingSum(1)(2)(3))
+
+// Promise.prototype.myFinally = function (onFinally) {
+//   return this.then(onFinally, onFinally)
+// }
+
+// Promise.myAllSettled = function (promises) {
+//   let res = [], count = 0
+//   return new Promise((resolve, reject) => {
+//     promises.forEach((promise, index) => {
+//       Promise.resolve(promise).then(
+//         value => {
+//           res[index] = {
+//             status: 'fulfilled',
+//             value
+//           }
+//           count++
+//           if (count === promises.length) {
+//             resolve(res)
+//           }
+//         },
+//         reason => {
+//           res[index] = {
+//             status: 'rejected',
+//             reason
+//           }
+//           count++
+//           if (count === promises.length) {
+//             resolve(res)
+//           }
+//         }
+//       )
+//     })
+//   })
+// }
+
+// Promise.myAllSettled([
+//   Promise.resolve(33),
+//   new Promise((resolve) => setTimeout(() => resolve(66), 0)),
+//   99,
+//   Promise.reject(new Error("一个错误")),
+// ]).then((values) =>
+//   console.log(values)
+// )
+
+
+// const fs = require('fs')
+// const util = require('util')
+// util.myPromisify = function (fn) {
+//   return (...args) => {
+//     return new Promise((resolve, reject) => {
+//       fn(...args, (err, buf) => {
+//         if (err) {
+//           reject(err)
+//           return
+//         }
+//         resolve(buf)
+//       })
+//     })
+//   }
+// }
+
+// const readFilePromisify = util.myPromisify(fs.readFile)
+// readFilePromisify('./Handwritten Questions/02-call.js', 'utf-8').then(value => {
+//   console.log(value)
+// })
+
+// Array.prototype.myReduce = function (fn, initialValue) {
+//   if (typeof fn !== 'function') {
+//     throw new Error('9999')
+//   }
+//   let arr = Object(this)
+//   let i = 0
+//   if ([undefined, null].includes(initialValue)) {
+//     i = 1
+//     initialValue = arr[0]
+//   }
+//   for (; i < arr.length; i++) {
+//     initialValue = fn(initialValue, arr[i], i, arr)
+//   }
+//   return initialValue
+// }
+
+// const arr = [1, 2, 3, 4, 5, 6]
+
+// console.log('Array.prototype.reduce 1:', arr.myReduce((a, b) => a + b))
+// console.log('Array.prototype.reduce 2:', arr.myReduce((a, b) => a + b, ''))
+
+// function sleep(delay) {
+//   return new Promise((resolve, reject) => setTimeout(resolve, delay))
+// }
+
+// async function runFunc() {
+//   console.log(1)
+//   await sleep(1000)
+//   console.log(2)
+// }
+// runFunc()
+
+// function sleep(delay) {
+//   return new Promise((resolve, reject) => {
+//     setTimeout(resolve, delay)
+//   })
+// }
+
+// async function runFunc() {
+//   for (let i = 0; i < 10; i++) {
+//     await sleep(1000)
+//     console.log(i)
+//   }
+// }
+
+// runFunc()
+
+// Promise.resolve().then(() => {
+//   console.log('Promise1')
+//   setTimeout(function () {
+//     console.log("setTimeout1")
+//   }, 10)
+// })
+// setTimeout(() => {
+//   console.log('setTimeout2')
+//   Promise.resolve().then(() => {
+//     console.log('Promise2')
+//   })
+// }, 10)
+
+// es5
+
+// function A(name) {
+//   this.name = name
+// }
+// A.prototype.getName = function () {
+//   console.log(this.name)
+// }
+
+// function B(name, age) {
+//   A.call(this, name)
+//   this.age = age
+// }
+// B.prototype = Object.create(A.prototype)
+// B.prototype.constructor = B
+
+// class A {
+//   constructor(name) {
+//     this.name = name
+//   }
+//   getName() {
+//     console.log(this.name)
+//   }
+// }
+
+// class B extends A {
+//   constructor(name, age) {
+//     super(name)
+//     this.age = age
+//   }
+// }
+
+// 加油吧bb💪 我觉得可以🙆‍♂️
