@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-08-20 20:13:05
- * @LastEditTime: 2023-10-11 23:16:46
+ * @LastEditTime: 2023-10-12 23:43:22
  */
 // 想到啥就写点儿
 
@@ -2475,3 +2475,55 @@
 // }
 
 // 加油吧bb💪 我觉得可以🙆‍♂️
+
+function _render(vnode) {
+  if (typeof vnode === 'number') {
+    vnode = String(vnode)
+  }
+  if (typeof vnode === 'string') {
+    vnode = document.createTextNode(vnode)
+  }
+  const dom = document.createElement(vnode.tag)
+  if (vnode.attrs) {
+    Object.keys(vnode.attrs).forEach(key => {
+      const value = vnode.attrs[key]
+      dom.setAttribute(key, value)
+    })
+  }
+  vnode.children.forEach(child => dom.appendChild(_render(child)))
+  return dom
+}
+
+// --------
+
+function dom2json() {
+  const jsContainer = document.getElementById('jsContainer')
+  const res = createObj(jsContainer)
+  console.log(res)
+}
+function createObj(ele) {
+  const obj = {}
+  obj.tag = ele.tagName.toLoweCase()
+  const attrs = {}
+  Array.from(ele.attributes).forEach(attr => {
+    const { name, value } = attr
+    attribute[name] = value
+  })
+  obj.attributes = attributes
+  const children = []
+  Array.from(ele.children).forEach(child => {
+    if (child.nodeType === 1) {
+      children.push(createObj(child))
+    } else if (child.nodeType === 3) {
+      const content = child.textContent.trim()
+      if (content.length) {
+        children.push({
+          tag: 'text',
+          content
+        })
+      }
+    }
+  })
+  obj.children = children
+  return obj
+}
