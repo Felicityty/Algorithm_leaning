@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-08-20 20:13:05
- * @LastEditTime: 2023-10-15 22:16:12
+ * @LastEditTime: 2023-10-16 23:28:51
  */
 // 想到啥就写点儿
 
@@ -2532,7 +2532,7 @@
 
 // 2023.10.15
 
-const a = [1, 2, 3, 4, 4, 5]
-const b = [2, 3, 7, 8, 9]
+// const a = [1, 2, 3, 4, 4, 5]
+// const b = [2, 3, 7, 8, 9]
 
-console.log(Array.from(new Set(a.concat(b))))
+// console.log(Array.from(new Set(a.concat(b))))

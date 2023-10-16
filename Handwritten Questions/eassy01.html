@@ -1,63 +1,65 @@
 <!--
  * @Author: Felicity💪
  * @Date: 2023-08-29 22:22:20
- * @LastEditTime: 2023-09-29 15:47:36
+ * @LastEditTime: 2023-10-16 23:57:21
 -->
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>debounce / throttle</title>
-  <style>
-    body {
-      height: 2000px;
-    }
-  </style>
+  <title>Document</title>
 </head>
 
 <body>
-  <input type="text">
+  <div id="app"></div>
 </body>
 
 </html>
 
 <script>
-  // debounce ✅
-  function debounce(fn, delay) {
-    let timer = null
-    return function (...args) {
-      if (timer !== null) {
-        clearTimeout(timer)
+  const vDom = {
+    tag: 'DIV',
+    attrs: {
+      id: 'app'
+    },
+    children: [
+      {
+        tag: 'SPAN',
+        children: [
+          { tag: 'A', children: [111] }
+        ]
+      },
+      {
+        tag: 'SPAN',
+        children: [
+          { tag: 'A', children: ['222'] },
+          { tag: 'A', children: [333, 444] }
+        ]
       }
-      timer = setTimeout(() => {
-        fn.apply(this, args)
-      }, delay)
-    }
+    ]
   }
 
-  const inp = document.querySelector('input')
-  inp.oninput = debounce(function () {
-    console.log(this.value)
-  }, 1000)
-
-  // throttle ✅
-  function throttle(fn, delay) {
-    let timer = null
-    return function (...args) {
-      if (timer === null) {
-        timer = setTimeout(() => {
-          fn.apply(this, args)
-          timer = null
-        }, delay)
-      }
+  function _render(vnode) {
+    if (typeof vnode === 'number') {
+      vnode = String(vnode)
     }
+    if (typeof vnode === 'string') {
+      return document.createTextNode(vnode)
+    }
+    const dom = document.createElement(vnode.tag)
+    if (vnode.attrs) {
+      Object.keys(vnode.attrs).forEach(key => {
+        const value = vnode.attrs[key]
+        dom.setAttribute(key, value)
+      })
+    }
+    vnode.children.forEach(child => dom.appendChild(_render(child)))
+    return dom
   }
 
-  window.onscroll = throttle(function () {
-    console.log(1111)
-  }, 1000)
+  const rootEl = document.getElementById('app')
+  rootEl.appendChild(_render(vDom))
 
 </script>

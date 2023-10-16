@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-10-12 23:18:41
- * @LastEditTime: 2023-10-12 23:42:35
+ * @LastEditTime: 2023-10-16 23:57:41
  */
 
 // 一面
@@ -83,3 +83,25 @@ console.log(b2.y); // 40
 
 // 一天三面的奇妙体验
 // 🦙，让我许个愿叭🙏
+
+
+// 补充一道Promise
+new Promise(resolve => {
+  resolve(new Promise(resolve => {
+    setTimeout(() => {
+      resolve(1)
+      console.log(2) // 同步的
+    })
+  }))
+}).then(() => {
+  console.log(5)
+})
+console.log(3)
+setTimeout(() => {
+  console.log(4)
+})
+
+// 3
+// 2
+// 5
+// 4
