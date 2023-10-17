@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-08-20 20:13:05
- * @LastEditTime: 2023-10-16 23:28:51
+ * @LastEditTime: 2023-10-17 22:17:48
  */
 // 想到啥就写点儿
 
@@ -2536,3 +2536,29 @@
 // const b = [2, 3, 7, 8, 9]
 
 // console.log(Array.from(new Set(a.concat(b))))
+
+const url = "https://shanyue.tech?name=%E5%B1%B1%E6%9C%88&a=3#hash"
+
+function parseUrl(url) {
+  const queryStr = url.match(/\?([^/?#:]+)#?/)?.[1]
+  if (!queryStr) {
+    return {}
+  }
+  let queryObj = queryStr.split('&').reduce((pre, cur) => {
+    const [_k, _v] = cur.split('=')
+    const k = decodeURIComponent(_k)
+    const v = decodeURIComponent(_v)
+    if (pre[k] !== undefined) {
+      pre[k] = [].concat(pre[k], v)
+    } else {
+      pre[k] = v
+    }
+    return pre
+  }, {})
+  return queryObj
+}
+
+console.log(parseUrl(url))
+
+// 这一周的面试都超过八九两个月的了🤯
+// 来个杭州的offer吧求求🥹😭🙏
