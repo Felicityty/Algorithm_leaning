@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-08-20 20:13:05
- * @LastEditTime: 2023-10-17 22:17:48
+ * @LastEditTime: 2023-10-18 20:40:30
  */
 // 想到啥就写点儿
 
@@ -2537,28 +2537,30 @@
 
 // console.log(Array.from(new Set(a.concat(b))))
 
-const url = "https://shanyue.tech?name=%E5%B1%B1%E6%9C%88&a=3#hash"
+// const url = "https://shanyue.tech?name=%E5%B1%B1%E6%9C%88&a=3#hash"
 
-function parseUrl(url) {
-  const queryStr = url.match(/\?([^/?#:]+)#?/)?.[1]
-  if (!queryStr) {
-    return {}
-  }
-  let queryObj = queryStr.split('&').reduce((pre, cur) => {
-    const [_k, _v] = cur.split('=')
-    const k = decodeURIComponent(_k)
-    const v = decodeURIComponent(_v)
-    if (pre[k] !== undefined) {
-      pre[k] = [].concat(pre[k], v)
-    } else {
-      pre[k] = v
-    }
-    return pre
-  }, {})
-  return queryObj
-}
+// function parseUrl(url) {
+//   const queryStr = url.match(/\?([^/?#:]+)#?/)?.[1]
+//   if (!queryStr) {
+//     return {}
+//   }
+//   let queryObj = queryStr.split('&').reduce((pre, cur) => {
+//     const [_k, _v] = cur.split('=')
+//     const k = decodeURIComponent(_k)
+//     const v = decodeURIComponent(_v)
+//     if (pre[k] !== undefined) {
+//       pre[k] = [].concat(pre[k], v)
+//     } else {
+//       pre[k] = v
+//     }
+//     return pre
+//   }, {})
+//   return queryObj
+// }
 
-console.log(parseUrl(url))
+// console.log(parseUrl(url))
 
-// 这一周的面试都超过八九两个月的了🤯
-// 来个杭州的offer吧求求🥹😭🙏
+
+// wuwuwuwuwu，被react拷打，好惨😭
+// 缓不过来🥹，真的好想找一份杭州的工作啊
+// 技术栈不是问题啊，让我再看看实习写的项目就会了，面试官捞捞我吧www🙏

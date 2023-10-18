@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-08-16 15:08:30
- * @LastEditTime: 2023-08-16 16:14:37
+ * @LastEditTime: 2023-10-18 20:17:39
  */
 
 let Person = {
@@ -45,7 +45,7 @@ Person.sayHi.myCall(Person1)
 // 最后 万一一下 手写symbol 真严谨
 function mySymbol(obj) {
   // 随机数+时间
-  let unique = (Math.random() + new Date.getTime()).toString(32).slice(0, 8)
+  let unique = (Math.random() + (new Date).getTime()).toString(32).slice(0, 8)
   if (obj.hasOwnProperty(unique)) {
     return mySymbol(obj)
   } else {
