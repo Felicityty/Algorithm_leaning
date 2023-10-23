@@ -1,0 +1,66 @@
+<!--
+ * @Author: Felicity💪
+ * @Date: 2023-10-23 20:10:44
+ * @LastEditTime: 2023-10-23 20:49:28
+-->
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <style>
+    /* 填写样式 */
+    .content {
+      font-size: 14px;
+    }
+
+    .content em {
+      font-style: normal;
+      color: #c00;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 填写标签 -->
+  <div class="content" id="jsContent">
+    前端开发
+    是创建Web页面或app等
+    前端界面呈现给用户的过程，通过HTML，CSS及JavaScript以及衍生出来的各种技术、框架、解决方案，来实现互联网产品的用户界面交互。它从网页制作...
+  </div>
+  <script type="text/javascript">
+    // 填写JavaScript
+    function duibi(str, dom) {
+      for (let i = 0; i < dom.length; i++) {
+        let j = 0
+        while (str[j] === dom[i]) {
+          j++
+          i++
+        }
+        if (j === str.length - 1) {
+          return i
+        }
+      }
+    }
+    function highlight(word) {
+      if (word.length === 0) {
+        return
+      }
+      let dom = document.getElementById('jsContent').innerHTML.toString()
+      console.log(dom)
+      for (let i = 0; i < word.length; i++) {
+        let str = word.slice(0, word.length - i)
+        let index = duibi(str, dom)
+        console.log(str)
+        console.log(index)
+        // dom.splice(index, 0, '<em>')
+        // dom.splice((index + str.length), 0, '</em>')
+      }
+      return dom
+    }
+
+    console.log(highlight('前端开发'))
+  </script>
+</body>
+
+</html>
