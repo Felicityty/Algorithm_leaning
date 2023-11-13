@@ -1,7 +1,7 @@
 /*
  * @Author: Felicity💪
  * @Date: 2023-08-20 20:13:05
- * @LastEditTime: 2023-10-28 20:49:09
+ * @LastEditTime: 2023-11-14 00:14:11
  */
 // 想到啥就写点儿
 
@@ -2560,3 +2560,33 @@
 
 // console.log(parseUrl(url))
 
+// function isHuiwen(str) {
+//   formatStr = str.toLowerCase().replace(/[^0-9a-z]/g, '')
+//   for (let i = 0, j = formatStr.length - 1; i < j; i++, j--) {
+//     if (formatStr[i] !== formatStr[j]) return false
+//   }
+//   return true
+// }
+// console.log(huiwen("A man a plan a canal Panama"))
+
+// function findPath(root, target) {
+//   let res = []
+//   function dfs(node, curPath, curSum) {
+//     if (!node) {
+//       return
+//     }
+//     curPath.push(node.val)
+//     curSum += node.val
+//     if (!node.left && !node.right && curSum === target) {
+//       res.push([...curPath])
+//     }
+//     dfs(node.left, curPath, curSum)
+//     dfs(node.right, curPath, curSum)
+//     curPath.pop()
+//     curSum -= node.val
+//   }
+//   dfs(root, [], 0)
+//   return res
+// }
+
+// 秋招结束 🎉 祝好～
